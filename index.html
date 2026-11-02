@@ -158,8 +158,6 @@ button{cursor:pointer}
     <div class="card"><div class="rings" id="totRings"></div></div>
     <div class="slbl">Log meetings <small id="logFor"></small></div>
     <div class="card" id="mRows"></div>
-    <div class="slbl">Headline results</div>
-    <div class="card" id="hRows"></div>
   </section>
 
   <!-- TAB 2: CERTIFICATIONS -->
@@ -220,7 +218,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-2";
+var APP_VERSION="2026.11.02-3";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -291,7 +289,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var left=Math.max(0,dayDiff(today,GOAL_DATE));$("daysLeft").textContent=left;
     $("todayLbl").textContent="Today: "+pretty(today);
     var M=totals(monthDays(today)).h,W=totals(weekDays(today)).h,D=totals([today]).h,sun=dow(today)===0;
-    function so(v,t,k){return ' <small style="color:'+(v>=t?'#16EC06':'#8c979f')+'">('+(k?v.toLocaleString("en-US"):v)+' so far)</small>';}
+    function so(){return '';} // 'so far' notes dropped in -3: the Base recruits/points inputs were removed
     $("monthGoal").innerHTML='<span>This month\'s goal:</span>'+HL.rec.m+' base recruits'+so(M.rec,HL.rec.m)+' · '+HL.pts.m.toLocaleString("en-US")+' base points'+so(M.pts,HL.pts.m,1)+' <small style="color:#8c979f">($100K business)</small>';
     $("weekGoal").innerHTML='<span>This week\'s goal:</span>'+HL.rec.w+' base recruits'+so(W.rec,HL.rec.w)+' · '+kfmt(HL.pts.w)+' base points'+so(W.pts,HL.pts.w,1);
     $("dayGoal").innerHTML='<span>Today\'s goal:</span>'+(sun?'Sunday, no daily goal (Mon–Sat)':HL.rec.d+' base recruit'+so(D.rec,HL.rec.d)+' · '+kfmt(HL.pts.d)+' base points'+so(D.pts,HL.pts.d,1));
@@ -304,8 +302,6 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     CATS.forEach(function(c){h+='<div class="mrow"><div><div class="mn">'+c.n+'</div><div class="mt">goal '+dt[c.id]+'/day · '+wkT(view)[c.id]+'/wk · '+moT(view)[c.id]+'/mo</div></div>'+inp("m",c.id,d.m[c.id],"0")+inp("r",c.id,d.r[c.id],c.res,1)+'</div>';});
     h+='<div class="mrow"><div><div class="mn">New contacts</div><div class="mt">goal '+CONTACTS.d+'/day · '+CONTACTS.w+'/wk · '+CONTACTS.m+'/mo</div></div>'+inp("nc","",d.nc,"0")+'<div></div></div>';
     $("mRows").innerHTML=h;
-    $("hRows").innerHTML='<div class="mrow"><div><div class="mn">Base recruits</div><div class="mt">goal 1/day · 4/wk · 15/mo</div></div><div></div>'+inp("h","rec",d.h.rec,"0",1)+'</div>'+
-      '<div class="mrow"><div><div class="mn">Base points</div><div class="mt">goal 4K/day · 23K/wk · 100K/mo</div></div><div></div>'+inp("h","pts",d.h.pts,"pts",1)+'</div>';
   }
   function renderMeetRings(){
     var dT=totals([view]),wT=totals(weekDays(view)),mT=totals(monthDays(view));
@@ -327,7 +323,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("dNext").addEventListener("click",function(){setView(shift(view,1));});
   $("dToday").addEventListener("click",function(){setView(today);});
   $("dPick").addEventListener("change",function(){if(this.value)setView(this.value);});
-  $("mRows").addEventListener("input",onInput);$("hRows").addEventListener("input",onInput);
+  $("mRows").addEventListener("input",onInput);
 
   // ---------- tab 2: certifications ----------
   function inDays(e,days){return days.indexOf(e.date)>=0;}
@@ -387,8 +383,6 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {s:"m-br",g:"Meetings",i:"👥",n:"Base recruiting",v:function(k){return int(day(k).m.br)||0;},T:{d:function(k){return dayT(k).br;},w:function(k){return wkT(k).br;},m:function(k){return moT(k).br;}}},
     {s:"m-bp",g:"Meetings",i:"🏁",n:"Base closing",v:function(k){return int(day(k).m.bp)||0;},T:{d:function(k){return dayT(k).bp;},w:function(k){return wkT(k).bp;},m:function(k){return moT(k).bp;}}},
     {s:"nc",g:"Meetings",i:"📇",n:"New contacts",v:function(k){return int(day(k).nc)||0;},T:{d:function(){return CONTACTS.d;},w:function(){return CONTACTS.w;},m:function(){return CONTACTS.m;}}},
-    {s:"h-rec",g:"Headline results",i:"🎯",n:"Base recruits",v:function(k){return int(day(k).h.rec)||0;},T:{d:function(){return HL.rec.d;},w:function(){return HL.rec.w;},m:function(){return HL.rec.m;}}},
-    {s:"h-pts",g:"Headline results",i:"📈",n:"Base points",k:1,v:function(k){return int(day(k).h.pts)||0;},T:{d:function(){return HL.pts.d;},w:function(){return HL.pts.w;},m:function(){return HL.pts.m;}}},
     {s:"r-pr",g:"Row results",i:"✅",n:"Personal recruiting results",v:function(k){return int(day(k).r.pr)||0;},T:{w:function(){return 1;},m:function(){return 3;}}},
     {s:"r-pc",g:"Row results",i:"✅",n:"Personal closing results",v:function(k){return int(day(k).r.pc)||0;},T:{w:function(){return 1;},m:function(){return 4;}}},
     {s:"r-br",g:"Row results",i:"✅",n:"Base recruiting results",v:function(k){return int(day(k).r.br)||0;},T:null},
