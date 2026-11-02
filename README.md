@@ -8,10 +8,10 @@ Phone-first tracker for the goal **EMD + $250K by June 30, 2027**. It is one HTM
 
 ## Tabs
 - **Header:** "GOAL: EMD + $250K by June 30, 2027", days left, and **results-only** goals (goal text only; the "so far" notes were removed in -3). A $100K business means 15 base recruits and 100,000 base points a month. That works out to 4 recruits and 23K points a week (15 ÷ 4.33 rounded up, 100,000 ÷ 4.33), and 1 recruit and 4K points a day, Mon–Sat (26 working days).
-1. **Meetings:** a date picker (Toronto time, so he can backfill) and rings for today, this week and this month: meetings against target. The rows are Personal recruiting, Personal closing, Base recruiting and Base closing, each with a meetings box and a Results box. There is also a New contacts box. (The Headline results inputs were removed in v2026.11.02-3.)
-2. **Certs:** the daily certification log (filled by the bot).
-3. **Licences:** the new-licence log (filled by the bot), with rings against 2 a week and 8 a month.
-4. **MDs:** an editable MD candidate list, plus a direct SMD legs ring.
+1. **Meetings:** a date picker (Toronto time, so he can backfill). It has two sets of rings, each for the viewed day, its week and its month: **Recruiting** (recruits vs 1 / 4 / 15) and **Production** (base points vs 4K / 23K / 100K). Recruits = Personal recruiting + Base recruiting results. Base points = Personal closing + Base closing results; those boxes are labelled "points". Rows: Personal recruiting, Personal closing, Base recruiting, Base closing (meetings + Results), plus New contacts. Sunday has no daily goal.
+2. **Certs:** day by day, using the same date picker with arrows as Meetings (defaults to today). It shows who cleared which certification on that day, the count for that day, and small week and month counts. Filled by the bot (`bs-v1:certs`).
+3. **Licences:** the same day-by-day layout. It shows who was newly licensed on that day, the count for that day, and week x/1 and month x/3. **Goal: 1 base licence a week, 3 a month.** Filled by the bot (`bs-v1:licences`).
+4. **MDs:** a plain read-only table (Name, Current month recruits, Current month cash flow) from `bs-v1:mdstats`. Blank numbers show "—". The bot fills it from MyWFG. A small direct-SMD-legs ring (x of 3) sits below it.
 5. **Trends:** a dashboard row for every metric (this week against its weekly goal, and this month). Tapping a row opens the trend view (`#trends/<slug>`), which has a metric picker and Week / Month / All. Week and Month show daily bars with a dashed daily goal line. All shows weekly bars with a dashed weekly goal line. Each view shows the total against its goal, a comparison with the prior period, and ‹ › to move between periods.
 
 ## Targets (whole numbers)
@@ -20,7 +20,7 @@ Meeting targets per week, in the order personal recruiting / personal closing / 
 - Dec 2026: 4/5/5/6 (20 a week)
 - Jan 2027 onward: 4/5/6/8 (23 a week). The monthly targets are 17/22/26/34.
 
-The ramp months' monthly target is round(week × 4.33). The daily target is ceil(week / 6). New contacts are 3 a day, 18 a week and 75 a month. The trend goals with no daily target are personal recruiting results (1 a week, 3 a month), personal closing results (1 a week, 4 a month) and new licences (2 a week, 8 a month). Base recruiting results, base closing results and certifications have no target.
+The ramp months' monthly target is round(week × 4.33). The daily target is ceil(week / 6). New contacts are 3 a day, 18 a week and 75 a month. The trend goals with no daily target are personal recruiting results (1 a week, 3 a month), personal closing results (1 a week, 4 a month) and new licences (1 a week, 3 a month). Base recruiting results, base closing results and certifications have no target.
 
 ## Sync store
 `https://api.npoint.io/5b132b3a6768f39258a9` is public and needs no auth. GET reads it, and POST replaces the **whole** document.
@@ -40,7 +40,8 @@ The prefix is `bs-v1:`, not `nn-v1:`. This app shares the `harpreetsbajwa92.gith
 | `bs-v1:day:YYYY-MM-DD` | `{"m":{"pr":n,"pc":n,"br":n,"bp":n},"r":{"pr":n,"pc":n,"br":n,"bp":n},"nc":new contacts,"h":{"rec":base recruits,"pts":base points},"u":ms}`. All values are whole numbers, and a missing value means it was left blank. `bp` = **Base closing** (it was called "Base production"). `h` was added in v2026.11.02-2. Since v2026.11.02-3 it is no longer entered or shown, but the merge still keeps it and it is never deleted. Older records may still carry `m.lc`, `m.leg` and `r.lc`, `r.leg`, `r.cash`, which are kept but no longer shown. | app |
 | `bs-v1:certs` | array of `{"id","date":"YYYY-MM-DD","name","cert","score":int?,"note"?,"u":ms}` | **bot** |
 | `bs-v1:licences` | array of `{"id","date":"YYYY-MM-DD","name","source"?:"DBI Hub"\|"MyWFG","note"?,"u":ms}` | **bot** |
-| `bs-v1:mds` | array of `{"id","name","title","stage":"Identified"\|"Working"\|"On track"\|"Promoted","notes","next","u":ms}` | app (the bot may also write) |
+| `bs-v1:mds` | (legacy, no longer shown since v2026.11.02-4. Kept and never deleted.) array of `{"id","name","title","stage","notes","next","u":ms}` | none |
+| `bs-v1:mdstats` | `{"month":"YYYY-MM","updated":"YYYY-MM-DD" or "","rows":[{"name":str,"recruits":int\|null,"cashflow":number\|null}]}`. One row per MD for the current month. `null` shows "—". Seeded on Nov 2, 2026 with Gokul Ravichandran, Saurabh Nair, Ishdeep Singh and Dhrumil Vashi (blank numbers). | **bot** (from MyWFG) |
 | `bs-v1:legs` | `{"target":3,"smd":["Sunchandan Singh"]}` | bot/app |
 
 `cert` must be exactly one of: `Ethics Compliance`, `Ethics`, `Life Insurance`, `A&S`, `Seg Funds`.
@@ -75,5 +76,12 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-4:**
+  - Premium look: a gold GOAL headline and centred goal tiles.
+  - Meetings rings now show results (recruits and base points) instead of meetings.
+  - Certs and Licences are day by day with a date picker.
+  - The licence goal is now 1 a week and 3 a month.
+  - MDs is a table from the new key `bs-v1:mdstats`, which was seeded with a write-merge so no store data was lost.
+  - The Trends tab gets a Results group (Recruits and Base points, with goals). The closing-results charts are now in points.
 - **v2026.11.02-3:** Removed the Headline results card (Base recruits / Base points inputs) from the Meetings tab. The header goals stay, without the "so far" notes. Removed the Base recruits / Base points trend charts, since they no longer have an input. Store data is unchanged, and any existing `h` values are kept.
 - **v2026.11.02-2:** results-only header goals, 4 meeting rows, headline results inputs, Trends tab.

@@ -20,7 +20,7 @@
 <link rel="icon" type="image/png" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--fc:"Barlow Condensed","DIN Condensed","Roboto Condensed","Arial Narrow",sans-serif;--fn:"DIN Alternate","Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--card:#232b31;--card2:#2b343b;--line:rgba(255,255,255,.07);--blue:#0093E7;--green:#16EC06;--yel:#FFDE00;--red:#FF0026;--mut:#9aa5ad}
@@ -139,52 +139,95 @@ button{cursor:pointer}
 .tabs button .ic{width:25px;height:25px}
 .tabs button.on{color:#fff}
 @media (min-width:700px){.wrap{max-width:640px}}
+/* ===== v4 polish: premium, mobile first ===== */
+:root{--gold:#F5C451;--gold2:#D9A021}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0)) ,var(--card);border-radius:20px;padding:16px;box-shadow:0 10px 28px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.04)}
+#hdr{position:relative;overflow:hidden;text-align:center;padding:22px 16px 18px;border:1px solid rgba(245,196,81,.22);background:radial-gradient(120% 90% at 50% -10%,rgba(245,196,81,.16),rgba(245,196,81,0) 60%),linear-gradient(180deg,#2a333a,#1d2429)}
+.goal{font-family:var(--fc);text-transform:uppercase;line-height:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.goal .ge{font-size:14px;font-weight:700;letter-spacing:5px;color:#aab4bb}
+.goal b{font-size:clamp(40px,12.5vw,58px);font-weight:800;letter-spacing:1px;color:var(--gold);background:linear-gradient(180deg,#FFE7A3 0%,#F5C451 45%,#C98E12 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 10px rgba(245,196,81,.25))}
+.goal .gd{font-size:20px;font-weight:800;letter-spacing:2.4px;color:#fff}
+.cd{justify-content:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.cdl{text-align:left}
+.gls{display:grid;gap:8px;margin-top:14px}
+.gl{margin:0;text-align:center;background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;padding:10px 10px 11px;font-size:18px;font-weight:700;color:#fff;line-height:1.3}
+.gl span{display:block;font-size:13px;letter-spacing:2.2px;margin:0 0 3px;color:var(--gold)}
+.gl small{font-weight:600}
+.gl .sep{color:#5d6973;margin:0 6px;font-style:normal}
+.gl em{font-style:normal;white-space:nowrap}
+.slbl{font-size:15.5px;letter-spacing:1.8px;margin:22px 4px 8px}
+.rl{letter-spacing:1.8px}
+.rs{font-size:12.5px;color:#c3ccd2}
+.dnav{margin:18px 0 6px}
+.pnav{background:#2b343b;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.pl{background:#3d4850}
+.num{border-radius:14px;background:#12171a}
+.num:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,196,81,.15)}
+.tabs button.on{color:var(--gold)}
+.dsum{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dbig b{display:block;font-family:var(--fn);font-size:56px;font-weight:700;line-height:1;color:#fff}
+.dbig span{font-family:var(--fc);font-size:14px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#aab4bb}
+.dsm{display:flex;gap:8px}
+.dsm div{background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:14px;padding:8px 10px;text-align:center;min-width:76px}
+.dsm b{display:block;font-family:var(--fn);font-size:22px;line-height:1.1}
+.dsm span{font-family:var(--fc);font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:#aab4bb}
+.dsm b small{font-size:13px;color:#8c979f;margin-left:2px}
+.who .it{align-items:center}
+.who .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#3a444c,#2b343b);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--gold);flex:0 0 38px;margin-right:10px}
+.who .l{display:flex;align-items:center;min-width:0}
+.mdt{width:100%;border-collapse:collapse}
+.mdt th{font-family:var(--fc);font-size:12.5px;letter-spacing:1.3px;text-transform:uppercase;color:#8c979f;text-align:right;padding:0 4px 8px;font-weight:700}
+.mdt th:first-child,.mdt td:first-child{text-align:left}
+.mdt td{padding:13px 4px;border-top:1px solid var(--line);text-align:right;font-family:var(--fn);font-size:18px;font-weight:700;white-space:nowrap}
+.mdt td:first-child{font-family:inherit;font-size:15.5px;white-space:normal}
+.mdt td.na{color:#5d6973}
+.legs{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.note{font-size:12.5px;color:#7f8a92;text-align:center;margin:6px 4px 0}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card" id="hdr">
-    <div class="goal">GOAL: <b>EMD + $250K</b> by June 30, 2027</div>
+    <div class="goal"><span class="ge">GOAL</span><b>EMD + $250K</b><span class="gd">by June 30, 2027</span></div>
     <div class="cd"><div class="cdn" id="daysLeft">-</div><div class="cdl">days left<br><span id="todayLbl"></span></div></div>
-    <div class="gl" id="monthGoal"></div>
-    <div class="gl" id="weekGoal"></div>
-    <div class="gl" id="dayGoal"></div>
+    <div class="gls"><div class="gl" id="monthGoal"></div><div class="gl" id="weekGoal"></div><div class="gl" id="dayGoal"></div></div>
   </div>
 
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
     <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
-    <div class="slbl">Meetings vs goal</div>
-    <div class="card"><div class="rings" id="totRings"></div></div>
+    <div class="slbl">Recruiting <small>recruits vs goal</small></div>
+    <div class="card"><div class="rings" id="recRings"></div></div>
+    <div class="slbl">Production <small>base points vs goal</small></div>
+    <div class="card"><div class="rings" id="ptsRings"></div></div>
     <div class="slbl">Log meetings <small id="logFor"></small></div>
     <div class="card" id="mRows"></div>
   </section>
 
-  <!-- TAB 2: CERTIFICATIONS -->
+  <!-- TAB 2: CERTIFICATIONS (day by day, filled by the bot) -->
   <section class="page" id="p-cert">
-    <div class="slbl">Certifications passed</div>
-    <div class="card stat" id="certStats"></div>
-    <div class="slbl">This month by type</div><div class="card"><div class="rings" id="certRings"></div></div>
-    <div class="slbl">Daily log <small>updated by your bot</small></div>
-    <div id="certList"></div>
+    <div class="dnav"><div class="pnav"><button class="pa" id="cPrev" aria-label="Previous day">‹</button><div class="pl"><span id="cLbl">TODAY</span><input type="date" id="cPick" aria-label="Pick a date"></div><button class="pa" id="cNext" aria-label="Next day">›</button></div><button class="tbtn" id="cToday" hidden>Today</button></div>
+    <div class="card dsum"><div class="dbig"><b id="cCnt">0</b><span id="cCntL">certifications</span></div><div class="dsm" id="cWM"></div></div>
+    <div class="slbl">Who cleared <small id="cFor"></small></div>
+    <div class="card lst who" id="certList"></div>
+    <div class="note">Updated by your bot</div>
   </section>
 
-  <!-- TAB 3: LICENCES -->
+  <!-- TAB 3: LICENCES (day by day, filled by the bot) -->
   <section class="page" id="p-lic">
-    <div class="slbl">New licences</div>
-    <div class="card"><div class="rings" id="licRings"></div></div>
-    <div class="slbl">Licence log <small>updated by your bot</small></div>
-    <div id="licList"></div>
+    <div class="dnav"><div class="pnav"><button class="pa" id="lPrev" aria-label="Previous day">‹</button><div class="pl"><span id="lLbl">TODAY</span><input type="date" id="lPick" aria-label="Pick a date"></div><button class="pa" id="lNext" aria-label="Next day">›</button></div><button class="tbtn" id="lToday" hidden>Today</button></div>
+    <div class="card dsum"><div class="dbig"><b id="lCnt">0</b><span id="lCntL">new licences</span></div><div class="dsm" id="lWM"></div></div>
+    <div class="slbl">Newly licensed <small id="lFor"></small></div>
+    <div class="card lst who" id="licList"></div>
+    <div class="note">Goal: 1 base licence a week · 3 a month. Updated by your bot</div>
   </section>
 
-  <!-- TAB 4: MDs -->
+  <!-- TAB 4: MDs (bs-v1:mdstats, filled by the bot from MyWFG) -->
   <section class="page" id="p-md">
-    <div class="slbl">Direct SMD legs</div>
-    <div class="card" style="display:flex;align-items:center;gap:16px"><div id="legRing"></div><div><div class="mn" id="legTxt"></div><div class="mt" id="legNames"></div></div></div>
-    <div class="slbl">MD pipeline</div>
-    <div class="card stat" id="mdStats"></div>
-    <div id="mdList"></div>
-    <button class="btn" id="mdAdd" style="margin-top:6px">+ Add MD candidate</button>
+    <div class="slbl">MD team <small id="mdMeta"></small></div>
+    <div class="card"><table class="mdt"><thead><tr><th>Name</th><th>Recruits</th><th>Cash flow</th></tr></thead><tbody id="mdBody"></tbody></table></div>
+    <div class="note" id="mdUpd"></div>
+    <div class="card legs"><div id="legRing"></div><div><div class="mn" id="legTxt"></div><div class="mt" id="legNames"></div></div></div>
   </section>
 
   <!-- TAB 5: TRENDS -->
@@ -218,7 +261,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-3";
+var APP_VERSION="2026.11.02-4";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -227,9 +270,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   var GOAL_DATE="2027-06-30";
   var CATS=[
     {id:"pr",n:"Personal recruiting",res:"recruits"},
-    {id:"pc",n:"Personal closing",res:"sales"},
-    {id:"br",n:"Base recruiting",res:"results"},
-    {id:"bp",n:"Base closing",res:"results"}      // was "Base production"; same data key bp
+    {id:"pc",n:"Personal closing",res:"points"},
+    {id:"br",n:"Base recruiting",res:"recruits"},
+    {id:"bp",n:"Base closing",res:"points"}      // was "Base production"; same data key bp
   ];
   // weekly meeting targets by phase (Mon–Sat weeks)
   var WK={nov:{pr:3,pc:5,br:3,bp:4},dec:{pr:4,pc:5,br:5,bp:6},full:{pr:4,pc:5,br:6,bp:8}};
@@ -239,7 +282,6 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // week = ceil(15/4.33)=4 and round(100000/4.33)=23K; day (Mon–Sat, 26 working days) = ceil(15/26)=1 and round(100000/26)=4K
   var HL={rec:{d:1,w:4,m:15},pts:{d:4000,w:23000,m:100000}};
   var CERTS=["Ethics Compliance","Ethics","Life Insurance","A&S","Seg Funds"];
-  var STAGES=["Identified","Working","On track","Promoted"];
   var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   var $=function(id){return document.getElementById(id);};
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -271,7 +313,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function day(k){var d=getJ("day:"+k,null);if(!d||typeof d!=="object")d={};d.m=d.m||{};d.r=d.r||{};d.h=d.h||{};return d;}
   function totals(days){var m={},r={},h={rec:0,pts:0},nc=0;CATS.forEach(function(c){m[c.id]=0;r[c.id]=0;});
     days.forEach(function(k){var d=day(k);CATS.forEach(function(c){m[c.id]+=int(d.m[c.id])||0;r[c.id]+=int(d.r[c.id])||0;});h.rec+=int(d.h.rec)||0;h.pts+=int(d.h.pts)||0;nc+=int(d.nc)||0;});
-    return {m:m,r:r,h:h,nc:nc};}
+    return {m:m,r:r,h:h,nc:nc,rec:r.pr+r.br,pts:r.pc+r.bp};}   // results: recruits = pr+br results, base points = pc+bp results
   function list(name){var a=getJ(name,[]);return Array.isArray(a)?a:[];}
 
   // ---------- rings (same drawing as the fitness app) ----------
@@ -288,11 +330,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderHeader(){
     var left=Math.max(0,dayDiff(today,GOAL_DATE));$("daysLeft").textContent=left;
     $("todayLbl").textContent="Today: "+pretty(today);
-    var M=totals(monthDays(today)).h,W=totals(weekDays(today)).h,D=totals([today]).h,sun=dow(today)===0;
-    function so(){return '';} // 'so far' notes dropped in -3: the Base recruits/points inputs were removed
-    $("monthGoal").innerHTML='<span>This month\'s goal:</span>'+HL.rec.m+' base recruits'+so(M.rec,HL.rec.m)+' · '+HL.pts.m.toLocaleString("en-US")+' base points'+so(M.pts,HL.pts.m,1)+' <small style="color:#8c979f">($100K business)</small>';
-    $("weekGoal").innerHTML='<span>This week\'s goal:</span>'+HL.rec.w+' base recruits'+so(W.rec,HL.rec.w)+' · '+kfmt(HL.pts.w)+' base points'+so(W.pts,HL.pts.w,1);
-    $("dayGoal").innerHTML='<span>Today\'s goal:</span>'+(sun?'Sunday, no daily goal (Mon–Sat)':HL.rec.d+' base recruit'+so(D.rec,HL.rec.d)+' · '+kfmt(HL.pts.d)+' base points'+so(D.pts,HL.pts.d,1));
+    var sun=dow(today)===0;
+    var SEP='<i class="sep">·</i>';
+    $("monthGoal").innerHTML='<span>This month\'s goal</span><em>'+HL.rec.m+' base recruits</em>'+SEP+'<em>'+HL.pts.m.toLocaleString("en-US")+' base points</em><br><small style="color:#8c979f;font-size:13px">$100K business</small>';
+    $("weekGoal").innerHTML='<span>This week\'s goal</span><em>'+HL.rec.w+' base recruits</em>'+SEP+'<em>'+kfmt(HL.pts.w)+' base points</em>';
+    $("dayGoal").innerHTML='<span>Today\'s goal</span>'+(sun?'Sunday, no daily goal (Mon–Sat)':'<em>'+HL.rec.d+' base recruit</em>'+SEP+'<em>'+kfmt(HL.pts.d)+' base points</em>');
   }
 
   // ---------- tab 1: meetings ----------
@@ -306,7 +348,12 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderMeetRings(){
     var dT=totals([view]),wT=totals(weekDays(view)),mT=totals(monthDays(view));
     var dt=dayT(view),wt=wkT(view),mt=moT(view);
-    $("totRings").innerHTML=rbox(sum(dT.m),sum(dt),(view===today?"Today":"Day"),100,9)+rbox(sum(wT.m),sum(wt),"This week",100,9)+rbox(sum(mT.m),sum(mt),"This month",100,9);
+    var sunV=dow(view)===0,lab=view===today?"Today":view===shift(today,-1)?"Yesterday":"Day";
+    function kp(n){n=Math.round(n||0);if(n<1000)return String(n);var x=n/1000;return (x>=100||x===Math.round(x)?String(Math.round(x)):x.toFixed(1).replace(/\.0$/,''))+'K';}
+    function rr(val,tgt,label,unit,k){if(!tgt)return '<div class="rbox">'+ring(0,"#323b42",100,9,'<b>'+(k?kp(val):val)+'</b>')+'<span class="rl">'+label+'</span><span class="rs">no goal Sunday</span></div>';
+      var f=val/tgt;return '<div class="rbox">'+ring(f,recCol(f),100,9,'<b>'+(k?kp(val):val)+'</b>')+'<span class="rl">'+label+'</span><span class="rs">'+(k?kp(val):val)+' of '+(k?kfmt(tgt):tgt)+' '+unit+(f>=1?' ✓':'')+'</span></div>';}
+    $("recRings").innerHTML=rr(dT.rec,sunV?0:HL.rec.d,lab,"recruits")+rr(wT.rec,HL.rec.w,"This week","recruits")+rr(mT.rec,HL.rec.m,"This month","recruits");
+    $("ptsRings").innerHTML=rr(dT.pts,sunV?0:HL.pts.d,lab,"pts",1)+rr(wT.pts,HL.pts.w,"This week","pts",1)+rr(mT.pts,HL.pts.m,"This month","pts",1);
     $("logFor").textContent=view===today?"":pretty(view);
   }
   function renderDate(){
@@ -325,55 +372,52 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("dPick").addEventListener("change",function(){if(this.value)setView(this.value);});
   $("mRows").addEventListener("input",onInput);
 
-  // ---------- tab 2: certifications ----------
+  // ---------- day pickers for certs / licences (same control as Meetings) ----------
   function inDays(e,days){return days.indexOf(e.date)>=0;}
-  function byDate(a){return a.slice().sort(function(x,y){return x.date<y.date?1:x.date>y.date?-1:0;});}
+  var dv={c:today,l:today};
+  function navLbl(k){return k===today?"TODAY":k===shift(today,-1)?"YESTERDAY":pretty(k).toUpperCase();}
+  function navRender(p){var k=dv[p];$(p+"Lbl").textContent=navLbl(k);$(p+"Pick").value=k;$(p+"Pick").max=today;$(p+"Next").disabled=k>=today;$(p+"Today").hidden=k===today;}
+  function navBind(p,rf){function set(k){if(!k||k>today)k=today;dv[p]=k;rf();}
+    $(p+"Prev").addEventListener("click",function(){set(shift(dv[p],-1));});$(p+"Next").addEventListener("click",function(){set(shift(dv[p],1));});
+    $(p+"Today").addEventListener("click",function(){set(today);});$(p+"Pick").addEventListener("change",function(){if(this.value)set(this.value);});}
+  function ini(n){return String(n||"?").trim().split(/\s+/).map(function(w){return w.charAt(0);}).slice(0,2).join("").toUpperCase();}
+  function forTxt(k){return k===today?"today":"on "+pretty(k);}
+  // ---------- tab 2: certifications ----------
   function renderCert(){
-    var a=list("certs"),wd=weekDays(today),md=monthDays(today);
-    var cD=a.filter(function(e){return e.date===today;}).length,cW=a.filter(function(e){return inDays(e,wd);}).length,cM=a.filter(function(e){return inDays(e,md);}).length;
-    $("certStats").innerHTML='<div><b>'+cD+'</b><span>Today</span></div><div><b>'+cW+'</b><span>This week</span></div><div><b>'+cM+'</b><span>This month</span></div><div><b>'+a.length+'</b><span>All time</span></div>';
-    var h="";CERTS.forEach(function(c){var n=a.filter(function(e){return e.cert===c&&inDays(e,md);}).length;h+='<div class="rbox">'+ring(n?1:0,n?"#16EC06":"#323b42",54,5,'<b style="font-size:17px">'+n+'</b>')+'<span class="rl" style="font-size:11.5px;letter-spacing:.6px">'+esc(c)+'</span></div>';});
-    $("certRings").innerHTML=h+'';
-    if(!a.length){$("certList").innerHTML='<div class="card empty">No certifications logged yet</div>';return;}
-    var g={},o="";byDate(a).forEach(function(e){(g[e.date]=g[e.date]||[]).push(e);});
-    Object.keys(g).sort().reverse().forEach(function(k){o+='<div class="dh">'+pretty(k)+' · '+g[k].length+' passed</div><div class="card lst">';
-      g[k].forEach(function(e){o+='<div class="it"><div><div class="nm">'+esc(e.name)+'</div><div class="sub">'+esc(e.cert)+(e.note?' · '+esc(e.note):'')+'</div></div><div>'+(e.score!=null&&e.score!==""?'<span class="pill g">'+esc(e.score)+'%</span>':'')+'</div></div>';});o+='</div>';});
-    $("certList").innerHTML=o;
+    navRender("c");var k=dv.c,a=list("certs"),dl=a.filter(function(e){return e.date===k;});
+    var w=a.filter(function(e){return inDays(e,weekDays(k));}).length,m=a.filter(function(e){return inDays(e,monthDays(k));}).length;
+    $("cCnt").textContent=dl.length;$("cCntL").textContent=dl.length===1?"certification":"certifications";
+    $("cWM").innerHTML='<div><b>'+w+'</b><span>Week</span></div><div><b>'+m+'</b><span>'+MON[parse(k).getUTCMonth()]+'</span></div>';
+    $("cFor").textContent=forTxt(k);
+    $("certList").innerHTML=dl.length?dl.map(function(e){return '<div class="it"><div class="l"><span class="av">'+esc(ini(e.name))+'</span><div><div class="nm">'+esc(e.name)+'</div><div class="sub">'+esc(e.cert)+(e.note?' · '+esc(e.note):'')+'</div></div></div><div>'+(e.score!=null&&e.score!==""?'<span class="pill g">'+esc(e.score)+'%</span>':'<span class="pill g">Passed</span>')+'</div></div>';}).join(""):'<div class="empty">No certifications cleared '+forTxt(k)+'</div>';
   }
-  // ---------- tab 3: licences ----------
-  function licCount(days){return list("licences").filter(function(e){return inDays(e,days);}).length;}
+  navBind("c",renderCert);
+  // ---------- tab 3: licences (goal 1 a week, 3 a month) ----------
+  var LIC={w:1,m:3};
   function renderLic(){
-    var a=list("licences"),w=licCount(weekDays(today)),m=licCount(monthDays(today));
-    $("licRings").innerHTML=rbox(w,2,"This week",100,9)+rbox(m,8,"This month",100,9)+rbox(a.length,a.length||1,"All time",100,9).replace(/of \d+( ✓)?/,"logged");
-    if(!a.length){$("licList").innerHTML='<div class="card empty">No new licences logged yet</div>';return;}
-    var g={},o="";a.forEach(function(e){(g[e.date]=g[e.date]||[]).push(e);});
-    Object.keys(g).sort().reverse().forEach(function(k){o+='<div class="dh">'+pretty(k)+' · '+g[k].length+' new</div><div class="card lst">';
-      g[k].forEach(function(e){o+='<div class="it"><div><div class="nm">'+esc(e.name)+'</div>'+(e.note||e.source?'<div class="sub">'+esc([e.source,e.note].filter(Boolean).join(" · "))+'</div>':'')+'</div><div><span class="pill b">Licensed</span></div></div>';});o+='</div>';});
-    $("licList").innerHTML=o;
+    navRender("l");var k=dv.l,a=list("licences"),dl=a.filter(function(e){return e.date===k;});
+    var w=a.filter(function(e){return inDays(e,weekDays(k));}).length,m=a.filter(function(e){return inDays(e,monthDays(k));}).length;
+    $("lCnt").textContent=dl.length;$("lCntL").textContent=dl.length===1?"new licence":"new licences";
+    $("lWM").innerHTML='<div><b style="color:'+(w>=LIC.w?'#16EC06':'#fff')+'">'+w+'<small>/'+LIC.w+'</small></b><span>Week</span></div><div><b style="color:'+(m>=LIC.m?'#16EC06':'#fff')+'">'+m+'<small>/'+LIC.m+'</small></b><span>'+MON[parse(k).getUTCMonth()]+'</span></div>';
+    $("lFor").textContent=forTxt(k);
+    $("licList").innerHTML=dl.length?dl.map(function(e){return '<div class="it"><div class="l"><span class="av">'+esc(ini(e.name))+'</span><div><div class="nm">'+esc(e.name)+'</div>'+(e.note||e.source?'<div class="sub">'+esc([e.source,e.note].filter(Boolean).join(" · "))+'</div>':'')+'</div></div><div><span class="pill b">Licensed</span></div></div>';}).join(""):'<div class="empty">No new licences '+forTxt(k)+'</div>';
   }
-  // ---------- tab 4: MDs ----------
+  navBind("l",renderLic);
+  // ---------- tab 4: MDs (read-only table from bs-v1:mdstats; the bot fills it from MyWFG) ----------
   function legs(){var l=getJ("legs",null);return l&&typeof l==="object"?l:{target:3,smd:[]};}
+  var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
   function renderMd(){
+    var st=getJ("mdstats",null);if(!st||typeof st!=="object")st={rows:[]};var rows=Array.isArray(st.rows)?st.rows:[];
+    function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
+    var mo=/^\d{4}-\d{2}$/.test(st.month||"")?st.month:today.slice(0,7);
+    $("mdMeta").textContent=MONL[+mo.slice(5,7)-1]+" "+mo.slice(0,4);
+    $("mdBody").innerHTML=rows.length?rows.map(function(r){return '<tr><td>'+esc(r.name)+'</td>'+(nb(r.recruits)?'<td class="na">—</td>':'<td>'+Math.round(+r.recruits)+'</td>')+(nb(r.cashflow)?'<td class="na">—</td>':'<td>$'+Math.round(+r.cashflow).toLocaleString("en-US")+'</td>')+'</tr>';}).join(""):'<tr><td colspan="3" class="empty">No MDs yet</td></tr>';
+    $("mdUpd").textContent=(st.updated?"From MyWFG · updated "+pretty(st.updated):"Your bot fills this from MyWFG")+(mo!==today.slice(0,7)?" · last month's numbers":"");
     var l=legs(),n=(l.smd||[]).length,t=l.target||3;
-    $("legRing").innerHTML=ring(n/t,recCol(n/t),92,9,'<b>'+n+'<small>/'+t+'</small></b>');
+    $("legRing").innerHTML=ring(n/t,recCol(n/t),56,6,'<b style="font-size:15px">'+n+'<small>/'+t+'</small></b>');
     $("legTxt").textContent="Direct SMD legs: "+n+" of "+t;
-    $("legNames").textContent=(l.smd||[]).length?"SMD legs: "+l.smd.join(", "):"No SMD legs yet";
-    var a=list("mds"),cnt={};STAGES.forEach(function(s){cnt[s]=0;});a.forEach(function(m){if(cnt[m.stage]!==undefined)cnt[m.stage]++;});
-    $("mdStats").innerHTML=STAGES.map(function(s){return '<div><b>'+cnt[s]+'</b><span>'+s+'</span></div>';}).join("");
-    if(!a.length){$("mdList").innerHTML='<div class="card empty">No MD candidates yet</div>';return;}
-    var o="";a.forEach(function(m){o+='<div class="md" data-id="'+esc(m.id)+'"><input class="nmi" data-k="name" value="'+esc(m.name)+'" placeholder="Name">'+
-      '<div class="r2"><div><label>Current title</label><input data-k="title" value="'+esc(m.title)+'" placeholder="e.g. SA, MD"></div><div><label>Stage</label><select data-k="stage">'+STAGES.map(function(s){return '<option'+(s===m.stage?' selected':'')+'>'+s+'</option>';}).join("")+'</select></div></div>'+
-      '<label>Notes</label><textarea data-k="notes" placeholder="Notes">'+esc(m.notes)+'</textarea>'+
-      '<label>Next step</label><input data-k="next" value="'+esc(m.next)+'" placeholder="Next step"><button class="del" data-del="1">Remove</button></div>';});
-    $("mdList").innerHTML=o;
+    $("legNames").textContent=(l.smd||[]).length?l.smd.join(", "):"No SMD legs yet";
   }
-  function mdSave(id,k,v){var a=list("mds");a.forEach(function(m){if(m.id===id){m[k]=v;m.u=Date.now();}});setJ("mds",a);}
-  $("mdList").addEventListener("input",function(e){var t=e.target,c=t.closest(".md");if(!c||!t.dataset.k||t.tagName==="SELECT")return;mdSave(c.dataset.id,t.dataset.k,t.value);});
-  $("mdList").addEventListener("change",function(e){var t=e.target,c=t.closest(".md");if(!c||t.tagName!=="SELECT")return;mdSave(c.dataset.id,"stage",t.value);renderMd();});
-  $("mdList").addEventListener("click",function(e){var b=e.target.closest("[data-del]");if(!b)return;var c=b.closest(".md"),a=list("mds"),m=a.filter(function(x){return x.id===c.dataset.id;})[0];
-    if(!confirm("Remove "+((m&&m.name)||"this candidate")+"?"))return;setJ("mds",a.filter(function(x){return x.id!==c.dataset.id;}));renderMd();});
-  $("mdAdd").addEventListener("click",function(){var a=list("mds");a.push({id:"md_"+Date.now().toString(36),name:"",title:"",stage:"Identified",notes:"",next:"",u:Date.now()});setJ("mds",a);renderMd();
-    var cs=document.querySelectorAll("#mdList .md");if(cs.length){var last=cs[cs.length-1];last.scrollIntoView({behavior:"smooth",block:"center"});last.querySelector("input").focus();}});
 
   // ---------- tab 5: trends (same approach as the fitness app: dashboard rows -> trend view with range toggle) ----------
   function cnt(name){return function(k){return list(name).filter(function(e){return e.date===k;}).length;};}
@@ -383,12 +427,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {s:"m-br",g:"Meetings",i:"👥",n:"Base recruiting",v:function(k){return int(day(k).m.br)||0;},T:{d:function(k){return dayT(k).br;},w:function(k){return wkT(k).br;},m:function(k){return moT(k).br;}}},
     {s:"m-bp",g:"Meetings",i:"🏁",n:"Base closing",v:function(k){return int(day(k).m.bp)||0;},T:{d:function(k){return dayT(k).bp;},w:function(k){return wkT(k).bp;},m:function(k){return moT(k).bp;}}},
     {s:"nc",g:"Meetings",i:"📇",n:"New contacts",v:function(k){return int(day(k).nc)||0;},T:{d:function(){return CONTACTS.d;},w:function(){return CONTACTS.w;},m:function(){return CONTACTS.m;}}},
-    {s:"r-pr",g:"Row results",i:"✅",n:"Personal recruiting results",v:function(k){return int(day(k).r.pr)||0;},T:{w:function(){return 1;},m:function(){return 3;}}},
-    {s:"r-pc",g:"Row results",i:"✅",n:"Personal closing results",v:function(k){return int(day(k).r.pc)||0;},T:{w:function(){return 1;},m:function(){return 4;}}},
-    {s:"r-br",g:"Row results",i:"✅",n:"Base recruiting results",v:function(k){return int(day(k).r.br)||0;},T:null},
-    {s:"r-bp",g:"Row results",i:"✅",n:"Base closing results",v:function(k){return int(day(k).r.bp)||0;},T:null},
+    {s:"rec",g:"Results",i:"🎯",n:"Recruits",v:function(k){var r=day(k).r;return (int(r.pr)||0)+(int(r.br)||0);},T:{d:function(){return HL.rec.d;},w:function(){return HL.rec.w;},m:function(){return HL.rec.m;}}},
+    {s:"pts",g:"Results",i:"📈",n:"Base points",k:1,v:function(k){var r=day(k).r;return (int(r.pc)||0)+(int(r.bp)||0);},T:{d:function(){return HL.pts.d;},w:function(){return HL.pts.w;},m:function(){return HL.pts.m;}}},
+    {s:"r-pr",g:"Row results",i:"✅",n:"Personal recruiting recruits",v:function(k){return int(day(k).r.pr)||0;},T:null},
+    {s:"r-pc",g:"Row results",i:"✅",n:"Personal closing points",k:1,v:function(k){return int(day(k).r.pc)||0;},T:null},
+    {s:"r-br",g:"Row results",i:"✅",n:"Base recruiting recruits",v:function(k){return int(day(k).r.br)||0;},T:null},
+    {s:"r-bp",g:"Row results",i:"✅",n:"Base closing points",k:1,v:function(k){return int(day(k).r.bp)||0;},T:null},
     {s:"certs",g:"Team",i:"🎓",n:"Certifications passed",v:cnt("certs"),T:null},
-    {s:"lic",g:"Team",i:"🪪",n:"New licences",v:cnt("licences"),T:{w:function(){return 2;},m:function(){return 8;}}}
+    {s:"lic",g:"Team",i:"🪪",n:"New licences",v:cnt("licences"),T:{w:function(){return LIC.w;},m:function(){return LIC.m;}}}
   ];
   function mBy(s){for(var i=0;i<METRICS.length;i++)if(METRICS[i].s===s)return METRICS[i];return null;}
   function nf(v,k){return k?kfmt(v):String(Math.round(v));}
@@ -469,7 +515,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview";renderHeader();TABS[t]();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
-  function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;show(tab);}}
+  function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
   document.addEventListener("visibilitychange",function(){if(!document.hidden)checkDay();});
   window.addEventListener("focus",checkDay);setInterval(checkDay,60000);
 
