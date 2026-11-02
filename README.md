@@ -7,27 +7,20 @@ Phone-first tracker for the goal **EMD + $250K by June 30, 2027**. It is one HTM
 **No personal or recruit data lives in this repo.** Names, meetings, certifications, licences and the MD list are only in the sync store.
 
 ## Tabs
-1. **Meetings**: a date picker (defaults to today, Toronto time, so you can backfill). Each category has one input for meetings and one optional Results input. The categories are Personal recruiting, Personal closing, Base recruiting, Base production, Licensing check-ins and SMD/MD leg meetings. There are also inputs for New contacts and Cash flow $. Rings show the total against the target for the day, week (Mon–Sun) and month, plus per-category rings and Results rings.
-2. **Certs**: a daily certification log (filled by the bot), with counts for today, this week, this month and all time.
-3. **Licences**: a new-licence log (filled by the bot), with rings against 2 a week and 8 a month.
-4. **MDs**: an editable list of MD candidates, plus a direct SMD legs ring (target 3).
+- **Header:** "GOAL: EMD + $250K by June 30, 2027", days left, and **results-only** goals with progress so far. A $100K business means 15 base recruits and 100,000 base points a month. That works out to 4 recruits and 23K points a week (15 ÷ 4.33 rounded up, 100,000 ÷ 4.33), and 1 recruit and 4K points a day, Mon–Sat (26 working days).
+1. **Meetings:** a date picker (Toronto time, so he can backfill) and rings for today, this week and this month: meetings against target. The rows are Personal recruiting, Personal closing, Base recruiting and Base closing, each with a meetings box and a Results box. There is also a New contacts box. The **Headline results** inputs are Base recruits and Base points, and they feed the header.
+2. **Certs:** the daily certification log (filled by the bot).
+3. **Licences:** the new-licence log (filled by the bot), with rings against 2 a week and 8 a month.
+4. **MDs:** an editable MD candidate list, plus a direct SMD legs ring.
+5. **Trends:** a dashboard row for every metric (this week against its weekly goal, and this month). Tapping a row opens the trend view (`#trends/<slug>`), which has a metric picker and Week / Month / All. Week and Month show daily bars with a dashed daily goal line. All shows weekly bars with a dashed weekly goal line. Each view shows the total against its goal, a comparison with the prior period, and ‹ › to move between periods.
 
 ## Targets (whole numbers)
-Weekly meeting targets, in the order personal recruiting / personal closing / base recruiting / base production / licensing / leg:
-- Nov 2026 (and anything earlier): 3/5/3/4/2/2 (19 a week)
-- Dec 2026: 4/5/5/6/3/3 (26 a week)
-- Jan 2027 onward: 4/5/6/8/4/3 (30 a week). The monthly targets are 17/22/26/34/17/13.
+Meeting targets per week, in the order personal recruiting / personal closing / base recruiting / base closing:
+- Nov 2026: 3/5/3/4 (15 a week)
+- Dec 2026: 4/5/5/6 (20 a week)
+- Jan 2027 onward: 4/5/6/8 (23 a week). The monthly targets are 17/22/26/34.
 
-The ramp months' monthly target is round(week × 4.33). The daily target is ceil(week / 6). New contacts are 3 a day, 18 a week and 75 a month. The Results rings are always at full pace:
-
-| Result | Week | Month |
-|---|---|---|
-| Personal recruits | 1 | 3 |
-| Personal sales | 1 | 4 |
-| Base shop recruits | 3 | 14 |
-| New licences | 2 | 8 |
-| Super base points | 24,000 | 102,000 |
-| Cash flow | $6,000 | $28,000 |
+The ramp months' monthly target is round(week × 4.33). The daily target is ceil(week / 6). New contacts are 3 a day, 18 a week and 75 a month. The trend goals with no daily target are personal recruiting results (1 a week, 3 a month), personal closing results (1 a week, 4 a month) and new licences (2 a week, 8 a month). Base recruiting results, base closing results and certifications have no target.
 
 ## Sync store
 `https://api.npoint.io/5b132b3a6768f39258a9` is public and needs no auth. GET reads it, and POST replaces the **whole** document.
@@ -44,7 +37,7 @@ The prefix is `bs-v1:`, not `nn-v1:`. This app shares the `harpreetsbajwa92.gith
 ### Keys
 | Key | Value (inside `v`, JSON-encoded) | Written by |
 |---|---|---|
-| `bs-v1:day:YYYY-MM-DD` | `{"m":{"pr":n,"pc":n,"br":n,"bp":n,"lc":n,"leg":n},"r":{"pr":recruits,"pc":sales,"br":base recruits,"bp":points,"lc":licences,"leg":n,"cash":dollars},"nc":new contacts,"u":ms}`. All values are whole numbers, and a missing value means it was left blank. | app |
+| `bs-v1:day:YYYY-MM-DD` | `{"m":{"pr":n,"pc":n,"br":n,"bp":n},"r":{"pr":n,"pc":n,"br":n,"bp":n},"nc":new contacts,"h":{"rec":base recruits,"pts":base points},"u":ms}`. All values are whole numbers, and a missing value means it was left blank. `bp` = **Base closing** (it was called "Base production"). `h` was added in v2026.11.02-2. Older records may still carry `m.lc`, `m.leg` and `r.lc`, `r.leg`, `r.cash`, which are kept but no longer shown. | app |
 | `bs-v1:certs` | array of `{"id","date":"YYYY-MM-DD","name","cert","score":int?,"note"?,"u":ms}` | **bot** |
 | `bs-v1:licences` | array of `{"id","date":"YYYY-MM-DD","name","source"?:"DBI Hub"\|"MyWFG","note"?,"u":ms}` | **bot** |
 | `bs-v1:mds` | array of `{"id","name","title","stage":"Identified"\|"Working"\|"On track"\|"Promoted","notes","next","u":ms}` | app (the bot may also write) |
