@@ -302,6 +302,28 @@ button{cursor:pointer}
 .pan .mdt.m4 td{font-size:14px;padding:5px 3px}
 .pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
 .mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
+/* ===== v18: Certs practice / exam tables (every active recruit) ===== */
+.lqx{padding:0;overflow:hidden}
+.tsc{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.lqt2{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;font-size:13px}
+.lqt2 th{position:sticky;top:0;background:#1d2328;font-family:var(--fc);font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:#8c979f;text-align:left;padding:8px 8px 6px;line-height:1.15;border-bottom:1px solid var(--line);white-space:nowrap}
+.lqt2 td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top;white-space:nowrap;font-weight:700;color:#e6ebee}
+.lqt2 tr:first-child td{border-top:0}
+.lqt2 th:first-child,.lqt2 td:first-child{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:1px 0 0 var(--line);min-width:118px;max-width:132px;white-space:normal}
+.lqt2 th:first-child{background:#1d2328;z-index:2}
+.lqt2 .nm2{font-size:13px;line-height:1.2}.lqt2 .nm2 small{white-space:normal}
+.lqt2 td small{display:block;font-size:10.5px;font-weight:600;color:#8c979f;margin-top:2px;white-space:nowrap}
+.lqt2 .ro{color:#e0675c;font-weight:700}
+.lqt2 .cm{white-space:normal;min-width:230px;font-size:12px;font-weight:600;color:#cfd6db;line-height:1.3}
+.lqt2 .ok{color:#16EC06}.lqt2 .bad{color:#ff6b5e}.lqt2 .amb{color:#F5A623}.lqt2 .mut{color:#6f7a82;font-weight:600}
+.lqt2 .sq span{color:#9aa5ad;font-weight:600}.lqt2 .sq i{font-style:normal;color:#56616a;margin:0 3px;font-size:11px}
+.lqt2 b.g{color:#16EC06}.lqt2 b.a{color:#F5A623}.lqt2 b.r{color:#ff6b5e}
+.lqt2 .pz{font-family:var(--fn);font-size:15px;color:#9aa5ad}.lqt2 .pz.g{color:#16EC06}.lqt2 .pz.a{color:var(--gold)}
+.lqt2 tr.off td{opacity:.6}.lqt2 tr.off td:first-child{opacity:1;color:#9aa5ad}
+.lqhl{margin:4px 0 8px 18px;padding:0;font-size:13px;font-weight:600;color:#dfe5e9;line-height:1.4}
+.lqhl li{margin:3px 0}
+#lqAct .lqs.call{margin-top:4px}
+@media (min-width:900px){.lqt2{font-size:13.5px}.lqt2 .cm{min-width:300px}}
 /* ===== v17: compact New licences goal cards (match New names) ===== */
 #licStats.lgo{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px;padding:0;background:none;border:0;box-shadow:none}
 #licStats .lgb,#licStats .lgs{display:flex;align-items:center;gap:9px;margin:0;padding:9px 11px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0)),var(--card);box-shadow:0 8px 22px rgba(0,0,0,.25)}
@@ -485,6 +507,13 @@ button{cursor:pointer}
     <div class="slbl"><span>Daily LLQP report</span><small id="lqUpd"></small></div>
     <div class="card lq" id="lqCard"></div>
     </div></div>
+    <!-- v18: every ACTIVE Oliver's recruit (bs-v1:llqpreport practice / exams / highlights / actions) -->
+    <div class="slbl"><span>Practice tests <small id="lqPn"></small></span><small>date order · green ≥60</small></div>
+    <div class="card lqx"><div class="tsc" id="lqPrac"></div></div>
+    <div class="slbl"><span>Certification exams <small id="lqXn"></small></span><small>✓ pass · red fail</small></div>
+    <div class="card lqx"><div class="tsc" id="lqExam"></div></div>
+    <div class="slbl"><span>Highlights &amp; calls to action</span></div>
+    <div class="card lq" id="lqAct"></div>
   </section>
 
   <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
@@ -537,7 +566,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-17";
+var APP_VERSION="2026.11.02-18";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -705,14 +734,44 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function sec(title,arr,row,none,cls){return '<div class="lqs'+(cls?' '+cls:'')+'"><div class="lqt">'+title+'</div>'+(arr.length?arr.map(row).join(""):'<div class="lqe">'+none+'</div>')+'</div>';}
     // fresh passes: one line per recruit
     var fg=[],fm={};A(r.fresh).forEach(function(f){var k=String(f.name||"");if(!fm[k]){fm[k]={name:k,p:[]};fg.push(fm[k]);}fm[k].p.push(f);});
-    h+='<div class="lqg"><div>';
+    h+='<div class="lqg1"><div>';
     h+=sec("🎉 Fresh passes",fg,function(g){return '<div class="lqr"><span>'+esc(g.name)+'<small>'+g.p.map(function(f){return esc(f.cert)+(f.score!==undefined&&f.score!==""?" "+esc(f.score)+"%":"")+(f.date?" · "+lqWhen(f.date):"");}).join("<br>")+'</small></span></div>';},"No fresh passes");
-    h+=sec("📖 Studying",A(r.studying).slice(0,6),function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+(s.last_login?"Last login "+lqWhen(s.last_login):"")+(s.note?(s.last_login?" · ":"")+esc(s.note):"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+'</em></div>';},"No one studying in the last 7 days");
-    var call=sec("📞 Needs a call",A(r.needs_call).slice(0,6),function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.reason||"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+(s.days_since_login!=null&&s.days_since_login!==""?'<small>'+esc(s.days_since_login)+'d since login</small>':"")+'</em></div>';},"No calls needed","call");
     h+=sec("🗓 Exams in 7 days",A(r.exams_soon),function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.exam||"")+'</small></span><em>'+lqWhen(s.date)+'</em></div>';},"No exams booked");
-    h+='</div><div>'+call+'</div></div>';
+    h+='</div></div>';
     h+='<div class="lqd"><b>DBI Hub:</b> '+(r.dbi?esc(r.dbi):"No DBI update today")+'</div>';
     c.innerHTML=h;
+    renderLqTables(r);
+  }
+  // v18: practice + exam tables for every active recruit, then highlights and calls to action
+  function renderLqTables(r){
+    function A(x){return Array.isArray(x)?x:[];}
+    function sc(v){var n=+v;return isFinite(n)?String(Math.round(n)):"?";}
+    function who(p){var dl=p.days_left,ds=p.days_since_login,t=[];
+      if(dl===0)t.push('<b class="ro">out of time</b>');else if(dl!=null&&dl!=="")t.push(esc(dl)+'d left');
+      if(ds!=null&&ds!=="")t.push(ds===0?'login today':'login '+esc(ds)+'d ago');
+      return '<td class="nm2'+(dl===0?' off':'')+'">'+esc(p.name)+'<small>'+t.join(' · ')+'</small></td>';}
+    function ecCell(ec){ec=ec||{};var st=ec.status,d=ec.date?lqWhen(ec.date):"",n=+ec.attempts||0;
+      if(st==="passed")return '<td class="ok">✓ Passed'+(d?'<small>'+d+'</small>':'')+'</td>';
+      if(st==="failed")return '<td class="bad">Failed ×'+n+'</td>';
+      if(st==="in_progress")return '<td class="amb">In progress</td>';
+      if(st==="not_started")return '<td class="mut">Not started</td>';
+      if(st==="expired")return '<td class="mut">Expired'+(n?'<small>failed ×'+n+'</small>':'')+'</td>';
+      return '<td class="mut">—</td>';}
+    function prCell(a){a=A(a);if(!a.length)return '<td class="mut">—</td>';
+      return '<td class="sq">'+a.map(function(v,i){var last=i===a.length-1;return last?'<b class="'+(+v>=60?'g':'a')+'">'+sc(v)+'</b>':'<span>'+sc(v)+'</span>';}).join('<i>→</i>')+'</td>';}
+    function exCell(a){a=A(a);if(!a.length)return '<td class="mut">—</td>';
+      return '<td class="sq">'+a.map(function(x){x=x||{};var ok=String(x.pf).toUpperCase()==="P";return '<b class="'+(ok?'g':'r')+'"'+(x.date?' title="'+esc(lqWhen(x.date))+'"':'')+'>'+(x.score!=null&&x.score!==""?sc(x.score):(ok?'Pass':'Fail'))+(ok?' ✓':'')+'</b>';}).join('<i>→</i>')+'</td>';}
+    var P=A(r&&r.practice),X=A(r&&r.exams);
+    $("lqPn").textContent=P.length?P.length+" active":"";$("lqXn").textContent=X.length?X.length+" active":"";
+    $("lqPrac").innerHTML=P.length?'<table class="lqt2"><thead><tr><th>Name</th><th>Ethics<br>Compliance</th><th>Ethics</th><th>Life</th><th>A&amp;S</th><th>Seg<br>Funds</th><th class="cm">Comment</th></tr></thead><tbody>'+
+      P.map(function(p){return '<tr'+(p.days_left===0?' class="off"':'')+'>'+who(p)+ecCell(p.ec)+prCell(p.ethics)+prCell(p.life)+prCell(p.as)+prCell(p.seg)+'<td class="cm">'+esc(p.comment||"")+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No practice data yet. Your bot adds it each morning.</div>';
+    $("lqExam").innerHTML=X.length?'<table class="lqt2"><thead><tr><th>Name</th><th>Ethics</th><th>Life</th><th>A&amp;S</th><th>Seg<br>Funds</th><th>Passed</th><th class="cm">Comment</th></tr></thead><tbody>'+
+      X.map(function(e){var n=+e.passed||0;return '<tr'+(e.days_left===0?' class="off"':'')+'>'+who(e)+exCell(e.ethics)+exCell(e.life)+exCell(e.as)+exCell(e.seg)+'<td class="pz'+(n>=4?' g':n?' a':'')+'">'+n+'/4</td><td class="cm">'+esc(e.comment||"")+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No exam data yet. Your bot adds it each morning.</div>';
+    var hl=A(r&&r.highlights),ac=A(r&&r.actions);
+    if(!ac.length)ac=A(r&&r.needs_call).map(function(s){return {name:s.name,why:s.reason,days_left:s.days_left,days_since_login:s.days_since_login};});   // older reports
+    var h='<div class="lqt">⭐ Highlights</div>'+(hl.length?'<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>':'<div class="lqe">No highlights today</div>');
+    h+='<div class="lqs call"><div class="lqt">📞 Call to action</div>'+(ac.length?ac.map(function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.why||"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+(s.days_since_login!=null&&s.days_since_login!==""?'<small>'+esc(s.days_since_login)+'d since login</small>':"")+'</em></div>';}).join(""):'<div class="lqe">No calls needed</div>')+'</div>';
+    $("lqAct").innerHTML=h;
   }
   navBind("c",renderCert);
   // ---------- tab 3: licences (goal 1 a week, 3 a month) ----------
