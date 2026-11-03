@@ -796,6 +796,14 @@ button{cursor:pointer}
 .att tr.ina td{background:rgba(255,255,255,.025);font-family:var(--fc);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#8c979f;padding:6px 8px}
 .att tr.io td.anm b{color:#aab4bb}
 .att tr.hid{display:none}
+.att tr.asub td{padding:9px 8px 7px;border-top:1px solid var(--line);font-family:var(--fc);font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:#cfd6db;background:rgba(255,255,255,.04)}
+.att tr.asub.lic td{background:rgba(22,236,6,.07);color:#16EC06}
+.att tr.asub td b{font-weight:800}.att tr.asub .pc{font-family:var(--fn);color:#fff;letter-spacing:0;font-size:13px;margin-left:4px}
+.att tr.asub i{font-style:normal;font-weight:600;color:#7f8a92;letter-spacing:.6px;font-size:10px;margin-left:6px}
+.att tr.asub small{float:right;font-weight:700;color:#aab4bb;letter-spacing:.4px;font-size:10.5px;text-transform:none;margin-top:1px}
+.atk2{margin-top:8px}.atk2>div{font-size:14px}.atk2 b.g{color:#16EC06}.atk2 .h:first-child{font-size:9.5px;text-transform:none;letter-spacing:.2px;color:#7f8a92;text-align:left}
+.atk2 small{color:#7f8a92;font-weight:600;font-size:10.5px}
+.atci .lc{font-size:9.5px;font-weight:800;color:#16EC06;background:rgba(22,236,6,.12);border-radius:5px;padding:1px 4px;letter-spacing:.5px;vertical-align:1px}
 @media (max-width:380px){.att .acd{width:54px;font-size:10.5px}.att .ack{width:38px}.att input[type=checkbox]{width:24px;height:24px}.att input[type=checkbox]:checked:after{left:6px;top:1px}}
 @media (min-width:700px){.att .arc{width:20%}.att .acd{width:80px}}
 .atnote{font-size:11.5px;color:#7f8a92;line-height:1.45}
@@ -976,7 +984,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-38";
+var APP_VERSION="2026.11.03-39";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1659,7 +1667,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function attUi(){try{return JSON.parse(localStorage.getItem("bs-ui:att"))||{};}catch(e){return {};}}
   function attUiSave(){try{localStorage.setItem("bs-ui:att",JSON.stringify({t:AT.t}));}catch(e){}}
   function attTy(id){for(var i=0;i<ATT_TYPES.length;i++)if(ATT_TYPES[i].id===id)return ATT_TYPES[i];return ATT_TYPES[0];}
-  function attData(){var S=getJ("attendance",null);if(!S||typeof S!=="object")S={v:1};if(!S.sessions||typeof S.sessions!=="object")S.sessions={};return S;}
+  function attData(){var S=getJ("attendance",null);if(!S||typeof S!=="object")S={v:1};if(!S.sessions||typeof S.sessions!=="object")S.sessions={};
+    var R=getJ("attendance_roster",null),M=R&&R.merged&&typeof R.merged==="object"?R.merged:null;if(M)attAlias(S,M);return S;}
+  // merged people: ticks stored under a retired id move to the kept id (tombstone on the old id so the move syncs cleanly)
+  function attAlias(S,M){Object.keys(S.sessions).forEach(function(k){var s=S.sessions[k];if(!s||typeof s!=="object")return;s.ts=s.ts||{};
+    [["inv","i:"],["att","a:"]].forEach(function(F){var f=F[0],p=F[1],a=s[f]||[];Object.keys(M).forEach(function(o){var n=M[o];if(!n||o===n)return;
+      var ho=a.indexOf(o)>=0,to=+s.ts[p+o]||0,tn=+s.ts[p+n]||0;if(!ho)return;
+      a=a.filter(function(x){return x!==o;});if(ho&&a.indexOf(n)<0&&!(tn>to))a.push(n);
+      s.ts[p+o]=Math.max(to,tn)+1;});s[f]=a.sort();});});}
   function attSess(S,t,d){return S.sessions[t+"|"+d]||null;}
   function attHas(s){return !!(s&&((s.inv&&s.inv.length)||(s.att&&s.att.length)));}
   function attSessList(S,t){return Object.keys(S.sessions).map(function(k){return S.sessions[k];}).filter(function(s){return s&&s.date&&(!t||s.type===t);}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});}
@@ -1691,7 +1706,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(s.type===t&&s.date>o.ls)o.ls=s.date;if(s.date>=from){o.n8++;if(s.type===t)o.n8s++;}});});
     var out={};["base","superbase"].forEach(function(sec){var a=(R.sections&&R.sections[sec])||[];
       a=a.map(function(p,i){var o=st[p.id]||{la:"",ls:"",n8:0,n8s:0,all:0};return {p:p,i:i,o:o,act:!!(p.biz||(p.act&&p.why!=="attended")||o.n8)};});
-      a.sort(function(x,y){return (y.act-x.act)||((y.o.la?1:0)-(x.o.la?1:0))||(x.o.ls<y.o.ls?1:x.o.ls>y.o.ls?-1:0)||(y.o.n8s-x.o.n8s)||(x.o.la<y.o.la?1:x.o.la>y.o.la?-1:0)||(y.o.n8-x.o.n8)||(y.o.all-x.o.all)||(x.i-y.i);});
+      a.sort(function(x,y){return ((y.p.lic?1:0)-(x.p.lic?1:0))||(y.act-x.act)||((y.o.la?1:0)-(x.o.la?1:0))||(x.o.ls<y.o.ls?1:x.o.ls>y.o.ls?-1:0)||(y.o.n8s-x.o.n8s)||(x.o.la<y.o.la?1:x.o.la>y.o.la?-1:0)||(y.o.n8-x.o.n8)||(y.o.all-x.o.all)||(x.i-y.i);});
       out[sec]=a;});
     return out;}
   function attWho(R){var m={};["base","superbase"].forEach(function(sec){((R.sections&&R.sections[sec])||[]).forEach(function(p){m[p.id]=p;});});return m;}
@@ -1713,24 +1728,30 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       h+='<div class="atsg'+(sb?' sb':'')+'"><b>'+(sb?'Super base':'Base shop')+'</b> <span class="pc">'+a.length+'</span><small>'+(sb?"SMD Sunchandan Singh's team · ":"")+'<span data-sc="'+sec+'">'+ni+' invited · '+na+' attended</span></small></div>';
       if(!a.length){h+='<div class="card attb"><div class="atnone">No one listed</div></div>';return;}
       h+='<div class="card attb '+(sb?'sb':'base')+'"><table class="att"><thead><tr><th class="asn">#</th><th>Name</th><th class="acd">WFG code</th><th class="arc">Recruiter</th><th class="ack">Invited</th><th class="ack">Attended</th></tr></thead><tbody>';
-      var shown=false;a.forEach(function(x,i){var p=x.p,o=x.o;
-        if(!x.act&&!shown){shown=true;h+='<tr class="ina" data-div="1"><td colspan="6">Inactive · '+a.filter(function(y){return !y.act;}).length+'</td></tr>';}
+      [["lic","Licensed","invite first"],["rec","Recruits","not licensed yet"]].forEach(function(G){var gl=a.filter(function(x){return (G[0]==="lic")===!!x.p.lic;}),gi=0,ga=0,gia=0;
+        gl.forEach(function(x){if(inv[x.p.id])gi++;if(att[x.p.id])ga++;if(inv[x.p.id]&&att[x.p.id])gia++;});
+        h+='<tr class="asub '+G[0]+'" data-g="'+sec+'-'+G[0]+'"><td colspan="6"><b>'+G[1]+'</b> <span class="pc">'+gl.length+'</span> <i>'+G[2]+'</i><small data-gc="'+sec+'-'+G[0]+'">'+gi+' inv · '+ga+' att · '+attRate({i:gi,ia:gia})+'</small></td></tr>';
+        if(!gl.length){h+='<tr class="ina" data-div="1" data-gm="'+sec+'-'+G[0]+'"><td colspan="6">No one</td></tr>';return;}
+      var shown=false;gl.forEach(function(x,i){var p=x.p,o=x.o;
+        if(!x.act&&!shown){shown=true;h+='<tr class="ina" data-div="1"><td colspan="6">Inactive · '+gl.filter(function(y){return !y.act;}).length+'</td></tr>';}
         var sub=o.la?'<small class="hot">last '+esc(attShort(o.la))+(o.n8?' · '+o.n8+'× in 8 wk':'')+'</small>':(p.biz||p.why)&&p.why!=="no recent activity"?'<small>'+esc(p.biz||p.why)+'</small>':'';
         var tl=attTel(p),lk=tl?'<span class="lk"><a href="tel:'+esc(tl)+'" aria-label="Call '+esc(p.name)+'">📞 Call</a><a href="sms:'+esc(tl)+'" aria-label="Text '+esc(p.name)+'">💬 Text</a></span>':'';
         var srch=(p.name+" "+(p.aka||[]).join(" ")+" "+(p.code||"")+" "+(p.rec||"")).toLowerCase();
-        h+='<tr data-id="'+esc(p.id)+'" data-q="'+esc(srch)+'"'+(x.act?'':' class="io"')+'><td class="asn">'+(i+1)+'</td><td class="anm"><b>'+esc(p.name)+'</b>'+sub+lk+'</td><td class="acd'+(p.code?'':' na')+'">'+(p.code?esc(p.code):'—')+'</td><td class="arc">'+esc(p.rec||"")+'</td>'+
-          '<td class="ack"><input type="checkbox" data-f="i" aria-label="Invited: '+esc(p.name)+'"'+(inv[p.id]?' checked':'')+'></td><td class="ack"><input type="checkbox" data-f="a" aria-label="Attended: '+esc(p.name)+'"'+(att[p.id]?' checked':'')+'></td></tr>';});
+        h+='<tr data-id="'+esc(p.id)+'" data-gm="'+sec+'-'+G[0]+'" data-q="'+esc(srch)+'"'+(x.act?'':' class="io"')+'><td class="asn">'+(i+1)+'</td><td class="anm"><b>'+esc(p.name)+'</b>'+sub+lk+'</td><td class="acd'+(p.code?'':' na')+'">'+(p.code?esc(p.code):'—')+'</td><td class="arc">'+esc(p.rec||"")+'</td>'+
+          '<td class="ack"><input type="checkbox" data-f="i" aria-label="Invited: '+esc(p.name)+'"'+(inv[p.id]?' checked':'')+'></td><td class="ack"><input type="checkbox" data-f="a" aria-label="Attended: '+esc(p.name)+'"'+(att[p.id]?' checked':'')+'></td></tr>';});});
       h+='</tbody></table></div>';});
     $("attSecs").innerHTML=h;
     attFilter();attSide();
     var g=R.gaps||{},gb=g.base||{},gs=g.superbase||{};
-    $("attNote").innerHTML='<b>How it works.</b> Same names for every training type; ticks are saved per training type and date, and sync to your other devices. Active people are on top (attended in the last 8 weeks, MD/SMD, new recruit, licensing or producing), ranked by their latest attended session, then how often in the last 8 weeks; people who never attended sit below. The list refreshes every morning from DBI Hub + MyWFG and never clears your ticks. '+
+    $("attNote").innerHTML='<b>How it works.</b> Same names for every training type; ticks are saved per training type and date, and sync to your other devices. Each section lists <b>Licensed</b> people first (licensed on MyWFG, or licence approved on DBI Hub; invite them first), then <b>Recruits</b> (not licensed yet); someone who gets licensed moves up on the next morning refresh and keeps their ticks. Numbers restart in each group. Within each group, active people are on top (attended in the last 8 weeks, MD/SMD, new recruit, licensing or producing), ranked by their latest attended session, then how often in the last 8 weeks; people who never attended sit below. The list refreshes every morning from DBI Hub + MyWFG and never clears your ticks. '+
       '<br><b>Data gaps.</b> Recruiter unknown for '+((gb.no_recruiter||0)+(gs.no_recruiter||0))+', no WFG code for '+((gb.no_code||0)+(gs.no_code||0))+', no phone for '+((gb.no_phone||0)+(gs.no_phone||0))+' (phone buttons show only when MyWFG has a cell number).';
   }
-  function attFilter(){var q=(AT.q||"").trim().toLowerCase();[].forEach.call(document.querySelectorAll("#attSecs tbody tr"),function(r){if(r.dataset.div){r.classList.toggle("hid",!!q);return;}r.classList.toggle("hid",!!q&&r.dataset.q.indexOf(q)<0);});}
-  function attStats(s,W){var c={base:{i:0,a:0,ia:0},superbase:{i:0,a:0,ia:0}},I={},A={};(s&&s.inv||[]).forEach(function(id){I[id]=1;});(s&&s.att||[]).forEach(function(id){A[id]=1;});
-    Object.keys(I).concat(Object.keys(A)).forEach(function(id,ix,arr){if(arr.indexOf(id)!==ix)return;var p=W[id];var sec=p&&p.team==="superbase"?"superbase":"base";if(I[id])c[sec].i++;if(A[id])c[sec].a++;if(I[id]&&A[id])c[sec].ia++;});
-    c.total={i:c.base.i+c.superbase.i,a:c.base.a+c.superbase.a,ia:c.base.ia+c.superbase.ia};return c;}
+  function attFilter(){var q=(AT.q||"").trim().toLowerCase(),vis={};[].forEach.call(document.querySelectorAll("#attSecs tbody tr"),function(r){if(r.dataset.g)return;if(r.dataset.div){r.classList.toggle("hid",!!q);return;}var h=!!q&&r.dataset.q.indexOf(q)<0;r.classList.toggle("hid",h);if(!h)vis[r.dataset.gm]=1;});
+    [].forEach.call(document.querySelectorAll("#attSecs tr.asub"),function(r){r.classList.toggle("hid",!!q&&!vis[r.dataset.g]);});}
+  function attStats(s,W){var c={base:{i:0,a:0,ia:0},superbase:{i:0,a:0,ia:0}},I={},A={};["base","superbase"].forEach(function(x){c[x].lic={i:0,a:0,ia:0};c[x].rec={i:0,a:0,ia:0};});(s&&s.inv||[]).forEach(function(id){I[id]=1;});(s&&s.att||[]).forEach(function(id){A[id]=1;});
+    Object.keys(I).concat(Object.keys(A)).forEach(function(id,ix,arr){if(arr.indexOf(id)!==ix)return;var p=W[id];var sec=p&&p.team==="superbase"?"superbase":"base",g=c[sec][p&&p.lic?"lic":"rec"];if(I[id]){c[sec].i++;g.i++;}if(A[id]){c[sec].a++;g.a++;}if(I[id]&&A[id]){c[sec].ia++;g.ia++;}});
+    function sum(a,b){return {i:a.i+b.i,a:a.a+b.a,ia:a.ia+b.ia};}
+    c.total=sum(c.base,c.superbase);c.total.lic=sum(c.base.lic,c.superbase.lic);c.total.rec=sum(c.base.rec,c.superbase.rec);return c;}
   function attRate(x){return x.i?Math.round(100*x.ia/x.i)+"%":"—";}
   function attSide(){var R=getJ("attendance_roster",null);if(!R||!R.sections)return;var S=attData(),T=attTy(AT.t),k=AT.d,s=attSess(S,AT.t,k),W=attWho(R),c=attStats(s,W);
     // counts
@@ -1738,10 +1759,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       '<div class="h"></div><div class="h b">Base</div><div class="h s">Super base</div><div class="h">Total</div>'+
       '<div class="r">Invited</div><div>'+c.base.i+'</div><div>'+c.superbase.i+'</div><div class="t">'+c.total.i+'</div>'+
       '<div class="r">Attended</div><div class="g">'+c.base.a+'</div><div class="g">'+c.superbase.a+'</div><div class="g t">'+c.total.a+'</div>'+
-      '<div class="r">Show-up rate</div><div>'+attRate(c.base)+'</div><div>'+attRate(c.superbase)+'</div><div class="t">'+attRate(c.total)+'</div></div>';
+      '<div class="r">Show-up rate</div><div>'+attRate(c.base)+'</div><div>'+attRate(c.superbase)+'</div><div class="t">'+attRate(c.total)+'</div></div>'+
+      '<div class="atk atk2"><div class="h">Att / Inv</div><div class="h b">Base</div><div class="h s">Super base</div><div class="h">Total</div>'+
+      [["lic","Licensed"],["rec","Recruits"]].map(function(G){function cl(x){return '<b class="g">'+x.a+'</b>/'+x.i+' <small>'+attRate(x)+'</small>';}
+        return '<div class="r">'+G[1]+'</div><div>'+cl(c.base[G[0]])+'</div><div>'+cl(c.superbase[G[0]])+'</div><div class="t">'+cl(c.total[G[0]])+'</div>';}).join("")+'</div>';
     var walk=c.total.a-c.total.ia;if(walk>0)h+='<div class="note" style="text-align:left">'+walk+' attended without an invite tick (walk-ins). Show-up rate = invited people who attended.</div>';
     $("attCounts").innerHTML=h;
-    ["base","superbase"].forEach(function(sec){var e=document.querySelector('[data-sc="'+sec+'"]');if(e)e.textContent=c[sec].i+" invited · "+c[sec].a+" attended";});
+    ["base","superbase"].forEach(function(sec){var e=document.querySelector('[data-sc="'+sec+'"]');if(e)e.textContent=c[sec].i+" invited · "+c[sec].a+" attended";
+      ["lic","rec"].forEach(function(g){var e2=document.querySelector('[data-gc="'+sec+'-'+g+'"]');if(e2)e2.textContent=c[sec][g].i+" inv · "+c[sec][g].a+" att · "+attRate(c[sec][g]);});});
     // trend: last 10 sessions of this type (with ticks, or the selected one)
     function trendOf(t,cur){return attSessList(S,t).filter(function(x){return attHas(x)||(cur&&x.date===cur);}).filter(function(x){return x.date<=today||x.date===cur;});}
     function ind(list){var n=list.map(function(x){return (x.att||[]).length;});if(n.length<2)return '<span class="atind fl">▬ not enough sessions yet</span>';
@@ -1762,9 +1787,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var I={};(s&&s.inv||[]).forEach(function(id){I[id]=1;});var A2={};(s&&s.att||[]).forEach(function(id){A2[id]=1;});
     var from=shift(k,-28),recent={},prevS=null;attSessList(S,null).forEach(function(x){if(x.date<k&&x.date>=from)(x.att||[]).forEach(function(id){if(!recent[id]||x.date>recent[id])recent[id]=x.date;});});
     attSessList(S,AT.t).forEach(function(x){if(x.date<k&&attHas(x))prevS=x;});
-    var g1=Object.keys(recent).filter(function(id){return W[id]&&!I[id];}).sort(function(a,b){return recent[a]<recent[b]?1:-1;});
-    var g2=prevS?(prevS.inv||[]).filter(function(id){return W[id]&&(prevS.att||[]).indexOf(id)<0&&!A2[id];}):[];
-    function row(id,why){var p=W[id],tl=attTel(p);return '<div class="atci"><span class="n">'+esc(p.name)+(p.team==="superbase"?' <span class="sb">· SB</span>':'')+'<small>'+esc(why)+(p.rec?' · rec. '+esc(p.rec):'')+'</small></span>'+
+    var g1=Object.keys(recent).filter(function(id){return W[id]&&!I[id];}).sort(function(a,b){return ((W[b].lic?1:0)-(W[a].lic?1:0))||(recent[a]<recent[b]?1:recent[a]>recent[b]?-1:0);});
+    var g2=prevS?(prevS.inv||[]).filter(function(id){return W[id]&&(prevS.att||[]).indexOf(id)<0&&!A2[id];}):[];g2=g2.map(function(id,i){return [id,i];}).sort(function(x,y){return ((W[y[0]].lic?1:0)-(W[x[0]].lic?1:0))||(x[1]-y[1]);}).map(function(x){return x[0];});
+    function row(id,why){var p=W[id],tl=attTel(p);return '<div class="atci"><span class="n">'+esc(p.name)+(p.lic?' <span class="lc">LIC</span>':'')+(p.team==="superbase"?' <span class="sb">· SB</span>':'')+'<small>'+esc(why)+(p.rec?' · rec. '+esc(p.rec):'')+'</small></span>'+
       (tl?'<a class="atbtn ph" href="tel:'+esc(tl)+'" aria-label="Call">📞</a><a class="atbtn ph" href="sms:'+esc(tl)+'" aria-label="Text">💬</a>':'')+(I[id]?'<span class="atbtn">Invited ✓</span>':'<button type="button" class="atbtn inv" data-inv="'+esc(id)+'">+ Invite</button>')+'</div>';}
     var nCall=g1.length+g2.length,ch='<details class="atcl"'+(nCall&&nCall<=12?' open':'')+'><summary><div class="athd" style="margin:0;flex:1"><b>Call list</b><span>'+(nCall?nCall+' to call':'nobody right now')+'</span></div></summary>';
     ch+='<div class="atcg">Came in the last 4 weeks · not invited yet ('+g1.length+')</div>'+(g1.length?g1.map(function(id){return row(id,"last came "+attShort(recent[id]));}).join(""):'<div class="atnone">Nobody</div>');
