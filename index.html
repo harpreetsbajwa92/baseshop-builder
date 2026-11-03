@@ -681,6 +681,124 @@ button{cursor:pointer}
 #p-lb .lb2 tr.me td{background:rgba(245,196,81,.07)}#p-lb .lb2 tr.me td:first-child{background:#2c2f2a}
 #p-lb .lb2 .chip{display:inline-block;font-size:9.5px;font-weight:700;color:#14181b;background:#c9a25a;border-radius:6px;padding:0 5px;margin-left:4px;vertical-align:1px}
 #p-lb .lb2 .cnt{color:#9fd3a8}
+/* v37: shared month calendar (Fitness-style pill opens a whole-month view; ‹ › toggles months like Google Calendar) */
+.pl.cal{cursor:pointer}.pl.cal input{pointer-events:none}
+.pl.cal:after{content:"";display:inline-block;width:0;height:0;margin-left:7px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #aab4bb;vertical-align:2px}
+.bscal{position:fixed;inset:0;z-index:300;display:flex;align-items:flex-end;justify-content:center}
+.bscal[hidden]{display:none}
+.bscal .bscb{position:absolute;inset:0;background:rgba(8,11,13,.62);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.bscal .bscp{position:relative;width:100%;max-width:420px;background:linear-gradient(180deg,#2b343b,#20272c);border:1px solid rgba(255,255,255,.08);border-radius:22px 22px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px rgba(0,0,0,.5);animation:bscUp .18s ease-out}
+@media (min-width:600px){.bscal{align-items:center}.bscal .bscp{border-radius:22px}}
+@keyframes bscUp{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+.bsch{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.bsch b{flex:1;font-family:var(--fc);font-size:13px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#aab4bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bscx{background:#3a444c;border:0;border-radius:999px;width:32px;height:32px;color:#fff;font-size:16px;line-height:1}
+.bscn{display:flex;align-items:center;justify-content:space-between;background:#1d2328;border-radius:999px;height:42px;padding:0 3px;margin-bottom:8px}
+.bscn .pa{width:40px;height:40px;background:none;border:0;font-size:26px;line-height:1;color:#fff;font-weight:600}
+.bscn .pa:disabled{color:#4a555e}
+.bscm{background:#3a444c;border:0;border-radius:999px;height:32px;padding:0 16px;font-family:var(--fc);font-weight:700;font-size:16px;letter-spacing:1.6px;text-transform:uppercase;color:#fff}
+.bscg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}
+.bscg .wd{font-family:var(--fc);font-size:11px;font-weight:800;letter-spacing:1px;color:#7f8a92;padding:3px 0 4px}
+.bscg button{position:relative;height:42px;border:0;border-radius:12px;background:transparent;color:#e6ebee;font-family:var(--fn);font-size:15px;font-weight:700}
+.bscg button.td{box-shadow:inset 0 0 0 1.5px #6cc3f5}
+.bscg button.sel{background:var(--gold);color:#14181b;box-shadow:none}
+.bscg button.mk:after{content:"";position:absolute;left:50%;bottom:5px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#16EC06}
+.bscg button.sel.mk:after{background:#14181b}
+.bscg button:disabled{color:#4a555e}
+.bscg button.ph{visibility:hidden}
+.bscg.mo{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.bscg.mo button{height:48px;font-family:var(--fc);font-size:16px;letter-spacing:1.2px;text-transform:uppercase;background:#1d2328}
+.bscg.mo button.sel{background:var(--gold)}
+.bscf{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.bscf button{flex:1;min-width:0;background:#3a444c;border:0;border-radius:999px;color:#fff;font-family:var(--fc);letter-spacing:1px;text-transform:uppercase;font-size:13px;font-weight:700;padding:9px 10px}
+.bscf button.go{background:rgba(245,196,81,.16);color:var(--gold)}
+.bscl{margin-top:8px;font-size:11px;color:#7f8a92;text-align:center}
+.bscl i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#16EC06;margin:0 4px 1px 0;vertical-align:middle}
+/* v37: Leaders month pill (replaces the select's look; the select stays as the value holder) */
+.lbmbar .pnav{height:36px}.lbmbar .pnav .pa{height:36px;width:34px}.lbmbar .pl{min-width:112px;height:28px;font-size:14px}
+.lbmsw.v37{display:none}
+/* v37: Attendance tab */
+#p-att{max-width:900px;margin:0 auto}
+#p-att .mdf{margin-bottom:2px}
+.atbar{display:flex;flex-direction:column;gap:8px;margin:10px 0 6px}
+.atlb{font-family:var(--fc);font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#8c979f;margin:0 4px -4px}
+.atsel{position:relative}
+.atsel:after{content:"▾";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#14181b;pointer-events:none;font-size:13px}
+#attType{width:100%;appearance:none;-webkit-appearance:none;background:var(--gold);color:#14181b;border:0;border-radius:14px;font-family:var(--fc);font-size:16px;font-weight:800;letter-spacing:.6px;padding:11px 34px 11px 14px}
+.atdn{display:flex;align-items:center;justify-content:center;gap:8px}
+.atdn .pl{min-width:170px}
+.atss{text-align:center;font-size:11.5px;color:#8c979f;font-weight:600;min-height:15px}
+.atss.ok{color:#16EC06}.atss.wt{color:#F5A623}
+.atk{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:0;font-size:13px}
+.atk>div{padding:7px 6px;border-top:1px solid var(--line);text-align:center;font-family:var(--fn);font-weight:800;font-size:17px;color:#fff}
+.atk>div.h{border-top:0;font-family:var(--fc);font-size:11px;letter-spacing:1.1px;text-transform:uppercase;color:#8c979f;padding-top:0}
+.atk>div.h.b{color:var(--gold)}.atk>div.h.s{color:#6cc3f5}
+.atk>div.r{text-align:left;font-family:var(--fc);font-size:12.5px;letter-spacing:1.1px;text-transform:uppercase;color:#aab4bb;font-weight:800}
+.atk>div.g{color:#16EC06}.atk>div.t{background:rgba(255,255,255,.03)}
+.athd{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.athd b{font-family:var(--fc);font-size:13px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+.athd span{margin-left:auto;font-size:11.5px;color:#8c979f;font-weight:600;text-align:right}
+.attr{display:flex;align-items:flex-end;gap:5px;height:118px;padding:0 2px;border-bottom:1px solid var(--line)}
+.attr .bc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.attr .bv{font-family:var(--fn);font-size:12px;font-weight:800;color:#e6ebee;margin-bottom:2px}
+.attr .bb{width:100%;max-width:30px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#5fe24f,#16a806);min-height:2px}
+.attr .bc.cur .bb{background:linear-gradient(180deg,#FFE7A3,#C98E12)}
+.attr .bc.z .bb{background:#3a444c}
+.atxl{display:flex;gap:5px;padding:4px 2px 0}
+.atxl span{flex:1;min-width:0;text-align:center;font-size:9.5px;color:#7f8a92;font-weight:700;white-space:nowrap;overflow:hidden}
+.atxl span.cur{color:var(--gold)}
+.atind{display:inline-block;border-radius:8px;padding:1px 8px;font-size:12px;font-weight:800;white-space:nowrap}
+.atind.up{background:rgba(22,236,6,.14);color:#16EC06}.atind.dn{background:rgba(255,92,92,.15);color:#ff6b6b}.atind.fl{background:#323b42;color:#cfd6db}
+.atoth{margin-top:9px;display:grid;grid-template-columns:1fr auto auto;gap:4px 10px;font-size:12.5px;align-items:center}
+.atoth .on2{color:#aab4bb;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atoth b{font-family:var(--fn);color:#fff;text-align:right}
+.atnone{color:#7f8a92;font-size:13px;font-weight:600;text-align:center;padding:12px 4px}
+#p-att details.atcl summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px}
+#p-att details.atcl summary::-webkit-details-marker{display:none}
+#p-att details.atcl summary:after{content:"▾";margin-left:auto;color:#8c979f}
+#p-att details.atcl[open] summary:after{content:"▴"}
+.atcg{margin-top:8px;font-family:var(--fc);font-size:11.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#aab4bb}
+.atci{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px;font-weight:700}
+.atci .n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atci .n small{display:block;font-size:11px;color:#7f8a92;font-weight:600}
+.atci .sb{color:#6cc3f5}
+.atbtn{background:#3a444c;border:0;border-radius:999px;color:#fff;font-size:12px;font-weight:800;padding:6px 10px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:3px}
+.atbtn.inv{background:rgba(245,196,81,.16);color:var(--gold)}
+.atbtn.ph{background:rgba(22,236,6,.12);color:#16EC06;padding:6px 8px}
+.atsr{position:relative;margin:12px 0 4px}
+#attQ{width:100%;background:#1d2328;border:1px solid var(--line);border-radius:12px;color:#fff;font-size:16px;padding:10px 12px 10px 36px}
+.atsr:before{content:"⌕";position:absolute;left:12px;top:50%;transform:translateY(-52%);color:#7f8a92;font-size:19px}
+.atsg{font-family:var(--fc);font-size:12.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);margin:12px 4px 4px;display:flex;align-items:center;gap:8px}
+.atsg.sb{color:#6cc3f5}
+.atsg .pc{font-family:var(--fn);font-size:15px;color:#fff;letter-spacing:0}
+.atsg small{color:#7f8a92;font-size:11px;letter-spacing:.6px;margin-left:auto;text-align:right}
+#p-att .attb{padding:4px 6px}
+#p-att .attb.base{border-color:rgba(245,196,81,.28)}#p-att .attb.sb{border-color:rgba(108,195,245,.28)}
+.att{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.att th{font-family:var(--fc);font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#8c979f;text-align:left;padding:7px 4px 6px;border-bottom:1px solid var(--line);line-height:1.1}
+.att td{padding:6px 4px;border-top:1px solid var(--line);vertical-align:middle;font-weight:700;color:#e6ebee;overflow:hidden}
+.att .asn{width:24px;text-align:right;color:#7f8a92;font-family:var(--fn);font-size:12px;padding-right:6px}
+.att .acd{width:62px;font-family:var(--fn);font-size:11.5px;color:#cfd6db;letter-spacing:.1px;white-space:nowrap}
+.att .acd.na{color:#5d6973}
+.att .arc{width:22%;font-size:11.5px;color:#aab4bb;line-height:1.2;word-break:break-word}
+.att .ack{width:44px;text-align:center;padding-left:0;padding-right:0}
+.att th.ack{text-align:center}
+.att .anm{line-height:1.2;word-break:break-word}
+.att .anm small{display:block;font-size:10.5px;color:#7f8a92;font-weight:600;margin-top:1px}
+.att .anm small.hot{color:#16EC06}
+.att .anm .lk{display:inline-flex;gap:4px;margin-top:3px}
+.att .anm .lk a{font-size:11px;font-weight:800;color:#16EC06;background:rgba(22,236,6,.10);border-radius:7px;padding:1px 6px;text-decoration:none}
+.att input[type=checkbox]{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:8px;border:2px solid #56626b;background:#1d2328;margin:0;vertical-align:middle;position:relative;cursor:pointer}
+.att input[type=checkbox]:checked{background:#16EC06;border-color:#16EC06}
+.att input[data-f=i]:checked{background:var(--gold);border-color:var(--gold)}
+.att input[type=checkbox]:checked:after{content:"";position:absolute;left:7px;top:2px;width:7px;height:13px;border:solid #14181b;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.att tr.ina td{background:rgba(255,255,255,.025);font-family:var(--fc);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#8c979f;padding:6px 8px}
+.att tr.io td.anm b{color:#aab4bb}
+.att tr.hid{display:none}
+@media (max-width:380px){.att .acd{width:54px;font-size:10.5px}.att .ack{width:38px}.att input[type=checkbox]{width:24px;height:24px}.att input[type=checkbox]:checked:after{left:6px;top:1px}}
+@media (min-width:700px){.att .arc{width:20%}.att .acd{width:80px}}
+.atnote{font-size:11.5px;color:#7f8a92;line-height:1.45}
+.atnote b{color:#cfd6db}
 </style>
 </head>
 <body>
@@ -693,7 +811,7 @@ button{cursor:pointer}
 
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
-    <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
+    <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
     <div class="mgrid">
       <div><div class="slbl"><span>Results vs goal<span class="bst">BASE SHOP</span></span><small id="logFor"></small></div>
       <div class="card"><div class="rg" id="resGrid"></div></div></div>
@@ -704,7 +822,7 @@ button{cursor:pointer}
 
   <!-- TAB 2: CERTIFICATIONS (day by day, filled by the bot) -->
   <section class="page" id="p-cert">
-    <div class="dnav"><div class="pnav"><button class="pa" id="cPrev" aria-label="Previous day">‹</button><div class="pl"><span id="cLbl">TODAY</span><input type="date" id="cPick" aria-label="Pick a date"></div><button class="pa" id="cNext" aria-label="Next day">›</button></div><button class="tbtn" id="cToday" hidden>Today</button></div>
+    <div class="dnav"><div class="pnav"><button class="pa" id="cPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="cLbl">TODAY</span><input type="date" id="cPick" aria-label="Pick a date"></div><button class="pa" id="cNext" aria-label="Next day">›</button></div><button class="tbtn" id="cToday" hidden>Today</button></div>
     <div class="cw"><div class="cwl">
     <div class="slbl"><span>Results vs goal<span class="bst">BASE SHOP</span></span><small>1/day · 7/wk · 30/mo</small></div>
     <div class="card"><div class="rg" id="certGrid"></div></div>
@@ -767,6 +885,23 @@ button{cursor:pointer}
   </section>
 
   <!-- TAB 4b (v30): RECRUITS (bs-v1:recruits, built by build_recruits.py from DBI Hub + MyWFG recruit drill-down). Read-only; append-only list; Base and Super base sections, newest recruit date first. -->
+  <!-- TAB (v37): ATTENDANCE. Roster = bs-v1:attendance_roster (build_attendance.py, daily, read-only here). Ticks = bs-v1:attendance (only written by this tab, via setJ + cloud sync; merged per tick). -->
+  <section class="page" id="p-att">
+    <div class="card mdf"><div class="mdft">Attendance</div><div class="mdfs" id="attMeta"></div></div>
+    <div class="atbar">
+      <div class="atlb">Type of training</div>
+      <div class="atsel"><select id="attType" aria-label="Type of training"></select></div>
+      <div class="dnav atdn"><div class="pnav"><button class="pa" id="aPrev" aria-label="Previous session">‹</button><div class="pl cal" id="aPl" role="button" tabindex="0" aria-label="Pick a date"><span id="aLbl"></span></div><button class="pa" id="aNext" aria-label="Next session">›</button></div><button class="tbtn" id="aToday" hidden>Today</button></div>
+      <div class="atss" id="attSave"></div>
+    </div>
+    <div class="card" id="attCounts"></div>
+    <div class="card" id="attTrend"></div>
+    <div class="card" id="attCall"></div>
+    <div class="atsr"><input id="attQ" type="search" placeholder="Search name, WFG code or recruiter" autocomplete="off" aria-label="Search attendance list"></div>
+    <div id="attSecs"></div>
+    <div class="card atnote" id="attNote"></div>
+  </section>
+
   <section class="page" id="p-rec">
     <div class="card mdf"><div class="mdft">Recruits</div><div class="mdfs" id="rcMeta"></div></div>
     <div id="rcSecs"></div>
@@ -775,7 +910,7 @@ button{cursor:pointer}
 
   <!-- TAB 5b (v29): LEADERS BULLETIN (bs-v1:leaders, built by build_lb.py from the MyWFG Leaders Bulletin top 100 exports). Read-only; scrolls like a normal page; tables scroll sideways with a sticky name column. -->
   <section class="page" id="p-lb">
-    <div class="lbmbar"><label for="lbMon">Bulletin month</label><span class="lbmsw"><select id="lbMon" aria-label="Bulletin month"></select></span><span id="lbMonN"></span></div>
+    <div class="lbmbar"><label for="lbMon">Bulletin month</label><div class="pnav"><button class="pa" id="lbPrev" aria-label="Older month">‹</button><div class="pl cal" id="lbPl" role="button" tabindex="0" aria-label="Pick a bulletin month"><span id="lbLbl">—</span></div><button class="pa" id="lbNext" aria-label="Newer month">›</button></div><span class="lbmsw v37"><select id="lbMon" aria-label="Bulletin month" tabindex="-1"></select></span><span id="lbMonN"></span></div>
     <div class="card mdf"><div class="mdft">Leaders Bulletin</div><div class="mdfs" id="lbMeta"></div></div>
     <div class="lb2bar"><span id="lbSum"></span><span class="sp"></span><button type="button" id="lbAll">Collapse all</button></div>
     <div class="card lbx" id="lbSecs"></div>
@@ -826,6 +961,7 @@ button{cursor:pointer}
   <button data-t="adm" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg>Admin</button>
   <button data-t="cert" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
   <button data-t="up" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
+  <button data-t="att" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3.5" width="16" height="17.5" rx="2"/><path d="M9 3.5h6v3H9zM7.5 11l1.5 1.5 2.5-2.5M13.5 11.5h3M7.5 16l1.5 1.5 2.5-2.5M13.5 16.5h3"/></svg>Attendance</button>
   <button data-t="lb" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="trends" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
   <button data-t="meet" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
@@ -839,7 +975,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-36";
+var APP_VERSION="2026.11.03-37";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1412,7 +1548,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderLb(){
     var MO=lbMonths(),ks=Object.keys(MO).sort().reverse();if(!MO[lbMonSel])lbMonSel=ks[0]||"";
     var so=ks.map(function(k){return '<option value="'+k+'">'+esc(lbMon(k))+'</option>';}).join("")||'<option value="">—</option>';
-    if($("lbMon").innerHTML!==so)$("lbMon").innerHTML=so;$("lbMon").value=lbMonSel;
+    if($("lbMon").innerHTML!==so)$("lbMon").innerHTML=so;$("lbMon").value=lbMonSel;lbPill();
     $("lbMonN").textContent=ks.length?(ks.length===1?"1 month saved":ks.length+" months saved")+(lbMonSel&&lbMonSel!==ks[0]?" · past month":" · newest"):"";
     var L=MO[lbMonSel]||getJ("leaders",null);
     if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base bulletin";$("lbSum").textContent="";$("lbSecs").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbNotes").innerHTML="";return;}
@@ -1469,12 +1605,205 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var lst=(R.notes||[]).map(function(x){return "<li>"+esc(x)+"</li>";});
     if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
     $("rcNotes").innerHTML=n;}
+  // ================= v37: shared month calendar =================
+  // calOpen({mode:"day"|"month", value, min, max, title, mark(k)->bool, ok(k)->bool, quick:[[label,key]], legend, pick(k)})
+  // Day mode: whole-month grid (Mon first), ‹ › change month, tap the month name to jump by month/year, swipe left/right.
+  var CAL={o:null,y:0,m:0,mm:false};
+  function calKey(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+(d?"-"+String(d).padStart(2,"0"):"");}
+  function calEl(){var e=$("bsCal");if(e)return e;e=document.createElement("div");e.id="bsCal";e.className="bscal";e.hidden=true;
+    e.innerHTML='<div class="bscb" data-cx="1"></div><div class="bscp" role="dialog" aria-modal="true" aria-label="Calendar"><div id="bscIn"></div></div>';document.body.appendChild(e);
+    e.addEventListener("click",function(ev){var t=ev.target.closest("button,[data-cx]");if(!t)return;
+      if(t.dataset.cx){calClose();return;}
+      if(t.dataset.nv){calNav(+t.dataset.nv);return;}
+      if(t.dataset.mm){CAL.mm=!CAL.mm;calDraw();return;}
+      if(t.dataset.cm){var a=t.dataset.cm.split("-");CAL.y=+a[0];CAL.m=+a[1]-1;if(CAL.o.mode==="month"){calDone(t.dataset.cm);return;}CAL.mm=false;calDraw();return;}
+      if(t.dataset.ck){calDone(t.dataset.ck);}});
+    var sx=null,sy=0;e.addEventListener("touchstart",function(ev){var p=ev.touches[0];sx=p.clientX;sy=p.clientY;},{passive:true});
+    e.addEventListener("touchend",function(ev){if(sx===null)return;var p=ev.changedTouches[0],dx=p.clientX-sx,dy=p.clientY-sy;sx=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.4)calNav(dx<0?1:-1);},{passive:true});
+    document.addEventListener("keydown",function(ev){if(e.hidden)return;if(ev.key==="Escape")calClose();else if(ev.key==="ArrowLeft")calNav(-1);else if(ev.key==="ArrowRight")calNav(1);});
+    return e;}
+  function calLim(){var o=CAL.o;return {lo:o.min?o.min.slice(0,7):"0000-00",hi:o.max?o.max.slice(0,7):"9999-99"};}
+  function calNav(n){var o=CAL.o;if(!o)return;var L=calLim();
+    if(o.mode==="month"||CAL.mm){var y=CAL.y+n;if(calKey(y,11)<L.lo||calKey(y,0)>L.hi)return;CAL.y=y;}
+    else{var m=CAL.m+n,y2=CAL.y;if(m<0){m=11;y2--;}if(m>11){m=0;y2++;}var k=calKey(y2,m);if(k<L.lo||k>L.hi)return;CAL.y=y2;CAL.m=m;}
+    calDraw();}
+  function calOpen(o){CAL.o=o;CAL.mm=false;var v=o.value||today,a=v.split("-");CAL.y=+a[0];CAL.m=(+a[1]||1)-1;calEl().hidden=false;calDraw();
+    try{document.body.style.overflow="hidden";}catch(x){}var f=document.querySelector("#bscIn .sel")||document.querySelector("#bscIn .bscx");if(f)try{f.focus({preventScroll:true});}catch(x){}}
+  function calClose(){var e=$("bsCal");if(e)e.hidden=true;CAL.o=null;try{document.body.style.overflow="";}catch(x){}}
+  function calDone(k){var o=CAL.o;calClose();if(o&&o.pick)o.pick(k);}
+  function calDraw(){var o=CAL.o;if(!o)return;var L=calLim(),y=CAL.y,m=CAL.m,h='',i;
+    var mon=o.mode==="month"||CAL.mm;
+    h+='<div class="bsch"><b>'+esc(o.title||"Pick a date")+'</b><button type="button" class="bscx" data-cx="1" aria-label="Close">✕</button></div>';
+    if(mon){h+='<div class="bscn"><button type="button" class="pa" data-nv="-1" aria-label="Previous year"'+(calKey(y-1,11)<L.lo?' disabled':'')+'>‹</button><span class="bscm" id="bscLbl">'+y+'</span><button type="button" class="pa" data-nv="1" aria-label="Next year"'+(calKey(y+1,0)>L.hi?' disabled':'')+'>›</button></div><div class="bscg mo">';
+      var cur=o.mode==="month"?(o.value||"").slice(0,7):calKey(y,m);
+      for(i=0;i<12;i++){var mk=calKey(y,i),dis=mk<L.lo||mk>L.hi||(o.mode==="month"&&o.ok&&!o.ok(mk));h+='<button type="button" data-cm="'+mk+'"'+(dis?' disabled':'')+' class="'+(mk===cur?'sel':'')+(o.mode==="month"&&o.mark&&o.mark(mk)?' mk':'')+'">'+MON[i]+'</button>';}
+      h+='</div>';}
+    else{h+='<div class="bscn"><button type="button" class="pa" data-nv="-1" aria-label="Previous month"'+(calKey(m?y:y-1,m?m-1:11)<L.lo?' disabled':'')+'>‹</button><button type="button" class="bscm" data-mm="1" id="bscLbl" aria-label="Choose month">'+MONL[m]+' '+y+'</button><button type="button" class="pa" data-nv="1" aria-label="Next month"'+(calKey(m<11?y:y+1,m<11?m+1:0)>L.hi?' disabled':'')+'>›</button></div><div class="bscg">';
+      ["M","T","W","T","F","S","S"].forEach(function(d){h+='<div class="wd">'+d+'</div>';});
+      var first=new Date(Date.UTC(y,m,1)).getUTCDay(),lead=(first+6)%7,nd=new Date(Date.UTC(y,m+1,0)).getUTCDate();
+      for(i=0;i<lead;i++)h+='<button type="button" class="ph" tabindex="-1" aria-hidden="true"></button>';
+      for(i=1;i<=nd;i++){var k=calKey(y,m,i),dis2=(o.min&&k<o.min)||(o.max&&k>o.max)||(o.ok&&!o.ok(k));
+        h+='<button type="button" data-ck="'+k+'"'+(dis2?' disabled':'')+' class="'+(k===o.value?'sel ':'')+(k===today?'td ':'')+(o.mark&&o.mark(k)?'mk':'')+'" aria-label="'+esc(pretty(k))+'">'+i+'</button>';}
+      h+='</div>';}
+    var q=(o.quick||[]).filter(function(x){return x&&x[1];});
+    if(q.length)h+='<div class="bscf">'+q.map(function(x){return '<button type="button" class="go" data-ck="'+x[1]+'">'+esc(x[0])+'</button>';}).join("")+'</div>';
+    if(o.legend)h+='<div class="bscl"><i></i>'+esc(o.legend)+'</div>';
+    $("bscIn").innerHTML=h;}
+  function calPill(el,fn){el.addEventListener("click",fn);el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();fn();}});}
+  function dayMarks(){var o={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf(PREFIX+"day:")===0)o[k.slice(PREFIX.length+4)]=1;}return o;}
+
+  // ================= v37: ATTENDANCE =================
+  var ATT_TYPES=[{id:"tue",label:"Tuesday Baseshop Training",dow:2},{id:"fri",label:"Friday Skill Set Training",dow:5},{id:"mis",label:"Mississauga Office Training (Assembly Academy)",dow:null},{id:"conv",label:"Convention",dow:null}];
+  var AT={t:null,d:null,q:"",pend:false,order:null,ok:""};
+  function attUi(){try{return JSON.parse(localStorage.getItem("bs-ui:att"))||{};}catch(e){return {};}}
+  function attUiSave(){try{localStorage.setItem("bs-ui:att",JSON.stringify({t:AT.t}));}catch(e){}}
+  function attTy(id){for(var i=0;i<ATT_TYPES.length;i++)if(ATT_TYPES[i].id===id)return ATT_TYPES[i];return ATT_TYPES[0];}
+  function attData(){var S=getJ("attendance",null);if(!S||typeof S!=="object")S={v:1};if(!S.sessions||typeof S.sessions!=="object")S.sessions={};return S;}
+  function attSess(S,t,d){return S.sessions[t+"|"+d]||null;}
+  function attHas(s){return !!(s&&((s.inv&&s.inv.length)||(s.att&&s.att.length)));}
+  function attSessList(S,t){return Object.keys(S.sessions).map(function(k){return S.sessions[k];}).filter(function(s){return s&&s.date&&(!t||s.type===t);}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});}
+  function attDefDate(t){var T=attTy(t),S=attData(),fut=attSessList(S,t).filter(function(s){return s.date>=today;});
+    if(fut.length)return fut[0].date;
+    if(T.dow===null){var past=attSessList(S,t).filter(attHas);return past.length?past[past.length-1].date:today;}
+    var d=parse(today).getUTCDay();return shift(today,(T.dow-d+7)%7);}
+  function attShort(k){var d=parse(k);return MON[d.getUTCMonth()]+" "+d.getUTCDate();}
+  function attLbl(k){return k===today?"TODAY · "+attShort(k).toUpperCase():pretty(k).toUpperCase();}
+  // ticks merge: per session, per (field,id) the newest tick time wins; sessions/ids from both sides are kept
+  function attMerge(a,b){var A=syParse(a),B=syParse(b);if(!A||typeof A!=="object")return b;if(!B||typeof B!=="object")return a;
+    var out={},z;for(z in B)out[z]=B[z];for(z in A)out[z]=A[z];out.sessions={};
+    var SA=A.sessions&&typeof A.sessions==="object"?A.sessions:{},SB=B.sessions&&typeof B.sessions==="object"?B.sessions:{};
+    Object.keys(SB).concat(Object.keys(SA)).forEach(function(k){if(out.sessions[k])return;var x=SA[k],y=SB[k];
+      if(!x||!y){out.sessions[k]=x||y;return;}
+      var r={},q;for(q in y)r[q]=y[q];for(q in x)r[q]=x[q];var tx=x.ts||{},ty=y.ts||{},ts={};
+      ["inv","att"].forEach(function(f){var p=f==="inv"?"i:":"a:",ix={},iy={},ids={},o=[];
+        (x[f]||[]).forEach(function(id){ix[id]=1;ids[id]=1;});(y[f]||[]).forEach(function(id){iy[id]=1;ids[id]=1;});
+        Object.keys(tx).concat(Object.keys(ty)).forEach(function(t){if(t.indexOf(p)===0)ids[t.slice(2)]=1;});
+        Object.keys(ids).forEach(function(id){var a1=+tx[p+id]||0,b1=+ty[p+id]||0,v;
+          if(a1>b1)v=!!ix[id];else if(b1>a1)v=!!iy[id];else v=!!(ix[id]||iy[id]);
+          if(a1||b1)ts[p+id]=Math.max(a1,b1);if(v)o.push(id);});
+        r[f]=o.sort();});
+      r.ts=ts;r.u=Math.max(+x.u||0,+y.u||0);out.sessions[k]=r;});
+    return JSON.stringify(out);}
+  // ranking for the selected session: uses only sessions BEFORE its date, so ticking today never reshuffles the list
+  function attRank(R,S,t,d){var hist=attSessList(S,null).filter(function(s){return s.date<d;}),from=shift(d,-56),st={};
+    hist.forEach(function(s){(s.att||[]).forEach(function(id){var o=st[id]||(st[id]={la:"",ls:"",n8:0,n8s:0,all:0});o.all++;if(s.date>o.la)o.la=s.date;
+      if(s.type===t&&s.date>o.ls)o.ls=s.date;if(s.date>=from){o.n8++;if(s.type===t)o.n8s++;}});});
+    var out={};["base","superbase"].forEach(function(sec){var a=(R.sections&&R.sections[sec])||[];
+      a=a.map(function(p,i){var o=st[p.id]||{la:"",ls:"",n8:0,n8s:0,all:0};return {p:p,i:i,o:o,act:!!(p.biz||(p.act&&p.why!=="attended")||o.n8)};});
+      a.sort(function(x,y){return (y.act-x.act)||((y.o.la?1:0)-(x.o.la?1:0))||(x.o.ls<y.o.ls?1:x.o.ls>y.o.ls?-1:0)||(y.o.n8s-x.o.n8s)||(x.o.la<y.o.la?1:x.o.la>y.o.la?-1:0)||(y.o.n8-x.o.n8)||(y.o.all-x.o.all)||(x.i-y.i);});
+      out[sec]=a;});
+    return out;}
+  function attWho(R){var m={};["base","superbase"].forEach(function(sec){((R.sections&&R.sections[sec])||[]).forEach(function(p){m[p.id]=p;});});return m;}
+  function attTel(p){var d=String(p.ph||"").replace(/[^\d+]/g,"");return d.length>=10?d:"";}
+  function renderAtt(){
+    if(!AT.t){var u=attUi();AT.t=attTy(u.t).id;}
+    if(!AT.d)AT.d=attDefDate(AT.t);
+    var R=getJ("attendance_roster",null),S=attData(),T=attTy(AT.t),k=AT.d,s=attSess(S,AT.t,k);
+    var so=ATT_TYPES.map(function(x){return '<option value="'+x.id+'">'+esc(x.label)+'</option>';}).join("");if($("attType").innerHTML!==so)$("attType").innerHTML=so;$("attType").value=AT.t;
+    $("aLbl").textContent=attLbl(k);$("aToday").hidden=k===today;
+    if(!R||typeof R!=="object"||!R.sections){$("attMeta").textContent="Base shop + Sunchandan's team";var w='<div class="wait">'+(SY.loaded?"No roster yet. Your bot builds it from DBI Hub + MyWFG every morning.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';
+      $("attCounts").innerHTML=w;["attTrend","attCall","attSecs","attNote"].forEach(function(i){$(i).innerHTML="";});return;}
+    $("attMeta").textContent=(lqUpd(R)?"Roster "+lqUpd(R)+" ET · ":"")+"Base + Sunchandan's team";
+    var key=AT.t+"|"+k+"|"+(R.updated||"");
+    if(!AT.order||AT.order.key!==key||AT.order.n!==Object.keys(S.sessions).length)AT.order={key:key,n:Object.keys(S.sessions).length,r:attRank(R,S,AT.t,k)};
+    var O=AT.order.r,inv={},att={};(s&&s.inv||[]).forEach(function(id){inv[id]=1;});(s&&s.att||[]).forEach(function(id){att[id]=1;});
+    var h='';
+    ["base","superbase"].forEach(function(sec){var a=O[sec]||[],sb=sec==="superbase",ni=0,na=0;a.forEach(function(x){if(inv[x.p.id])ni++;if(att[x.p.id])na++;});
+      h+='<div class="atsg'+(sb?' sb':'')+'">'+(sb?'Super base':'Base shop')+' <span class="pc">'+a.length+'</span><small>'+(sb?"SMD Sunchandan Singh's team · ":"")+'<span data-sc="'+sec+'">'+ni+' invited · '+na+' attended</span></small></div>';
+      if(!a.length){h+='<div class="card attb"><div class="atnone">No one listed</div></div>';return;}
+      h+='<div class="card attb '+(sb?'sb':'base')+'"><table class="att"><thead><tr><th class="asn">#</th><th>Name</th><th class="acd">WFG code</th><th class="arc">Recruiter</th><th class="ack">Invited</th><th class="ack">Attended</th></tr></thead><tbody>';
+      var shown=false;a.forEach(function(x,i){var p=x.p,o=x.o;
+        if(!x.act&&!shown){shown=true;h+='<tr class="ina" data-div="1"><td colspan="6">Inactive · '+a.filter(function(y){return !y.act;}).length+'</td></tr>';}
+        var sub=o.la?'<small class="hot">last '+esc(attShort(o.la))+(o.n8?' · '+o.n8+'× in 8 wk':'')+'</small>':(p.biz||p.why)&&p.why!=="no recent activity"?'<small>'+esc(p.biz||p.why)+'</small>':'';
+        var tl=attTel(p),lk=tl?'<span class="lk"><a href="tel:'+esc(tl)+'" aria-label="Call '+esc(p.name)+'">📞 Call</a><a href="sms:'+esc(tl)+'" aria-label="Text '+esc(p.name)+'">💬 Text</a></span>':'';
+        var srch=(p.name+" "+(p.aka||[]).join(" ")+" "+(p.code||"")+" "+(p.rec||"")).toLowerCase();
+        h+='<tr data-id="'+esc(p.id)+'" data-q="'+esc(srch)+'"'+(x.act?'':' class="io"')+'><td class="asn">'+(i+1)+'</td><td class="anm"><b>'+esc(p.name)+'</b>'+sub+lk+'</td><td class="acd'+(p.code?'':' na')+'">'+(p.code?esc(p.code):'—')+'</td><td class="arc">'+esc(p.rec||"")+'</td>'+
+          '<td class="ack"><input type="checkbox" data-f="i" aria-label="Invited: '+esc(p.name)+'"'+(inv[p.id]?' checked':'')+'></td><td class="ack"><input type="checkbox" data-f="a" aria-label="Attended: '+esc(p.name)+'"'+(att[p.id]?' checked':'')+'></td></tr>';});
+      h+='</tbody></table></div>';});
+    $("attSecs").innerHTML=h;
+    attFilter();attSide();
+    var g=R.gaps||{},gb=g.base||{},gs=g.superbase||{};
+    $("attNote").innerHTML='<b>How it works.</b> Same names for every training type; ticks are saved per training type and date, and sync to your other devices. Active people are on top (attended in the last 8 weeks, MD/SMD, new recruit, licensing or producing), ranked by their latest attended session, then how often in the last 8 weeks; people who never attended sit below. The list refreshes every morning from DBI Hub + MyWFG and never clears your ticks. '+
+      '<br><b>Data gaps.</b> Recruiter unknown for '+((gb.no_recruiter||0)+(gs.no_recruiter||0))+', no WFG code for '+((gb.no_code||0)+(gs.no_code||0))+', no phone for '+((gb.no_phone||0)+(gs.no_phone||0))+' (phone buttons show only when MyWFG has a cell number).';
+  }
+  function attFilter(){var q=(AT.q||"").trim().toLowerCase();[].forEach.call(document.querySelectorAll("#attSecs tbody tr"),function(r){if(r.dataset.div){r.classList.toggle("hid",!!q);return;}r.classList.toggle("hid",!!q&&r.dataset.q.indexOf(q)<0);});}
+  function attStats(s,W){var c={base:{i:0,a:0,ia:0},superbase:{i:0,a:0,ia:0}},I={},A={};(s&&s.inv||[]).forEach(function(id){I[id]=1;});(s&&s.att||[]).forEach(function(id){A[id]=1;});
+    Object.keys(I).concat(Object.keys(A)).forEach(function(id,ix,arr){if(arr.indexOf(id)!==ix)return;var p=W[id];var sec=p&&p.team==="superbase"?"superbase":"base";if(I[id])c[sec].i++;if(A[id])c[sec].a++;if(I[id]&&A[id])c[sec].ia++;});
+    c.total={i:c.base.i+c.superbase.i,a:c.base.a+c.superbase.a,ia:c.base.ia+c.superbase.ia};return c;}
+  function attRate(x){return x.i?Math.round(100*x.ia/x.i)+"%":"—";}
+  function attSide(){var R=getJ("attendance_roster",null);if(!R||!R.sections)return;var S=attData(),T=attTy(AT.t),k=AT.d,s=attSess(S,AT.t,k),W=attWho(R),c=attStats(s,W);
+    // counts
+    var h='<div class="athd"><b>'+esc(T.label)+'</b><span>'+esc(pretty(k))+(k>today?' · planned':'')+'</span></div><div class="atk">'+
+      '<div class="h"></div><div class="h b">Base</div><div class="h s">Super base</div><div class="h">Total</div>'+
+      '<div class="r">Invited</div><div>'+c.base.i+'</div><div>'+c.superbase.i+'</div><div class="t">'+c.total.i+'</div>'+
+      '<div class="r">Attended</div><div class="g">'+c.base.a+'</div><div class="g">'+c.superbase.a+'</div><div class="g t">'+c.total.a+'</div>'+
+      '<div class="r">Show-up rate</div><div>'+attRate(c.base)+'</div><div>'+attRate(c.superbase)+'</div><div class="t">'+attRate(c.total)+'</div></div>';
+    var walk=c.total.a-c.total.ia;if(walk>0)h+='<div class="note" style="text-align:left">'+walk+' attended without an invite tick (walk-ins). Show-up rate = invited people who attended.</div>';
+    $("attCounts").innerHTML=h;
+    ["base","superbase"].forEach(function(sec){var e=document.querySelector('[data-sc="'+sec+'"]');if(e)e.textContent=c[sec].i+" invited · "+c[sec].a+" attended";});
+    // trend: last 10 sessions of this type (with ticks, or the selected one)
+    function trendOf(t,cur){return attSessList(S,t).filter(function(x){return attHas(x)||(cur&&x.date===cur);}).filter(function(x){return x.date<=today||x.date===cur;});}
+    function ind(list){var n=list.map(function(x){return (x.att||[]).length;});if(n.length<2)return '<span class="atind fl">▬ not enough sessions yet</span>';
+      var last=n[n.length-1],prev=n.slice(Math.max(0,n.length-4),n.length-1),avg=prev.reduce(function(a,b){return a+b;},0)/prev.length,d=last-avg;
+      if(d>Math.max(.5,avg*.1))return '<span class="atind up">▲ up '+(avg?Math.round(100*d/avg)+'%':'')+' vs avg '+avg.toFixed(1)+'</span>';
+      if(d<-Math.max(.5,avg*.1))return '<span class="atind dn">▼ down '+(avg?Math.round(-100*d/avg)+'%':'')+' vs avg '+avg.toFixed(1)+'</span>';
+      return '<span class="atind fl">▬ flat vs avg '+avg.toFixed(1)+'</span>';}
+    var L=trendOf(AT.t,s?k:null);if(!s&&k<=today&&!L.some(function(x){return x.date===k;}))L.push({date:k,att:[],inv:[],type:AT.t});
+    L.sort(function(a,b){return a.date<b.date?-1:1;});L=L.slice(-10);var mx=Math.max.apply(null,[1].concat(L.map(function(x){return (x.att||[]).length;})));
+    var tb='<div class="athd"><b>Trend · last '+L.length+' session'+(L.length===1?'':'s')+'</b><span>'+ind(L)+'</span></div>';
+    if(L.length){tb+='<div class="attr">'+L.map(function(x){var n=(x.att||[]).length;return '<div class="bc'+(x.date===k?' cur':'')+(n?'':' z')+'" title="'+esc(pretty(x.date))+': '+n+' attended, '+(x.inv||[]).length+' invited"><span class="bv">'+n+'</span><div class="bb" style="height:'+Math.round(90*n/mx)+'%"></div></div>';}).join("")+'</div>'+
+      '<div class="atxl">'+L.map(function(x){return '<span'+(x.date===k?' class="cur"':'')+'>'+esc(attShort(x.date))+'</span>';}).join("")+'</div>';}
+    else tb+='<div class="atnone">No sessions yet. Tick Attended to start the trend.</div>';
+    tb+='<div class="atoth">'+ATT_TYPES.filter(function(x){return x.id!==AT.t;}).map(function(x){var l=trendOf(x.id,null).slice(-10),last=l.length?l[l.length-1]:null;
+      return '<span class="on2">'+esc(x.label)+'</span><b>'+(last?(last.att||[]).length+' <small style="color:#7f8a92;font-weight:600">'+esc(attShort(last.date))+'</small>':'—')+'</b>'+(l.length>=2?ind(l).replace(/ vs avg [\d.]+/,''):'<span class="atind fl">▬</span>');}).join("")+'</div>';
+    $("attTrend").innerHTML=tb;
+    // call list
+    var I={};(s&&s.inv||[]).forEach(function(id){I[id]=1;});var A2={};(s&&s.att||[]).forEach(function(id){A2[id]=1;});
+    var from=shift(k,-28),recent={},prevS=null;attSessList(S,null).forEach(function(x){if(x.date<k&&x.date>=from)(x.att||[]).forEach(function(id){if(!recent[id]||x.date>recent[id])recent[id]=x.date;});});
+    attSessList(S,AT.t).forEach(function(x){if(x.date<k&&attHas(x))prevS=x;});
+    var g1=Object.keys(recent).filter(function(id){return W[id]&&!I[id];}).sort(function(a,b){return recent[a]<recent[b]?1:-1;});
+    var g2=prevS?(prevS.inv||[]).filter(function(id){return W[id]&&(prevS.att||[]).indexOf(id)<0&&!A2[id];}):[];
+    function row(id,why){var p=W[id],tl=attTel(p);return '<div class="atci"><span class="n">'+esc(p.name)+(p.team==="superbase"?' <span class="sb">· SB</span>':'')+'<small>'+esc(why)+(p.rec?' · rec. '+esc(p.rec):'')+'</small></span>'+
+      (tl?'<a class="atbtn ph" href="tel:'+esc(tl)+'" aria-label="Call">📞</a><a class="atbtn ph" href="sms:'+esc(tl)+'" aria-label="Text">💬</a>':'')+(I[id]?'<span class="atbtn">Invited ✓</span>':'<button type="button" class="atbtn inv" data-inv="'+esc(id)+'">+ Invite</button>')+'</div>';}
+    var nCall=g1.length+g2.length,ch='<details class="atcl"'+(nCall&&nCall<=12?' open':'')+'><summary><div class="athd" style="margin:0;flex:1"><b>Call list</b><span>'+(nCall?nCall+' to call':'nobody right now')+'</span></div></summary>';
+    ch+='<div class="atcg">Came in the last 4 weeks · not invited yet ('+g1.length+')</div>'+(g1.length?g1.map(function(id){return row(id,"last came "+attShort(recent[id]));}).join(""):'<div class="atnone">Nobody</div>');
+    ch+='<div class="atcg">Invited last time'+(prevS?' ('+esc(attShort(prevS.date))+')':'')+' · didn\'t come ('+g2.length+')</div>'+(g2.length?g2.map(function(id){return row(id,"missed "+attShort(prevS.date));}).join(""):'<div class="atnone">'+(prevS?"Nobody":"No earlier "+esc(T.label)+" with ticks yet")+'</div>');
+    $("attCall").innerHTML=ch+'</details>';
+    attSaveUI();}
+  function attSaveUI(){var e=$("attSave");if(!e)return;if(!AT.pend&&!AT.ok){e.textContent="";e.className="atss";return;}
+    if(AT.pend){e.className="atss wt";e.textContent=SY.err?"Saved on this device · cloud upload retrying…":"Saved on this device · syncing to cloud…";}
+    else{e.className="atss ok";e.textContent=AT.ok;}}
+  function attTick(id,f,on){var S=attData(),key=AT.t+"|"+AT.d,s=S.sessions[key]||{type:AT.t,date:AT.d,inv:[],att:[],ts:{}},fld=f==="i"?"inv":"att",a=(s[fld]||[]).filter(function(x){return x!==id;});
+    if(on)a.push(id);s[fld]=a.sort();s.ts=s.ts||{};var now=Date.now();s.ts[f+":"+id]=now;s.u=now;S.sessions[key]=s;S.v=1;setJ("attendance",S);AT.pend=true;AT.ok="";attSide();}
+  function attSetDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d||""))return;AT.d=d;renderAtt();}
+  $("attType").addEventListener("change",function(){AT.t=this.value;attUiSave();AT.d=attDefDate(AT.t);renderAtt();this.blur();});
+  $("aPrev").addEventListener("click",function(){var T=attTy(AT.t);attSetDate(shift(AT.d,T.dow===null?-1:-7));});
+  $("aNext").addEventListener("click",function(){var T=attTy(AT.t);attSetDate(shift(AT.d,T.dow===null?1:7));});
+  $("aToday").addEventListener("click",function(){attSetDate(today);});
+  calPill($("aPl"),function(){var S=attData(),T=attTy(AT.t),mk={};attSessList(S,AT.t).forEach(function(x){if(attHas(x))mk[x.date]=1;});
+    var dw=T.dow,td=parse(today).getUTCDay(),nx=dw===null?null:shift(today,((dw-td+7)%7)||7),pv=dw===null?null:shift(today,-(((td-dw+7)%7)||7));
+    calOpen({mode:"day",value:AT.d,title:T.label,mark:function(k){return !!mk[k];},legend:"Session with ticks",
+      quick:[["Today",today]].concat(dw===null?[]:[["Last "+DOW[dw],pv],["Next "+DOW[dw],nx]]),pick:attSetDate});});
+  $("attSecs").addEventListener("change",function(e){var c=e.target;if(!c||c.type!=="checkbox")return;var tr=c.closest("tr");if(!tr)return;attTick(tr.dataset.id,c.dataset.f,c.checked);});
+  $("attCall").addEventListener("click",function(e){var b=e.target.closest("[data-inv]");if(!b)return;var id=b.dataset.inv;attTick(id,"i",true);var cb=document.querySelector('#attSecs tr[data-id="'+(window.CSS&&CSS.escape?CSS.escape(id):id)+'"] input[data-f="i"]');if(cb)cb.checked=true;});
+  $("attQ").addEventListener("input",function(){AT.q=this.value;attFilter();});
+  // shared calendar on the Main + Certs day pills (the native input stays as the value holder; past dates only, like before)
+  calPill(document.querySelector("#dPick").parentNode,function(){var mk=dayMarks();calOpen({mode:"day",value:view,max:today,title:"Meetings day",mark:function(k){return !!mk[k];},legend:"Day with entries",quick:[["Today",today],["Yesterday",shift(today,-1)]],pick:function(k){setView(k);}});});
+  calPill(document.querySelector("#cPick").parentNode,function(){var mk={};list("certs").forEach(function(e){if(e&&e.team!=="superbase"&&e.date)mk[e.date]=1;});calOpen({mode:"day",value:dv.c,max:today,title:"Certifications day",mark:function(k){return !!mk[k];},legend:"Day with a cert",quick:[["Today",today],["Yesterday",shift(today,-1)]],pick:function(k){dv.c=k>today?today:k;renderCert();}});});
+  // Leaders month: same pill + month grid; drives the (hidden) #lbMon select and fires its change event
+  function lbPill(){var s=$("lbMon"),ks=[].map.call(s.options,function(o){return o.value;}).filter(Boolean),i=ks.indexOf(s.value);
+    $("lbLbl").textContent=s.value?lbMon(s.value).toUpperCase():"—";$("lbPrev").disabled=i<0||i>=ks.length-1;$("lbNext").disabled=i<=0;return ks;}
+  function lbSet(v){var s=$("lbMon");if(!v||v===s.value)return;s.value=v;s.dispatchEvent(new Event("change"));}
+  $("lbPrev").addEventListener("click",function(){var ks=lbPill(),i=ks.indexOf($("lbMon").value);if(i>=0&&i<ks.length-1)lbSet(ks[i+1]);});
+  $("lbNext").addEventListener("click",function(){var ks=lbPill(),i=ks.indexOf($("lbMon").value);if(i>0)lbSet(ks[i-1]);});
+  calPill($("lbPl"),function(){var ks=lbPill();if(!ks.length)return;var set={};ks.forEach(function(k){set[k]=1;});
+    calOpen({mode:"month",value:$("lbMon").value,min:ks[ks.length-1]+"-01",max:ks[0]+"-28",title:"Bulletin month",ok:function(k){return !!set[k];},mark:function(k){return !!set[k];},legend:"Month saved",pick:lbSet});});
   function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
     if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
-  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm};
+  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm,att:renderAtt};
   function show(t){t=t||"";if(t==="cold")t="gold";   /* v35: #cold = alias of #gold (Cold Prospects) */
     if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm";renderHeader();TABS[t]();navReveal();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm"||t==="att";renderHeader();TABS[t]();navReveal();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -1510,6 +1839,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function syLocalKeys(){var a=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf(PREFIX)===0)a.push(k);}return a;}
   // merge one key when BOTH sides changed: day records merge field by field (newer side wins per field); lists merge by id; else newer wins
   function syMerge(fk,a,b,ta,tb){
+    if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
     if(/^day:/.test(k)&&N&&O&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
@@ -1534,11 +1864,13 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(loc===rv){if(rv===null)delete sh[k];else sh[k]=syHash(rv);return;}
         var remoteSame=rv!==null&&sh[k]===syHash(rv);
         var nv=dirty?(remoteSame?loc:syMerge(k,loc,rv,mt[k]||(sh[k]!==undefined?now:0),+r.t||0)):rv;
+        if(k===PREFIX+"attendance"&&loc!==null&&rv!==null){   // v37: ALWAYS merge ticks (a tick lost to another device's whole-doc write comes back from here)
+          var am=attMerge(loc,rv),ac=canon(syParse(am));nv=ac===canon(syParse(rv))?rv:ac===canon(syParse(loc))?loc:am;}
         if(nv!==loc){try{if(nv===null)localStorage.removeItem(k);else localStorage.setItem(k,nv);changed=true;}catch(e){return;}}
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm"||tab==="att")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
@@ -1554,11 +1886,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return syRead().then(function(D){return round(1,D);}).then(function(){SY.err="";SY.fails=0;sySet("at",new Date().toISOString());},function(e){
         if(e&&e.stale){setTimeout(syncNow,4000);return;}SY.err=SY.loaded?"upload":"offline";SY.fails++;
         clearTimeout(SY.retry);SY.retry=setTimeout(function(){if(!document.hidden)syncNow();},Math.min(60000,10000*SY.fails));})
-      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert"||tab==="up")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
+      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert"||tab==="up"||tab==="att")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
   }
   function syRerender(){var ae=document.activeElement;if(ae&&(ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT"))return;show(tab);}
   function ago(iso){var s=Math.round((Date.now()-new Date(iso))/1000);return s<60?"just now":s<3600?Math.round(s/60)+" min ago":Math.round(s/3600)+" h ago";}
-  function syUI(){var at=syGet("at",null);$("appVer").textContent="App v"+APP_VERSION+(SY.err==="upload"?" · ☁️ loaded, upload retrying":SY.err?" · ☁️ offline, showing saved data · retrying":at?" · ☁️ synced "+ago(at):" · ☁️ syncing…");}
+  function syUI(){if(typeof AT==="object"&&AT&&AT.pend&&!SY.busy&&!SY.err&&SY.loaded&&!syGet("mt",{})[PREFIX+"attendance"]){AT.pend=false;var d=new Date();AT.ok="✓ Saved to cloud "+d.toLocaleTimeString("en-CA",{timeZone:TZ,hour:"numeric",minute:"2-digit"})+" ET";}if(typeof attSaveUI==="function")attSaveUI();var at=syGet("at",null);$("appVer").textContent="App v"+APP_VERSION+(SY.err==="upload"?" · ☁️ loaded, upload retrying":SY.err?" · ☁️ offline, showing saved data · retrying":at?" · ☁️ synced "+ago(at):" · ☁️ syncing…");}
   $("syNow").addEventListener("click",function(){$("appVer").textContent="Syncing…";syncNow();});
 
   // ---- self-update: version.json vs APP_VERSION; reload once per new version (sessionStorage guard). Never touches localStorage. ----
