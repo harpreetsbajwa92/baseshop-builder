@@ -725,8 +725,29 @@ button{cursor:pointer}
 .atsel{position:relative}
 .atsel:after{content:"▾";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#14181b;pointer-events:none;font-size:13px}
 #attType{width:100%;appearance:none;-webkit-appearance:none;background:var(--gold);color:#14181b;border:0;border-radius:14px;font-family:var(--fc);font-size:16px;font-weight:800;letter-spacing:.6px;padding:11px 34px 11px 14px}
-.atdn{display:flex;align-items:center;justify-content:center;gap:8px}
-.atdn .pl{min-width:170px}
+.atbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#14181b 85%,rgba(20,24,27,.0));padding:8px 2px 4px;margin:6px -2px 4px}
+.atrow{display:flex;gap:8px;align-items:flex-end}.atcol{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1 1 auto}.atcc{flex:0 0 auto}
+.atcol .atlb{margin:0 4px}
+.atcal{display:flex;align-items:center;gap:7px;height:44px;padding:0 12px;border-radius:14px;border:2px solid var(--gold);background:#1d2328;color:var(--gold);font-family:var(--fc);font-size:15.5px;font-weight:800;letter-spacing:.4px;white-space:nowrap;cursor:pointer;box-shadow:0 0 0 3px rgba(240,192,64,.12)}
+.atcal i{font-style:normal;font-size:12px;opacity:.8}.atcal:active{transform:scale(.97)}
+#attType{height:44px;text-overflow:ellipsis}
+.atdn{display:flex;align-items:center;justify-content:center;gap:8px}.atdn .pa{flex:0 0 auto;width:40px;height:34px;border-radius:10px;border:1px solid var(--line);background:#1d2328;color:#fff;font-size:22px;line-height:1;font-weight:600;padding:0;cursor:pointer}
+@media (max-width:480px){#attType{font-size:14.5px;padding:11px 28px 11px 12px;letter-spacing:.3px}.atcal{font-size:14.5px;padding:0 10px;gap:6px}}
+.atdh{font-size:11.5px;color:#8c979f;font-weight:600;text-align:center;flex:1}
+.atrg{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.atrg button{border:1px solid var(--line);background:#1d2328;color:#aab4bb;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;cursor:pointer}
+.atrg button.on{background:var(--gold);color:#14181b;border-color:var(--gold)}
+.atlg{display:flex;gap:14px;font-size:12px;color:#aab4bb;font-weight:700;margin:0 0 8px}.atlg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.atlg i.li,.attg .bb.i{background:linear-gradient(180deg,#8fd3ff,#2f8fd8)}.atlg i.la,.attg .bb.a{background:linear-gradient(180deg,#5fe24f,#16a806)}
+.attw{overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid var(--line)}
+.attg{display:flex;align-items:stretch;gap:4px;min-width:100%}
+.attg .gp{flex:1 0 26px;display:flex;flex-direction:column;align-items:center;cursor:pointer;border-radius:8px;padding:2px 0}
+.attg .gp.cur{background:rgba(240,192,64,.12)}.attg .gp.cur .xl{color:var(--gold);font-weight:800}
+.attg .pr{display:flex;align-items:flex-end;justify-content:center;gap:2px;height:120px;width:100%}
+.attg .b1{flex:1;max-width:16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.attg .b1 span{font-family:var(--fn);font-size:11px;font-weight:800;color:#e6ebee;margin-bottom:2px}
+.attg .bb{width:100%;border-radius:4px 4px 1px 1px;min-height:2px}.attg .bb.z{background:#3a444c}
+.attg .xl{font-size:10.5px;color:#8c979f;white-space:nowrap;margin-top:4px}
+.atrt{font-size:12px;color:#aab4bb;margin-top:8px}.atrt b{color:#fff;font-family:var(--fn)}
 .atss{text-align:center;font-size:11.5px;color:#8c979f;font-weight:600;min-height:15px}
 .atss.ok{color:#16EC06}.atss.wt{color:#F5A623}
 .atk{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:0;font-size:13px}
@@ -925,9 +946,9 @@ button{cursor:pointer}
   <section class="page" id="p-att">
     <div class="card mdf"><div class="mdft">Attendance</div><div class="mdfs" id="attMeta"></div></div>
     <div class="atbar">
-      <div class="atlb">Type of training</div>
-      <div class="atsel"><select id="attType" aria-label="Type of training"></select></div>
-      <div class="dnav atdn"><div class="pnav"><button class="pa" id="aPrev" aria-label="Previous session">‹</button><div class="pl cal" id="aPl" role="button" tabindex="0" aria-label="Pick a date"><span id="aLbl"></span></div><button class="pa" id="aNext" aria-label="Next session">›</button></div><button class="tbtn" id="aToday" hidden>Today</button></div>
+      <div class="atrow"><div class="atcol"><div class="atlb">Type of training</div><div class="atsel"><select id="attType" aria-label="Type of training"></select></div></div>
+        <div class="atcol atcc"><div class="atlb">Date</div><button type="button" class="atcal" id="aPl" aria-label="Open calendar to pick a date"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="aLbl"></span><i>▾</i></button></div></div>
+      <div class="atdn"><button class="pa" id="aPrev" aria-label="Previous session" title="Previous session">‹</button><span class="atdh" id="aHint"></span><button class="tbtn" id="aToday" hidden>Today</button><button class="pa" id="aNext" aria-label="Next session">›</button></div>
       <div class="atss" id="attSave"></div>
     </div>
     <div class="card" id="attCounts"></div>
@@ -1012,7 +1033,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-41";
+var APP_VERSION="2026.11.03-42";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1707,7 +1728,15 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   var ATT_TYPES=[{id:"tue",label:"Tuesday Baseshop Training",dow:2},{id:"fri",label:"Friday Skill Set Training",dow:5},{id:"mis",label:"Mississauga Office Training (Assembly Academy)",dow:null},{id:"conv",label:"Convention",dow:null}];
   var AT={t:null,d:null,q:"",pend:false,order:null,ok:""};
   function attUi(){try{return JSON.parse(localStorage.getItem("bs-ui:att"))||{};}catch(e){return {};}}
-  function attUiSave(){try{localStorage.setItem("bs-ui:att",JSON.stringify({t:AT.t,g:AT.g!==false}));}catch(e){}}
+  function attUiSave(){try{localStorage.setItem("bs-ui:att",JSON.stringify({t:AT.t,g:AT.g!==false,rg:AT.rg||"8",rf:AT.rf||null,rt:AT.rt||null}));}catch(e){}}
+  // v42: range for the trend chart + MD leaderboard: last 4/8/12 sessions of the type ending at the selected date, or a from-to range
+  function attRange(S){var all=attSessList(S,AT.t).filter(attHas),k=AT.d,rg=AT.rg||"8";
+    if(rg==="c"&&AT.rf&&AT.rt){var f=AT.rf<AT.rt?AT.rf:AT.rt,t=AT.rf<AT.rt?AT.rt:AT.rf;return {L:all.filter(function(x){return x.date>=f&&x.date<=t;}),lbl:attShort(f)+" – "+attShort(t),c:1};}
+    var n=+rg||8;return {L:all.filter(function(x){return x.date<=k;}).slice(-n),n:n,lbl:"last "+n+" to "+attShort(k)};}
+  function attRangePick(){var T=attTy(AT.t),S=attData(),mk={};attSessList(S,AT.t).forEach(function(x){if(attHas(x))mk[x.date]=1;});
+    var r0=attRange(S).L;calOpen({mode:"day",value:AT.rf||(r0.length?r0[0].date:shift(AT.d,-28)),title:"Range start · "+T.label,mark:function(k){return !!mk[k];},legend:"Session with ticks",pick:function(f){
+      setTimeout(function(){calOpen({mode:"day",value:AT.rt&&AT.rt>=f?AT.rt:AT.d>=f?AT.d:f,min:f,title:"Range end · "+T.label,mark:function(k){return !!mk[k];},legend:"Session with ticks",quick:[["Selected date",AT.d>=f?AT.d:null],["Today",today]],
+        pick:function(t){AT.rg="c";AT.rf=f;AT.rt=t;attUiSave();attSide();}});},30);}});}
   function attTy(id){for(var i=0;i<ATT_TYPES.length;i++)if(ATT_TYPES[i].id===id)return ATT_TYPES[i];return ATT_TYPES[0];}
   function attData(){var S=getJ("attendance",null);if(!S||typeof S!=="object")S={v:1};if(!S.sessions||typeof S.sessions!=="object")S.sessions={};
     var R=getJ("attendance_roster",null),M=R&&R.merged&&typeof R.merged==="object"?R.merged:null;if(M)attAlias(S,M);return S;}
@@ -1784,11 +1813,12 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function ovMerge(a,b){var A=syParse(a),B=syParse(b);if(!A||typeof A!=="object"||!A.o)return b;if(!B||typeof B!=="object"||!B.o)return a;var out={v:1,o:{}};
     Object.keys(B.o).concat(Object.keys(A.o)).forEach(function(id){var x=A.o[id],y=B.o[id];out.o[id]=!x?y:!y?x:((+x.t||0)>=(+y.t||0)?x:y);});return JSON.stringify(out);}
   function renderAtt(){
-    if(!AT.t){var u=attUi();AT.t=attTy(u.t).id;AT.g=u.g!==false;}
+    if(!AT.t){var u=attUi();AT.t=attTy(u.t).id;AT.g=u.g!==false;AT.rg=u.rg||"8";AT.rf=u.rf||null;AT.rt=u.rt||null;}
     if(!AT.d)AT.d=attDefDate(AT.t);
     var R=getJ("attendance_roster",null),S=attData(),T=attTy(AT.t),k=AT.d,s=attSess(S,AT.t,k);
     var so=ATT_TYPES.map(function(x){return '<option value="'+x.id+'">'+esc(x.label)+'</option>';}).join("");if($("attType").innerHTML!==so)$("attType").innerHTML=so;$("attType").value=AT.t;
-    $("aLbl").textContent=attLbl(k);$("aToday").hidden=k===today;
+    $("aLbl").textContent=pretty(k)+(k.slice(0,4)!==today.slice(0,4)?" "+k.slice(0,4):"");$("aToday").hidden=k===today;
+    $("aHint").textContent=k<today?"Past session · its ticks and counts":k>today?"Planned · tick invites ahead":"Today's session";
     if(!R||typeof R!=="object"||!R.sections){$("attMeta").textContent="Base shop + Sunchandan's team";var w='<div class="wait">'+(SY.loaded?"No roster yet. Your bot builds it from DBI Hub + MyWFG every morning.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';
       $("attCounts").innerHTML=w;["attTrend","attCall","attSecs","attNote"].forEach(function(i){$(i).innerHTML="";});return;}
     $("attMeta").textContent=(lqUpd(R)?"Roster "+lqUpd(R)+" ET · ":"")+"Base + Sunchandan's team";
@@ -1862,12 +1892,13 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var I0={},A0={};(s&&s.inv||[]).forEach(function(id){I0[id]=1;});(s&&s.att||[]).forEach(function(id){A0[id]=1;});
     [].forEach.call(document.querySelectorAll("#attSecs [data-gc]"),function(e2){var x=attCnt((AT.gmem||{})[e2.dataset.gc],I0,A0);e2.textContent=x.i+" inv · "+x.a+" att · "+attRate(x);});
     var BL=(AT.blocks||[]).filter(function(b){return !b.none;});
-    if(BL.length){var hs=attSessList(S,AT.t).filter(function(x){return attHas(x)&&x.date<=k;}).slice(-4);
+    var RG=attRange(S);
+    if(BL.length){var hs=RG.L;
       var pm='<div class="athd" style="margin-top:12px"><b>Per MD · this session</b><span>attended / invited · show-up</span></div><div class="atmd">'+BL.map(function(b){var x=attCnt(b.ids,I0,A0);
         return '<div class="r'+(b.sec==="superbase"?' sb':'')+'">'+esc(b.lbl.replace(/ \((MD|SMD)\)$/,""))+(b.smd?' <small>SMD</small>':'')+'</div><div><b class="g">'+x.a+'</b>/'+x.i+'</div><div>'+attRate(x)+'</div>';}).join("")+'</div>';
       var lb=BL.map(function(b){var t={i:0,ia:0,a:0};hs.forEach(function(x){var I={},A={};(x.inv||[]).forEach(function(id){I[id]=1;});(x.att||[]).forEach(function(id){A[id]=1;});var y=attCnt(b.ids,I,A);t.i+=y.i;t.ia+=y.ia;t.a+=y.a;});return {b:b,t:t};}).filter(function(z){return z.t.i>0;})
         .sort(function(p,q){return (q.t.ia/q.t.i-p.t.ia/p.t.i)||(q.t.a-p.t.a);});
-      pm+='<div class="athd" style="margin-top:12px"><b>MD leaderboard</b><span>show-up rate · last '+hs.length+' '+esc(T.label.split(" ")[0])+' session'+(hs.length===1?'':'s')+'</span></div>'+
+      pm+='<div class="athd" style="margin-top:12px"><b>MD leaderboard</b><span>show-up rate · '+hs.length+' '+esc(T.label.split(" ")[0])+' session'+(hs.length===1?'':'s')+' · '+esc(RG.lbl)+'</span></div>'+
         (lb.length?'<div class="atlb2">'+lb.map(function(z,i){return '<div><span class="rk">'+(i+1)+'</span><span class="n">'+esc(z.b.lbl.replace(/ \((MD|SMD)\)$/,""))+'</span><b>'+attRate(z.t)+'</b><small>'+z.t.ia+'/'+z.t.i+' came</small></div>';}).join("")+'</div>':'<div class="atnone">No invite ticks yet in these sessions.</div>');
       $("attCounts").insertAdjacentHTML("beforeend",pm);}
     // trend: last 10 sessions of this type (with ticks, or the selected one)
@@ -1877,12 +1908,18 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(d>Math.max(.5,avg*.1))return '<span class="atind up">▲ up '+(avg?Math.round(100*d/avg)+'%':'')+' vs avg '+avg.toFixed(1)+'</span>';
       if(d<-Math.max(.5,avg*.1))return '<span class="atind dn">▼ down '+(avg?Math.round(-100*d/avg)+'%':'')+' vs avg '+avg.toFixed(1)+'</span>';
       return '<span class="atind fl">▬ flat vs avg '+avg.toFixed(1)+'</span>';}
-    var L=trendOf(AT.t,s?k:null);if(!s&&k<=today&&!L.some(function(x){return x.date===k;}))L.push({date:k,att:[],inv:[],type:AT.t});
-    L.sort(function(a,b){return a.date<b.date?-1:1;});L=L.slice(-10);var mx=Math.max.apply(null,[1].concat(L.map(function(x){return (x.att||[]).length;})));
-    var tb='<div class="athd"><b>Trend · last '+L.length+' session'+(L.length===1?'':'s')+'</b><span>'+ind(L)+'</span></div>';
-    if(L.length){tb+='<div class="attr">'+L.map(function(x){var n=(x.att||[]).length;return '<div class="bc'+(x.date===k?' cur':'')+(n?'':' z')+'" title="'+esc(pretty(x.date))+': '+n+' attended, '+(x.inv||[]).length+' invited"><span class="bv">'+n+'</span><div class="bb" style="height:'+Math.round(90*n/mx)+'%"></div></div>';}).join("")+'</div>'+
-      '<div class="atxl">'+L.map(function(x){return '<span'+(x.date===k?' class="cur"':'')+'>'+esc(attShort(x.date))+'</span>';}).join("")+'</div>';}
-    else tb+='<div class="atnone">No sessions yet. Tick Attended to start the trend.</div>';
+    var L=RG.L.slice();if(!RG.c&&k<=today&&!L.some(function(x){return x.date===k;})){L.push(s||{date:k,att:[],inv:[],type:AT.t});L.sort(function(a,b){return a.date<b.date?-1:1;});if(L.length>RG.n)L=L.slice(-RG.n);}
+    var mx=Math.max.apply(null,[1].concat(L.map(function(x){return Math.max((x.att||[]).length,(x.inv||[]).length);})));
+    var tb='<div class="athd"><b>Trend · '+L.length+' session'+(L.length===1?'':'s')+'</b><span>'+ind(L)+'</span></div>';
+    tb+='<div class="atrg" role="group" aria-label="Range">'+["4","8","12"].map(function(n){return '<button type="button" data-rg="'+n+'"'+((AT.rg||"8")===n?' class="on"':'')+'>Last '+n+'</button>';}).join("")+
+      '<button type="button" data-rg="c"'+(AT.rg==="c"?' class="on"':'')+'>📅 '+(AT.rg==="c"&&AT.rf?esc(RG.lbl):'From – to')+'</button></div>';
+    if(L.length){var ti=0,ta=0,tia=0;L.forEach(function(x){var I={};(x.inv||[]).forEach(function(id){I[id]=1;});ti+=(x.inv||[]).length;ta+=(x.att||[]).length;(x.att||[]).forEach(function(id){if(I[id])tia++;});});
+      tb+='<div class="atlg"><span><i class="li"></i>Invited</span><span><i class="la"></i>Showed up</span></div><div class="attw"><div class="attg">'+L.map(function(x){var ni=(x.inv||[]).length,na=(x.att||[]).length;
+        return '<div class="gp'+(x.date===k?' cur':'')+'" data-gd="'+x.date+'" title="'+esc(pretty(x.date))+': '+ni+' invited, '+na+' showed up" role="button" aria-label="'+esc(pretty(x.date))+': '+ni+' invited, '+na+' showed up"><div class="pr">'+
+          '<div class="b1"><span>'+ni+'</span><div class="bb i'+(ni?'':' z')+'" style="height:'+Math.round(88*ni/mx)+'%"></div></div>'+
+          '<div class="b1"><span>'+na+'</span><div class="bb a'+(na?'':' z')+'" style="height:'+Math.round(88*na/mx)+'%"></div></div></div><div class="xl">'+esc(attShort(x.date))+'</div></div>';}).join("")+'</div></div>'+
+        '<div class="atrt">'+esc(RG.lbl)+': <b>'+ti+'</b> invited · <b style="color:#16EC06">'+ta+'</b> showed up · show-up rate <b>'+(ti?Math.round(100*tia/ti)+'%':'—')+'</b> · tap a session to open it</div>';}
+    else tb+='<div class="atnone">No sessions with ticks in this range.</div>';
     tb+='<div class="atoth">'+ATT_TYPES.filter(function(x){return x.id!==AT.t;}).map(function(x){var l=trendOf(x.id,null).slice(-10),last=l.length?l[l.length-1]:null;
       return '<span class="on2">'+esc(x.label)+'</span><b>'+(last?(last.att||[]).length+' <small style="color:#7f8a92;font-weight:600">'+esc(attShort(last.date))+'</small>':'—')+'</b>'+(l.length>=2?ind(l).replace(/ vs avg [\d.]+/,''):'<span class="atind fl">▬</span>');}).join("")+'</div>';
     $("attTrend").innerHTML=tb;
@@ -1909,13 +1946,15 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("aPrev").addEventListener("click",function(){var T=attTy(AT.t);attSetDate(shift(AT.d,T.dow===null?-1:-7));});
   $("aNext").addEventListener("click",function(){var T=attTy(AT.t);attSetDate(shift(AT.d,T.dow===null?1:7));});
   $("aToday").addEventListener("click",function(){attSetDate(today);});
-  calPill($("aPl"),function(){var S=attData(),T=attTy(AT.t),mk={};attSessList(S,AT.t).forEach(function(x){if(attHas(x))mk[x.date]=1;});
+  calPill($("aPl"),function(){var S=attData(),T=attTy(AT.t),mk={};attSessList(S,AT.t).forEach(function(x){if(attHas(x)||x.date)mk[x.date]=1;});
     var dw=T.dow,td=parse(today).getUTCDay(),nx=dw===null?null:shift(today,((dw-td+7)%7)||7),pv=dw===null?null:shift(today,-(((td-dw+7)%7)||7));
-    calOpen({mode:"day",value:AT.d,title:T.label,mark:function(k){return !!mk[k];},legend:"Session with ticks",
+    calOpen({mode:"day",value:AT.d,title:T.label,mark:function(k){return !!mk[k];},legend:"Session / ticks for "+T.label,
       quick:[["Today",today]].concat(dw===null?[]:[["Last "+DOW[dw],pv],["Next "+DOW[dw],nx]]),pick:attSetDate});});
   $("attSecs").addEventListener("change",function(e){var c=e.target;if(c&&c.tagName==="SELECT"&&c.dataset.md){var tr0=c.closest("tr");if(tr0){c.blur();attMdSet(tr0.dataset.id,c.value);}return;}if(!c||c.type!=="checkbox")return;var tr=c.closest("tr");if(!tr)return;attTick(tr.dataset.id,c.dataset.f,c.checked);});
   $("attCall").addEventListener("click",function(e){var b=e.target.closest("[data-inv]");if(!b)return;var id=b.dataset.inv;attTick(id,"i",true);var cb=document.querySelector('#attSecs tr[data-id="'+(window.CSS&&CSS.escape?CSS.escape(id):id)+'"] input[data-f="i"]');if(cb)cb.checked=true;});
   $("attQ").addEventListener("input",function(){AT.q=this.value;attFilter();});
+  $("attTrend").addEventListener("click",function(e){var r=e.target.closest("[data-rg]");if(r){if(r.dataset.rg==="c"){attRangePick();return;}AT.rg=r.dataset.rg;attUiSave();attSide();return;}
+    var g=e.target.closest("[data-gd]");if(g&&g.dataset.gd!==AT.d){attSetDate(g.dataset.gd);try{$("aPl").scrollIntoView({block:"nearest"});}catch(x){}}});
   $("attView").addEventListener("click",function(e){var b=e.target.closest("[data-vw]");if(!b)return;AT.g=b.dataset.vw==="g";attUiSave();renderAtt();});
   $("attSecs").addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(!b)return;var B=(AT.blocks||[]).filter(function(x){return x.bk===b.dataset.copy;})[0];if(!B)return;
     attCopy(attCopyText(B)).then(function(ok){b.textContent=ok?"✓ Copied":"Copy failed";b.classList.toggle("ok",!!ok);setTimeout(function(){b.textContent="📋 Copy names";b.classList.remove("ok");},2200);});});
