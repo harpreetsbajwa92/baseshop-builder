@@ -520,6 +520,7 @@ button{cursor:pointer}
 .upt .yn{font-family:var(--fn);font-size:14px;text-align:center}
 .upt th.c{text-align:center}
 .upt .yn.y{color:#16EC06}.upt .yn.n{color:#6f7a82}
+.upt td small.raw{font-size:10px;color:#7f8a92;margin-top:2px}
 .upt td small.wn{font-size:10px;color:#7f8a92}
 #upHl .lqhl{margin:2px 0 2px 18px}
 #p-up .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 12px}
@@ -630,7 +631,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-24";
+var APP_VERSION="2026.11.02-25";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1041,9 +1042,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // ---------- v24: Upcoming Licences (bs-v1:upcoming from DBI Hub; anyone on bs-v1:licensed is hidden at render time) ----------
   function upNorm(n){return String(n||"").toLowerCase().replace(/\./g," ").replace(/[^a-z ]/g,"").replace(/\s+/g," ").trim();}
   function upLicSet(){var L=getJ("licensed",null),c={},n={};if(L&&typeof L==="object")["base","superbase"].forEach(function(t){(Array.isArray(L[t])?L[t]:[]).forEach(function(p){if(p&&p.code)c[String(p.code).toUpperCase()]=1;if(p&&p.name)n[upNorm(p.name)]=1;});});return {c:c,n:n,ok:!!(L&&typeof L==="object")};}
-  function upIsLic(p,S){var c=p.code?String(p.code).toUpperCase():"";if(c&&S.c[c])return true;return !!S.n[upNorm(p.name)]||(p.wfg_name&&!!S.n[upNorm(p.wfg_name)]);}   // code first, then name
+  function upIsLic(p,S){var c=p.code?String(p.code).toUpperCase():"";if(c&&S.c[c])return true;if(p.code_match_only)return false;return !!S.n[upNorm(p.name)]||(p.wfg_name&&!!S.n[upNorm(p.wfg_name)]);}   // code first, then name
   function upDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d||"")&&+d.slice(0,4)>=2020?d:null;}
-  function upDue(p){var d=upDate(p.exam_date);if(!d)return {k:2,n:null};var n=dayDiff(today,d);return n>=0?{k:0,n:n}:{k:1,n:n};}
+  function upDue(p){if(p.date_invalid)return {k:2,n:null};var d=upDate(p.exam_date);if(!d)return {k:3,n:null};var n=dayDiff(today,d);return n>=0?{k:0,n:n}:{k:1,n:n};}
   function upShort(d){var x=parse(d);return MON[x.getUTCMonth()]+" "+x.getUTCDate()+(d.slice(0,4)!==today.slice(0,4)?", "+d.slice(0,4):"");}
   var UPM=[["ethics","Ethics"],["life","Life"],["as","A&S"],["seg","Seg"]];
   function upMods(p){var m=p.mods&&typeof p.mods==="object"?p.mods:{},a=UPM.filter(function(x){return m[x[0]];}).map(function(x){return x[1];});return {n:a.length,t:a.join(", ")};}
@@ -1061,7 +1062,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function govSort(a){return a.slice().sort(function(x,y){var a1=upDue(x),b1=upDue(y);if(a1.k!==b1.k)return a1.k-b1.k;if(a1.k===0)return a1.n-b1.n;if(a1.k===1)return b1.n-a1.n;return String(x.name).localeCompare(String(y.name));});}
     function govRow(p){var d=upDue(p),dt=upDate(p.exam_date),c;
       if(d.k===0)c='<span class="chip g'+(dt?' blk':'')+'">'+(d.n===0?"today":d.n===1?"tomorrow":"in "+d.n+" days")+'</span>';
-      else if(d.k===1)c='<span class="chip a blk">date passed, rebook?</span>';else c='<span class="chip n">no date</span>';
+      else if(d.k===1)c='<span class="chip a blk">date passed, rebook?</span>';else if(d.k===2){var rw=String(p.exam_raw||"");c='<span class="chip a">invalid date</span>'+(rw?'<small class="raw">DBI: '+esc(upDate(rw)?upShort(rw):rw)+'</small>':'');}else c='<span class="chip n">no date</span>';
       var m=upMods(p);
       return '<tr>'+nmCell(p)+cdCell(p)+'<td>'+(dt?'<span class="dte">'+upShort(dt)+'</span>':'')+c+(p.exam_note?'<small>'+esc(p.exam_note)+'</small>':'')+'</td>'+
         '<td class="md2"><b class="'+(m.n?'g':'z')+'">'+m.n+'/4</b><span>'+(m.n?esc(m.t):'none yet')+'</span></td></tr>';}
@@ -1078,8 +1079,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     // highlights (computed now, so they stay true as days pass and MyWFG catches up)
     var hl=[],soon=govSort(gov).filter(function(p){var d=upDue(p);return d.k===0&&d.n<=14;});
     soon.slice(0,3).forEach(function(p){var n=upDue(p).n;hl.push(upFirst(p.name)+"'s exam is "+(n===0?"today":n===1?"tomorrow":"in "+n+" days")+" ("+upShort(p.exam_date)+(p.mods?", "+upMods(p).n+"/4 passed":"")+").");});
-    var past=gov.filter(function(p){return upDue(p).k===1;}),nod=gov.filter(function(p){return upDue(p).k===2;});
+    var past=gov.filter(function(p){return upDue(p).k===1;}),nod=gov.filter(function(p){return upDue(p).k===3;}),inv=gov.filter(function(p){return upDue(p).k===2;});
     if(past.length)hl.push(past.length+" exam date"+(past.length===1?" has":"s have")+" passed with modules still open: "+past.map(function(p){return upFirst(p.name);}).join(", ")+". Rebook or confirm the results.");
+    if(inv.length)hl.push(inv.length+" exam date"+(inv.length===1?" is":"s are")+" invalid in DBI Hub: "+inv.map(function(p){return upFirst(p.name);}).join(", ")+". Confirm the real date.");
     if(nod.length)hl.push(nod.length+" in the exam phase "+(nod.length===1?"has":"have")+" no date booked.");
     if(reg.length){var fee=reg.filter(function(p){return p.gov_fee;}).length,ap=reg.filter(function(p){return p.licence_approved;});
       hl.push(reg.length+" passed the exam and "+(reg.length===1?"is":"are")+" waiting on MyWFG: "+fee+" paid the gov fee, "+ap.length+" show licence approved on DBI.");
