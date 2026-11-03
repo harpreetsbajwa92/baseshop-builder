@@ -78,6 +78,9 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-15 (Nov 2, 2026):**
+  - MD Factory: both tables (My base MDs, Sunchandan's team) now show 4 numbers per MD with totals: Rec <month> (`recruits`), Rec 12 mo (`recruits_12`), CF <month> (`cashflow`), CF 12 mo (`cf_12`). Blank/null shows "—". Cash flow of $10K or more shows as e.g. $37.3K. Still one screen on phone and laptop, no inner scroll.
+  - Store: `bs-v1:mdstats` rows got `cf_12` (copied from `bs-v1:licensed` by WFG code, = R08 Custom Report "Top 100 Total CashFlow in Associate's Entire Hierarchy" Nov 2025–Oct 2026) and `recruits_12: null` (no per-MD rolling-12 recruit count exists in the local exports). Write-merge rev 23 → 24, only this key changed.
 - **v2026.11.02-14 (Nov 2, 2026):**
   - Certs: new compact gold "Daily LLQP report" card from the new key `bs-v1:llqpreport`: "Updated <date, time>" label, headline, count chips (Active, Studied 24h, Ran out), 🎉 Fresh passes (one line per recruit), 📖 Studying (last login, days left, note), 📞 Needs a call (amber, with reason, days left, days since login), 🗓 Exams in 7 days and the DBI Hub line. Empty sections show one short line. Laptop: beside the rings (wider right column, report split into two inner columns). Phone: below the "Who cleared" list. The Certs page now scrolls normally (fitBoxes removed for Certs); no inner scroll boxes.
   - The key is read through the normal sync (45 s GET, hedged mirror read, 3 retries, quick retry after errors); the card shows "Loading…" / "Can't reach the store yet. Retrying…" until data arrives and rerenders after sync.

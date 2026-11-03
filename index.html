@@ -297,6 +297,11 @@ button{cursor:pointer}
 .slbl .bst{font-size:10.5px}
 .nls{font-size:12.5px;font-weight:700;line-height:1.35;max-height:3.1em;overflow:auto;color:#e6eaec}
 .nls.e{color:#7f8a92;font-weight:600}
+/* ===== v15: MD Factory 4-number tables ===== */
+.mdt.m4 th small{display:block;font-size:10px;letter-spacing:.6px;color:#6f7a82}
+.pan .mdt.m4 td{font-size:14px;padding:5px 3px}
+.pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
+.mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
 /* ===== v14: daily LLQP report card (bs-v1:llqpreport) ===== */
 .lq{padding:10px 12px;border-color:rgba(245,196,81,.32)}
 .lqh{font-size:14px;font-weight:800;line-height:1.3;background:linear-gradient(180deg,#FFE7A3 0%,#F5C451 45%,#C98E12 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -510,7 +515,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-14";
+var APP_VERSION="2026.11.02-15";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -751,12 +756,18 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
     var mo=/^\d{4}-\d{2}$/.test(st.month||"")?st.month:today.slice(0,7);
     $("mdMeta").textContent="My base MDs + Sunchandan's team · "+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4);
-    function tbl(rows,cls,title,sub){var tr=0,tc=0,any=false,anyR=false;rows.forEach(function(r){if(!nb(r.recruits)){tr+=+r.recruits;any=true;anyR=true;}if(!nb(r.cashflow)){tc+=+r.cashflow;any=true;}});
+    // v15: 4 numbers per MD: recruits this month, recruits rolling 12, cash flow this month, cash flow rolling 12 (optional recruits_12 / cf_12; blank = —)
+    var mS=MONL[+mo.slice(5,7)-1].slice(0,3);
+    function cf(v){v=+v;var a=Math.abs(v),t=a>=10000?(a/1000).toFixed(1).replace(/\.0$/,"")+"K":Math.round(a).toLocaleString("en-US");return (v<0?"-$":"$")+t;}
+    var COLS=[["recruits",0],["recruits_12",0],["cashflow",1],["cf_12",1]];
+    function tbl(rows,cls,title,sub){var tot=[0,0,0,0],has=[0,0,0,0];
+      rows.forEach(function(r){COLS.forEach(function(c,i){if(!nb(r[c[0]])){tot[i]+=+r[c[0]];has[i]=1;}});});
+      function cell(v,money){return nb(v)?'<td class="na">—</td>':'<td>'+(money?cf(v):Math.round(+v))+'</td>';}
       return '<div class="pan '+cls+'"><div class="ph"><div><b>'+title+'</b><small>'+sub+'</small></div><span class="pc" style="font-size:18px">'+rows.length+'</span></div>'+
-      '<div class="mdb"><table class="mdt"><thead><tr><th>Name</th><th>Recruits</th><th>Cash flow</th></tr></thead><tbody>'+
-      (rows.length?rows.map(function(r){return '<tr><td>'+esc(r.name)+(r.title?'<span class="ttl">'+esc(r.title)+'</span>':'')+'</td>'+(nb(r.recruits)?'<td class="na">—</td>':'<td>'+Math.round(+r.recruits)+'</td>')+(nb(r.cashflow)?'<td class="na">—</td>':'<td>$'+Math.round(+r.cashflow).toLocaleString("en-US")+'</td>')+'</tr>';}).join("")+
-        '</tbody>'+(any&&rows.length>1?'<tfoot><tr><td style="color:#8c979f">Total</td><td>'+(anyR?Math.round(tr):'—')+'</td><td>$'+Math.round(tc).toLocaleString("en-US")+'</td></tr></tfoot>':''):'<tr><td colspan="3" class="na">None yet</td></tr></tbody>')+'</table></div></div>';}
-    $("mdSplit").innerHTML=tbl(base,"base","My base MDs",(st.month?"cash flow ":"")+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4))+tbl(sup,"sb","Sunchandan's team","SMD + his MDs");
+      '<div class="mdb"><table class="mdt m4"><thead><tr><th>Name</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12 mo</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 mo</small></th></tr></thead><tbody>'+
+      (rows.length?rows.map(function(r){return '<tr><td>'+esc(r.name)+(r.title?'<span class="ttl">'+esc(r.title)+'</span>':'')+'</td>'+COLS.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'</tr>';}).join("")+
+        '</tbody>'+(rows.length>1&&has.some(Boolean)?'<tfoot><tr><td style="color:#8c979f">Total</td>'+COLS.map(function(c,i){return has[i]?'<td>'+(c[1]?cf(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'</tr></tfoot>':''):'<tr><td colspan="5" class="na">None yet</td></tr></tbody>')+'</table></div></div>';}
+    $("mdSplit").innerHTML=tbl(base,"base","My base MDs",mS+" "+mo.slice(0,4)+" vs rolling 12")+tbl(sup,"sb","Sunchandan's team","SMD + his MDs");
     $("mdUpd").textContent=(st.updated?"From MyWFG · updated "+pretty(st.updated):"Your bot fills this from MyWFG")+(mo!==today.slice(0,7)?" · last month's numbers":"");
     // v11: full-height tables, no inner scroll (the page scrolls if needed); SMD legs card removed (bs-v1:legs kept in the store)
   }
