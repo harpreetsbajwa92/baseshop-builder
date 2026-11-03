@@ -297,6 +297,32 @@ button{cursor:pointer}
 .slbl .bst{font-size:10.5px}
 .nls{font-size:12.5px;font-weight:700;line-height:1.35;max-height:3.1em;overflow:auto;color:#e6eaec}
 .nls.e{color:#7f8a92;font-weight:600}
+/* ===== v14: daily LLQP report card (bs-v1:llqpreport) ===== */
+.lq{padding:10px 12px;border-color:rgba(245,196,81,.32)}
+.lqh{font-size:14px;font-weight:800;line-height:1.3;background:linear-gradient(180deg,#FFE7A3 0%,#F5C451 45%,#C98E12 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lqc{display:flex;gap:6px;margin:7px 0 2px}
+.lqc span{flex:1;text-align:center;border:1px solid rgba(245,196,81,.3);border-radius:10px;padding:3px 2px;font-family:var(--fc);font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:#a9b3ba}
+.lqc b{display:block;font-family:var(--fn);font-size:18px;line-height:1.1;color:var(--gold);letter-spacing:0}
+.lqs{margin-top:7px}
+.lqt{font-family:var(--fc);font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.lqr{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;padding:3px 0;border-top:1px solid var(--line)}
+.lqr:first-of-type{border-top:0}
+.lqr>span{min-width:0}
+.lqr small{display:block;font-size:11px;font-weight:600;color:#8c979f;line-height:1.25}
+.lqr em{font-style:normal;flex:0 0 auto;font-size:11.5px;font-weight:700;color:#cfd6db;white-space:nowrap}
+.lqs.call{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.35);border-radius:10px;padding:5px 8px}
+.lqs.call .lqt{color:#F5A623}
+.lqs.call small{color:#e3b56a}
+.lqs.call em{color:#F5A623}
+.lqe{font-size:12px;color:#7f8a92;padding:1px 0}
+.lqd{margin-top:7px;padding-top:6px;border-top:1px dashed rgba(245,196,81,.3);font-size:12px;color:#cfd6db;line-height:1.35}
+.lqd b{color:var(--gold)}
+@media (min-width:900px){
+  #p-cert{max-width:none}
+  .cw{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:14px;align-items:start}
+  .lqg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:10px;align-items:start}
+  .lqg>div>.lqs:first-child{margin-top:7px}
+}
 .pan.cmp{padding:7px 9px}.pan.cmp .ph{margin-bottom:2px}.pan.cmp .pc{font-size:19px}
 .roster{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
 .roster .pan.off{display:none}
@@ -422,11 +448,16 @@ button{cursor:pointer}
   <!-- TAB 2: CERTIFICATIONS (day by day, filled by the bot) -->
   <section class="page" id="p-cert">
     <div class="dnav"><div class="pnav"><button class="pa" id="cPrev" aria-label="Previous day">‹</button><div class="pl"><span id="cLbl">TODAY</span><input type="date" id="cPick" aria-label="Pick a date"></div><button class="pa" id="cNext" aria-label="Next day">›</button></div><button class="tbtn" id="cToday" hidden>Today</button></div>
+    <div class="cw"><div class="cwl">
     <div class="slbl"><span>Results vs goal<span class="bst">BASE SHOP</span></span><small>1/day · 7/wk · 30/mo</small></div>
     <div class="card"><div class="rg" id="certGrid"></div></div>
     <div class="slbl"><span>Who cleared<span class="bst">BASE SHOP</span></span><small id="cFor"></small></div>
     <div class="card lst who" id="certList"></div>
     <div class="note">Base shop only (your own base). Updated by your bot</div>
+    </div><div class="cwr">
+    <div class="slbl"><span>Daily LLQP report</span><small id="lqUpd"></small></div>
+    <div class="card lq" id="lqCard"></div>
+    </div></div>
   </section>
 
   <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
@@ -479,7 +510,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-13";
+var APP_VERSION="2026.11.02-14";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -628,7 +659,33 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       '<div class="rn">Certs<small>cleared</small></div>'+cc(dl.length,CERT.d)+cc(w,CERT.w)+cc(m,CERT.m);
     $("cFor").textContent=forTxt(k);
     $("certList").innerHTML=dl.length?dl.map(function(e){return '<div class="it"><div class="l"><span class="av">'+esc(ini(e.name))+'</span><div><div class="nm">'+esc(e.name)+'</div><div class="sub">'+esc(e.cert)+(e.note?' · '+esc(e.note):'')+'</div></div></div><div>'+(e.score!=null&&e.score!==""?'<span class="pill g">'+esc(e.score)+'%</span>':'<span class="pill g">Passed</span>')+'</div></div>';}).join(""):'<div class="empty">No certifications cleared '+forTxt(k)+'</div>';
-    fitBoxes("p-cert","#certList");
+    renderLlqp();
+  }
+  // v14: daily LLQP report (bs-v1:llqpreport, written by the bot each morning; synced like every other key)
+  function lqWhen(s){s=String(s||"");var m=/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec(s);if(!m)return esc(s);
+    var t=MON[+m[2]-1]+" "+(+m[3]);if(m[4]!==undefined){var h=+m[4],ap=h<12?"AM":"PM";h=h%12||12;t+=", "+h+":"+m[5]+" "+ap;}return t;}
+  function lqUpd(r){var u=r.updated?new Date(r.updated):null;
+    if(u&&!isNaN(u)){try{return "Updated "+u.toLocaleString("en-US",{timeZone:"America/Toronto",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}catch(e){}}
+    return r.date?"Updated "+lqWhen(r.date):"";}
+  function renderLlqp(){
+    var r=getJ("llqpreport",null),c=$("lqCard");if(!c)return;
+    if(!r||typeof r!=="object"){$("lqUpd").textContent="";c.innerHTML='<div class="lqe">'+(SY.loaded?"No report yet. Your bot adds it each morning.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';return;}
+    function A(x){return Array.isArray(x)?x:[];}function n(x){return x===null||x===undefined||x===""?"–":esc(x);}
+    var ct=r.counts&&typeof r.counts==="object"?r.counts:{},h="";
+    $("lqUpd").textContent=lqUpd(r);
+    if(r.headline)h+='<div class="lqh">'+esc(r.headline)+'</div>';
+    h+='<div class="lqc"><span><b>'+n(ct.active)+'</b>Active</span><span><b>'+n(ct.studied_24h)+'</b>Studied 24h</span><span><b>'+n(ct.ran_out)+'</b>Ran out</span></div>';
+    function sec(title,arr,row,none,cls){return '<div class="lqs'+(cls?' '+cls:'')+'"><div class="lqt">'+title+'</div>'+(arr.length?arr.map(row).join(""):'<div class="lqe">'+none+'</div>')+'</div>';}
+    // fresh passes: one line per recruit
+    var fg=[],fm={};A(r.fresh).forEach(function(f){var k=String(f.name||"");if(!fm[k]){fm[k]={name:k,p:[]};fg.push(fm[k]);}fm[k].p.push(f);});
+    h+='<div class="lqg"><div>';
+    h+=sec("🎉 Fresh passes",fg,function(g){return '<div class="lqr"><span>'+esc(g.name)+'<small>'+g.p.map(function(f){return esc(f.cert)+(f.score!==undefined&&f.score!==""?" "+esc(f.score)+"%":"")+(f.date?" · "+lqWhen(f.date):"");}).join("<br>")+'</small></span></div>';},"No fresh passes");
+    h+=sec("📖 Studying",A(r.studying).slice(0,6),function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+(s.last_login?"Last login "+lqWhen(s.last_login):"")+(s.note?(s.last_login?" · ":"")+esc(s.note):"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+'</em></div>';},"No one studying in the last 7 days");
+    var call=sec("📞 Needs a call",A(r.needs_call).slice(0,6),function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.reason||"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+(s.days_since_login!=null&&s.days_since_login!==""?'<small>'+esc(s.days_since_login)+'d since login</small>':"")+'</em></div>';},"No calls needed","call");
+    h+=sec("🗓 Exams in 7 days",A(r.exams_soon),function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.exam||"")+'</small></span><em>'+lqWhen(s.date)+'</em></div>';},"No exams booked");
+    h+='</div><div>'+call+'</div></div>';
+    h+='<div class="lqd"><b>DBI Hub:</b> '+(r.dbi?esc(r.dbi):"No DBI update today")+'</div>';
+    c.innerHTML=h;
   }
   navBind("c",renderCert);
   // ---------- tab 3: licences (goal 1 a week, 3 a month) ----------
@@ -685,7 +742,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       var hs=b.map(function(x){return x.offsetHeight;}),h=Math.max.apply(null,hs);if(h<=84)break;
       var lo=hs.filter(function(v){return v<h-1;}),h2=lo.length?Math.max.apply(null,lo):0,grp=b.filter(function(x,k){return hs[k]>=h-1;});
       var tg=Math.max(84,h2,Math.floor(h-over/z/(stk?grp.length:1))-1);grp.forEach(function(x){x.style.maxHeight=tg+"px";});}}
-  addEventListener("resize",function(){clearTimeout(fitBoxes.t);fitBoxes.t=setTimeout(function(){fitBoxes("p-cert","#certList");},120);});
+  // v14: Certs now scrolls like a normal page (LLQP report below the rings on a phone), so no fitBoxes resize hook
   // ---------- tab 4: MDs (read-only table from bs-v1:mdstats; the bot fills it from MyWFG) ----------
   function legs(){var l=getJ("legs",null);return l&&typeof l==="object"?l:{target:3,smd:[]};}
   function renderMd(){
@@ -863,7 +920,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
@@ -879,7 +936,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return syRead().then(function(D){return round(1,D);}).then(function(){SY.err="";SY.fails=0;sySet("at",new Date().toISOString());},function(e){
         if(e&&e.stale){setTimeout(syncNow,4000);return;}SY.err=SY.loaded?"upload":"offline";SY.fails++;
         clearTimeout(SY.retry);SY.retry=setTimeout(function(){if(!document.hidden)syncNow();},Math.min(60000,10000*SY.fails));})
-      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&tab==="lic"))syRerender();if(SY.again){SY.again=false;return syncNow();}});
+      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
   }
   function syRerender(){var ae=document.activeElement;if(ae&&(ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT"))return;show(tab);}
   function ago(iso){var s=Math.round((Date.now()-new Date(iso))/1000);return s<60?"just now":s<3600?Math.round(s/60)+" min ago":Math.round(s/3600)+" h ago";}
