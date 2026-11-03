@@ -525,6 +525,24 @@ button{cursor:pointer}
 #upHl .lqhl{margin:2px 0 2px 18px}
 #p-up .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 12px}
 @media (min-width:900px){#p-up{max-width:760px;margin:0 auto}}
+/* ===== v28: Gold Prospects tab (bs-v1:gold, built by build_gold.py from the LinkedIn + Instagram bots' Good prospects lists; read-only; page scrolls) ===== */
+#p-gold .mdf{margin-bottom:2px}
+#p-gold .gsl{font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:12px 4px 6px;display:flex;align-items:center;gap:8px;color:#cfd6db}
+#p-gold .gsl .dot{width:9px;height:9px;border-radius:50%;flex:none}
+#p-gold .gsl.li .dot{background:#3d9be9}#p-gold .gsl.ig .dot{background:linear-gradient(135deg,#feda75,#d62976 55%,#4f5bd5)}
+#p-gold .gsl .pc{font-family:var(--fn);font-size:12px;letter-spacing:0;color:#14181b;background:var(--gold);border-radius:9px;padding:1px 8px;font-weight:800}
+#p-gold .gl{padding:2px 12px}
+#p-gold .gr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.06)}
+#p-gold .gr:first-child{border-top:0}
+#p-gold .gr .gn{min-width:0;flex:1;text-align:left}
+#p-gold .gr .gn b{display:block;font-size:14.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-gold .gr .gn small{display:block;font-size:11.5px;color:#8c979f;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-gold .gk{flex:none;display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:800;border-radius:9px;padding:6px 11px;text-decoration:none;white-space:nowrap}
+#p-gold .gk.c{color:#14181b;background:linear-gradient(180deg,#FFE7A3,#F5C451 55%,#d79d1f)}
+#p-gold .gk.p{color:#cfd6db;background:#323b42;border:1px solid rgba(255,255,255,.08)}
+#p-gold .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 0}
+@media (max-width:430px){.tabs button{font-size:10px;letter-spacing:-.25px}.tabs button .ic{width:22px;height:22px}}
+@media (min-width:900px){#p-gold{max-width:640px;margin:0 auto}}
 </style>
 </head>
 <body>
@@ -566,6 +584,16 @@ button{cursor:pointer}
     <div class="card lqx"><div class="tsc" id="lqPrac"></div></div>
     <div class="slbl"><span>Highlights &amp; calls to action</span></div>
     <div class="card lq" id="lqAct"></div>
+  </section>
+
+  <!-- TAB 1b (v28): GOLD PROSPECTS (bs-v1:gold, built by build_gold.py from the LinkedIn + Instagram bots). Read-only; scrolls like a normal page. -->
+  <section class="page" id="p-gold">
+    <div class="card mdf"><div class="mdft">Gold Prospects</div><div class="mdfs" id="goldMeta"></div></div>
+    <div class="gsl li"><span class="dot"></span>LinkedIn <span class="pc" id="goldLn"></span></div>
+    <div class="card gl" id="goldLi"></div>
+    <div class="gsl ig"><span class="dot"></span>Instagram <span class="pc" id="goldIn"></span></div>
+    <div class="card gl" id="goldIg"></div>
+    <p class="note" id="goldNote"></p>
   </section>
 
   <!-- TAB 2b (v24): UPCOMING LICENCES (bs-v1:upcoming, filled by the bot from DBI Hub; filtered against bs-v1:licensed at render time). Scrolls like a normal page. -->
@@ -628,6 +656,7 @@ button{cursor:pointer}
 
 <nav class="tabs" id="tabs">
   <button data-t="meet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
+  <button data-t="gold"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Gold</button>
   <button data-t="cert"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
   <button data-t="up"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
@@ -639,7 +668,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-27";
+var APP_VERSION="2026.11.03-28";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1110,9 +1139,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("upHl").innerHTML='<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>';
     $("upNote").textContent="From DBI Hub (Business Tracker → Licensing). Grey italic code = DBI Hub only, not found on MyWFG. Anyone licensed on MyWFG drops off automatically"+(S.ok?".":" (licensed list still loading).");
   }
-  var tab="meet",TABS={meet:renderMeet,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,gt:function(){}};
+  // ---------- v28: Gold Prospects (bs-v1:gold from build_gold.py; LinkedIn then Instagram; read-only) ----------
+  function goldSince(d){return /^\d{4}-\d{2}-\d{2}$/.test(d||"")?"since "+upShort(d):"";}
+  function goldList(a){a=Array.isArray(a)?a.filter(function(x){return x&&x.name;}):[];
+    if(!a.length)return {n:0,h:'<div class="none">No good prospects yet</div>'};
+    return {n:a.length,h:a.map(function(x){var u=/^https:\/\//.test(x.url||"")?x.url:"",pr=x.url_kind==="profile",sub=[goldSince(x.since),x.note].filter(Boolean).join(" · ");
+      return '<div class="gr"><div class="gn"><b>'+esc(x.name)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+(u?'<a class="gk '+(pr?'p':'c')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+(pr?'Profile':'Chat')+' ↗</a>':'')+'</div>';}).join("")};}
+  function renderGold(){
+    var G=getJ("gold",null);
+    if(!G||typeof G!=="object"){$("goldMeta").textContent="LinkedIn + Instagram";var w='<div class="none" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the LinkedIn and Instagram bots.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("goldLi").innerHTML=w;$("goldIg").innerHTML="";$("goldLn").textContent="";$("goldIn").textContent="";$("goldNote").textContent="";return;}
+    $("goldMeta").textContent=(lqUpd(G)?lqUpd(G)+" ET · ":"")+"LinkedIn + Instagram";
+    var L=goldList(G.linkedin),I=goldList(G.instagram);
+    $("goldLi").innerHTML=L.h;$("goldIg").innerHTML=I.h;$("goldLn").textContent=L.n;$("goldIn").textContent=I.n;
+    $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation.";
+  }
+  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,gt:function(){}};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt";renderHeader();TABS[t]();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold";renderHeader();TABS[t]();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -1176,7 +1219,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
