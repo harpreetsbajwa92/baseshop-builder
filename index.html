@@ -292,6 +292,47 @@ button{cursor:pointer}
   .mds{grid-template-columns:1fr 1fr}
   .licw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:14px;align-items:start}
 }
+/* ===== v7: base shop tags, licensed roster ===== */
+.bst{display:inline-block;font-family:var(--fc);font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:#101518;background:linear-gradient(180deg,#FFE7A3,#F5C451 55%,#D9A021);border-radius:5px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+.slbl .bst{font-size:10.5px}
+.nls{font-size:12.5px;font-weight:700;line-height:1.35;max-height:3.1em;overflow:auto;color:#e6eaec}
+.nls.e{color:#7f8a92;font-weight:600}
+.pan.cmp{padding:7px 9px}.pan.cmp .ph{margin-bottom:2px}.pan.cmp .pc{font-size:19px}
+.roster{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.roster .pan.off{display:none}
+.rt2{width:100%;border-collapse:collapse;table-layout:fixed}
+.rt2 th{font-family:var(--fc);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:#8c979f;text-align:right;padding:0 3px 4px;font-weight:700}
+.rt2 td{padding:5px 3px;border-top:1px solid var(--line);text-align:right;font-family:var(--fn);font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt2 th:first-child,.rt2 td:first-child{text-align:left;font-family:inherit}
+.rt2 td:first-child{font-size:13px}
+.rt2 td.cd2{color:#9aa5ad;font-size:12px;font-weight:600}
+.rt2 col.c1{width:auto}.rt2 col.c2{width:62px}.rt2 col.c3{width:74px}.rt2 col.c4{width:82px}
+.rb{min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;border-top:1px solid var(--line)}
+.rb .rt2 tr:first-child td{border-top:0}
+.rtot td{border-top:1px solid rgba(245,196,81,.35)!important;color:var(--gold)}
+.pan.sb .rtot td{color:#6cc3f5;border-top-color:rgba(108,195,245,.35)!important}
+.wait{color:#7f8a92;text-align:center;padding:16px 6px;font-size:13px}
+#rSeg{margin-left:auto}
+.nrc{padding:6px 10px}
+.nper{font-family:var(--fc);font-size:10.5px;letter-spacing:1px;color:#7f8a92;text-transform:uppercase;margin-bottom:2px}
+.nrw{display:flex;align-items:baseline;gap:7px;padding:2px 0;min-width:0}
+.nrw b{font-family:var(--fc);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.nrw.sb b{color:#6cc3f5}
+.nrw .pc{font-size:14px;min-width:12px}
+.nrw .nls{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:none;font-size:12.5px}
+#roster .pan{padding:6px 9px}
+.rt2 th .tl{font-size:13px;letter-spacing:1.2px;color:var(--gold);margin-right:6px}.pan.sb .rt2 th .tl{color:#6cc3f5}
+.rt2 th .pc{font-size:15px;color:#fff;letter-spacing:0}
+.rt2 thead th{vertical-align:bottom}
+#p-lic .rg{row-gap:2px}#p-lic .rg .rt{font-size:11px}
+#rSeg button{font-size:12px;padding:4px 8px;white-space:nowrap}
+#rMeta{white-space:nowrap;font-size:11px}
+#p-lic .slbl>span{white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media (min-width:900px){
+  .roster{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .roster .pan.off{display:block}
+  #rSeg{display:none}
+}
 </style>
 </head>
 <body>
@@ -306,9 +347,9 @@ button{cursor:pointer}
   <section class="page" id="p-meet">
     <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
     <div class="mgrid">
-      <div><div class="slbl">Results vs goal <small id="logFor"></small></div>
+      <div><div class="slbl"><span>Results vs goal<span class="bst">BASE SHOP</span></span><small id="logFor"></small></div>
       <div class="card"><div class="rg" id="resGrid"></div></div></div>
-      <div><div class="slbl">Log meetings &amp; results</div>
+      <div><div class="slbl"><span>Log meetings &amp; results<span class="bst">BASE SHOP</span></span></div>
       <div class="card" id="mRows"></div></div>
     </div>
   </section>
@@ -317,21 +358,22 @@ button{cursor:pointer}
   <section class="page" id="p-cert">
     <div class="dnav"><div class="pnav"><button class="pa" id="cPrev" aria-label="Previous day">‹</button><div class="pl"><span id="cLbl">TODAY</span><input type="date" id="cPick" aria-label="Pick a date"></div><button class="pa" id="cNext" aria-label="Next day">›</button></div><button class="tbtn" id="cToday" hidden>Today</button></div>
     <div class="card dsum"><div class="dbig"><b id="cCnt">0</b><span id="cCntL">certifications</span></div><div class="dsm" id="cWM"></div></div>
-    <div class="slbl">Who cleared <small id="cFor"></small></div>
+    <div class="slbl"><span>Who cleared<span class="bst">BASE SHOP</span></span><small id="cFor"></small></div>
     <div class="card lst who" id="certList"></div>
-    <div class="note">Updated by your bot</div>
+    <div class="note">Base shop only (your own base). Updated by your bot</div>
   </section>
 
   <!-- TAB 3: LICENCES (day by day, filled by the bot) -->
   <section class="page" id="p-lic">
     <div class="dnav"><div class="pnav"><button class="pa" id="lPrev" aria-label="Previous day">‹</button><div class="pl"><span id="lLbl">TODAY</span><input type="date" id="lPick" aria-label="Pick a date"></div><button class="pa" id="lNext" aria-label="Next day">›</button></div><button class="tbtn" id="lToday" hidden>Today</button></div>
     <div class="licw">
-      <div><div class="slbl">Base licences vs goal <small>1/wk · 3/mo</small></div>
-      <div class="card"><div class="rg" id="licGrid"></div></div></div>
-      <div><div class="segc"><div class="seg" id="lSeg"><button data-r="D">Day</button><button data-r="W">Week</button><button data-r="M">Month</button></div></div>
-      <div class="split" id="licSplit"></div>
-      <div class="note">Base = your base shop · Super base = Sunchandan Singh's team. Updated by your bot from MyWFG</div></div>
+      <div><div class="slbl">New licences <small>base goal 1/wk · 3/mo</small></div>
+      <div class="card" style="padding:9px 10px"><div class="rg" id="licGrid"></div></div></div>
+      <div><div class="slbl"><span>New names <small id="nPer"></small></span><div class="seg" id="lSeg"><button data-r="D">Day</button><button data-r="W">Week</button><button data-r="M">Month</button></div></div>
+      <div class="card nrc" id="licSplit"></div></div>
     </div>
+    <div class="slbl"><span>All licensed agents <small id="rMeta"></small></span><div class="seg" id="rSeg"><button data-r="base">Base</button><button data-r="superbase">Super base</button></div></div>
+    <div class="roster" id="roster"></div>
   </section>
 
   <!-- TAB 4: MDs (bs-v1:mdstats, filled by the bot from MyWFG) -->
@@ -373,7 +415,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-6";
+var APP_VERSION="2026.11.02-7";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -498,7 +540,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function forTxt(k){return k===today?"today":"on "+pretty(k);}
   // ---------- tab 2: certifications ----------
   function renderCert(){
-    navRender("c");var k=dv.c,a=list("certs"),dl=a.filter(function(e){return e.date===k;});
+    navRender("c");var k=dv.c,a=list("certs").filter(function(e){return e.team!=="superbase";}),dl=a.filter(function(e){return e.date===k;});
     var w=a.filter(function(e){return inDays(e,weekDays(k));}).length,m=a.filter(function(e){return inDays(e,monthDays(k));}).length;
     $("cCnt").textContent=dl.length;$("cCntL").textContent=dl.length===1?"certification":"certifications";
     $("cWM").innerHTML='<div><b>'+w+'</b><span>Week</span></div><div><b>'+m+'</b><span>'+MON[parse(k).getUTCMonth()]+'</span></div>';
@@ -508,30 +550,58 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   navBind("c",renderCert);
   // ---------- tab 3: licences (goal 1 a week, 3 a month) ----------
   var LIC={w:1,m:3};
+  var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
   var lRange="D";
   function licTeam(e){return e&&e.team==="superbase"?"superbase":"base";}   // missing team = base
   function licIn(team,days){return list("licences").filter(function(e){return licTeam(e)===team&&inDays(e,days);});}
   function renderLic(){
     navRender("l");var k=dv.l,D=[k],W=weekDays(k),M=monthDays(k),mon=MON[parse(k).getUTCMonth()];
     var lab=k===today?"Today":k===shift(today,-1)?"Yesterday":"Day";
-    function cell(n,t,blue){if(!t){var c=n>0?(blue?"#6cc3f5":"#F5C451"):"#323b42";return '<div class="rc">'+ring(n>0?1:0,c,44,5,'<b>'+n+'</b>')+'<div class="rt"><small>no goal</small></div></div>';}
-      var f=n/t;return '<div class="rc">'+ring(f,recCol(f),44,5,'<b>'+n+'</b>')+'<div class="rt">'+(f>=1?'✓ ':'')+'of '+t+'<small>'+Math.min(999,Math.round(f*100))+'%</small></div></div>';}
+    function cell(n,t,blue){if(!t){var c=n>0?(blue?"#6cc3f5":"#F5C451"):"#323b42";return '<div class="rc">'+ring(n>0?1:0,c,36,4,'<b>'+n+'</b>')+'<div class="rt"><small>no goal</small></div></div>';}
+      var f=n/t;return '<div class="rc">'+ring(f,recCol(f),36,4,'<b>'+n+'</b>')+'<div class="rt">'+(f>=1?'✓ ':'')+'of '+t+'<small>'+Math.min(999,Math.round(f*100))+'%</small></div></div>';}
     var b=[licIn("base",D).length,licIn("base",W).length,licIn("base",M).length],sb=[licIn("superbase",D).length,licIn("superbase",W).length,licIn("superbase",M).length];
     $("licGrid").innerHTML='<div></div><div class="rh">'+lab+'</div><div class="rh">Week</div><div class="rh">'+mon+'</div>'+
-      '<div class="rn">Base<small>goal</small></div>'+cell(b[0],0)+cell(b[1],LIC.w)+cell(b[2],LIC.m)+
+      '<div class="rn">Base shop<small>goal</small></div>'+cell(b[0],0)+cell(b[1],LIC.w)+cell(b[2],LIC.m)+
       '<div class="rn" style="color:#6cc3f5">Super base<small>Sunchandan</small></div>'+cell(sb[0],0,1)+cell(sb[1],0,1)+cell(sb[2],0,1);
     [].forEach.call(document.querySelectorAll("#lSeg button"),function(x){x.classList.toggle("on",x.dataset.r===lRange);});
     var days=lRange==="D"?D:lRange==="W"?W:M,per=lRange==="D"?forTxt(k):lRange==="W"?"week of "+pretty(W[0]):mon+" "+k.slice(0,4);
     function pan(team,cls,title){var a=licIn(team,days).sort(function(x,y){return x.date<y.date?-1:x.date>y.date?1:0;});
+      return '<div class="nrw '+cls+'"><b>'+title+'</b><span class="pc">'+a.length+'</span><span class="nls'+(a.length?'':' e')+'">'+(a.length?a.map(function(e){return esc(e.name);}).join(", "):"None")+'</span></div>';
       return '<div class="pan '+cls+'"><div class="ph"><div><b>'+title+'</b><small>'+esc(per)+'</small></div><span class="pc">'+a.length+'</span></div>'+
         (a.length?a.map(function(e){return '<div class="nl">'+esc(e.name)+(lRange!=="D"||e.source||e.note?'<small>'+esc([lRange!=="D"?pretty(e.date):"",e.source,e.note].filter(Boolean).join(" · "))+'</small>':'')+'</div>';}).join(""):'<div class="empty">No new licences</div>')+'</div>';}
-    $("licSplit").innerHTML=pan("base","base","Base")+pan("superbase","sb","Super base");
+    $("nPer").textContent=per;$("licSplit").innerHTML=pan("base","base","Base shop")+pan("superbase","sb","Super base");
+    renderRoster();
   }
+  // ---- roster of ALL licensed agents (bs-v1:licensed, filled by the bot from MyWFG) ----
+  var rTeam="base";
+  function money(v){return (v<0?"-$":"$")+Math.abs(Math.round(v)).toLocaleString("en-US");}
+  function renderRoster(){
+    var L=getJ("licensed",null);if(!L||typeof L!=="object")L={};
+    function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
+    var mo=/^\d{4}-\d{2}$/.test(L.month||"")?L.month:"";
+    $("rMeta").textContent=(mo?MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4):"")+(L.updated?" · upd "+pretty(L.updated).replace(/^\w+, /,""):"");
+    [].forEach.call(document.querySelectorAll("#rSeg button"),function(x){x.classList.toggle("on",x.dataset.r===rTeam);});
+    function pnl(team,cls,title){var rows=(Array.isArray(L[team])?L[team]:[]).slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
+      var tm=0,t12=0;rows.forEach(function(r){if(!nb(r.cf_month))tm+=+r.cf_month;if(!nb(r.cf_12))t12+=+r.cf_12;});
+      var cols='<colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>';
+      return '<div class="pan '+cls+(team!==rTeam?' off':'')+'"><table class="rt2">'+cols+'<thead><tr><th><b class="tl">'+title+'</b><span class="pc">'+rows.length+'</span></th><th>WFG code</th><th>CF month</th><th>CF 12 mo ▾</th></tr></thead></table>'+
+        '<div class="rb">'+(rows.length?'<table class="rt2">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td><td>'+(nb(r.cf_month)?'—':money(+r.cf_month))+'</td><td>'+(nb(r.cf_12)?'—':money(+r.cf_12))+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">Waiting for MyWFG data</div>')+'</div>'+
+        '<table class="rt2">'+cols+'<tbody><tr class="rtot"><td>Total ('+rows.length+')</td><td></td><td>'+money(tm)+'</td><td>'+money(t12)+'</td></tr></tbody></table></div>';}
+    $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");
+    fitRoster();
+  }
+  // keep the page one screen: the roster body scrolls inside its panel
+  function fitRoster(){var b=[].slice.call(document.querySelectorAll("#roster .rb"));if(!b.length||!$("p-lic").classList.contains("on"))return;
+    b.forEach(function(x){x.style.maxHeight="none";});
+    var se=document.scrollingElement||document.documentElement,z=parseFloat(getComputedStyle(document.querySelector(".wrap")).zoom)||1;
+    var over=se.scrollHeight-innerHeight,h=Math.max.apply(null,b.map(function(x){return x.offsetHeight;}));
+    var mh=Math.max(84,Math.floor(h-Math.max(0,over)/z)-2);b.forEach(function(x){x.style.maxHeight=mh+"px";});}
+  addEventListener("resize",function(){clearTimeout(fitRoster.t);fitRoster.t=setTimeout(fitRoster,120);});
+  $("rSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;rTeam=x.dataset.r;renderRoster();});
   $("lSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;lRange=x.dataset.r;renderLic();});
   navBind("l",renderLic);
   // ---------- tab 4: MDs (read-only table from bs-v1:mdstats; the bot fills it from MyWFG) ----------
   function legs(){var l=getJ("legs",null);return l&&typeof l==="object"?l:{target:3,smd:[]};}
-  var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
   function renderMd(){
     var st=getJ("mdstats",null);if(!st||typeof st!=="object")st={};
     var base=Array.isArray(st.base)?st.base:Array.isArray(st.rows)?st.rows:[],sup=Array.isArray(st.superbase)?st.superbase:[];   // old {rows:[]} format = base
@@ -565,7 +635,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {s:"r-pc",g:"Row results",i:"✅",n:"Pers. closing points",k:1,v:function(k){return int(day(k).r.pc)||0;},T:null},
     {s:"r-br",g:"Row results",i:"✅",n:"Base recruiting recruits",v:function(k){return int(day(k).r.br)||0;},T:null},
     {s:"r-bp",g:"Row results",i:"✅",n:"Base closing points",k:1,v:function(k){return int(day(k).r.bp)||0;},T:null},
-    {s:"certs",g:"Team",i:"🎓",n:"Certifications",sn:"Certs",v:cnt("certs"),T:null},
+    {s:"certs",g:"Team",i:"🎓",n:"Certifications (base shop)",sn:"Certs",v:function(k){return list("certs").filter(function(e){return e.date===k&&e.team!=="superbase";}).length;},T:null},
     {s:"lic",g:"Team",i:"🪪",n:"Base licences",sn:"Base lic.",v:function(k){return licIn("base",[k]).length;},T:{w:function(){return LIC.w;},m:function(){return LIC.m;}}},
     {s:"lic-sb",g:"Team",i:"🪪",n:"Super base licences",sn:"Superbase",v:function(k){return licIn("superbase",[k]).length;},T:null}
   ];
