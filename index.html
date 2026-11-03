@@ -302,6 +302,13 @@ button{cursor:pointer}
 .pan .mdt.m4 td{font-size:14px;padding:5px 3px}
 .pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
 .mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
+/* ===== v21: timestamps on every Certs activity ===== */
+.lqt2 .at{display:inline-block;vertical-align:top;text-align:center;line-height:1.15}
+.lqt2 .at b.p{color:#9aa5ad;font-weight:600}
+.lqt2 .at small{display:block;font-size:9.5px;font-weight:600;color:#7f8a92;margin-top:1px;white-space:nowrap}
+.lqt2 .sq i{vertical-align:top;line-height:1.15}
+.lqt2 small.ts{font-size:9.5px;color:#6f7a82}
+#lqAct em small.ts{font-size:10px;color:#b99a62}
 /* ===== v18: Certs practice / exam tables (every active recruit) ===== */
 .lqx{padding:0;overflow:hidden}
 .tsc{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -566,7 +573,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-20";
+var APP_VERSION="2026.11.02-21";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -714,12 +721,18 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("certGrid").innerHTML='<div></div><div class="rh">'+lab+'</div><div class="rh">Week</div><div class="rh">'+MON[parse(k).getUTCMonth()]+'</div>'+
       '<div class="rn">Certs<small>cleared</small></div>'+cc(dl.length,CERT.d)+cc(w,CERT.w)+cc(m,CERT.m);
     $("cFor").textContent=forTxt(k);
-    $("certList").innerHTML=dl.length?dl.map(function(e){return '<div class="it"><div class="l"><span class="av">'+esc(ini(e.name))+'</span><div><div class="nm">'+esc(e.name)+'</div><div class="sub">'+esc(e.cert)+(e.note?' · '+esc(e.note):'')+'</div></div></div><div>'+(e.score!=null&&e.score!==""?'<span class="pill g">'+esc(e.score)+'%</span>':'<span class="pill g">Passed</span>')+'</div></div>';}).join(""):'<div class="empty">No certifications cleared '+forTxt(k)+'</div>';
+    var lr=getJ("llqpreport",null)||{};
+    function mk(c){c=String(c||"").toLowerCase();return c.indexOf("ethic")===0?"ethics":c.indexOf("life")===0?"life":c.indexOf("a&s")===0||c.indexOf("accident")===0?"as":c.indexOf("seg")===0?"seg":c;}
+    function whenOf(e){if(e.time)return e.date+" "+e.time;if(/\d:\d/.test(String(e.date||"")))return e.date;var nm=String(e.name||"").toLowerCase(),m=mk(e.cert),hit=null;
+      (Array.isArray(lr.fresh)?lr.fresh:[]).forEach(function(f){if(!hit&&String(f.name||"").toLowerCase()===nm&&mk(f.cert)===m&&String(f.date||"").slice(0,10)===e.date&&String(f.date).length>10)hit=f.date;});
+      (Array.isArray(lr.exams)?lr.exams:[]).forEach(function(x){if(hit||String(x.name||"").toLowerCase()!==nm)return;(Array.isArray(x[m])?x[m]:[]).forEach(function(a){if(!hit&&a&&String(a.pf).toUpperCase()==="P"&&String(a.date||"").slice(0,10)===e.date&&String(a.date).length>10)hit=a.date;});});
+      return hit||e.date;}
+    $("certList").innerHTML=dl.length?dl.map(function(e){return '<div class="it"><div class="l"><span class="av">'+esc(ini(e.name))+'</span><div><div class="nm">'+esc(e.name)+'</div><div class="sub">'+esc(e.cert)+' · '+lqWhen(whenOf(e))+(e.note?' · '+esc(e.note):'')+'</div></div></div><div>'+(e.score!=null&&e.score!==""?'<span class="pill g">'+esc(e.score)+'%</span>':'<span class="pill g">Passed</span>')+'</div></div>';}).join(""):'<div class="empty">No certifications cleared '+forTxt(k)+'</div>';
     renderLlqp();
   }
   // v14: daily LLQP report (bs-v1:llqpreport, written by the bot each morning; synced like every other key)
   function lqWhen(s){s=String(s||"");var m=/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec(s);if(!m)return esc(s);
-    var t=MON[+m[2]-1]+" "+(+m[3]);if(m[4]!==undefined){var h=+m[4],ap=h<12?"AM":"PM";h=h%12||12;t+=", "+h+":"+m[5]+" "+ap;}return t;}
+    var t=MON[+m[2]-1]+" "+(+m[3])+(m[1]!==String(today).slice(0,4)?", "+m[1]:"");if(m[4]!==undefined){var h=+m[4],ap=h<12?"AM":"PM";h=h%12||12;t+=", "+h+":"+m[5]+" "+ap;}return t;}
   function lqUpd(r){var u=r.updated?new Date(r.updated):null;
     if(u&&!isNaN(u)){try{return "Updated "+u.toLocaleString("en-US",{timeZone:"America/Toronto",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}catch(e){}}
     return r.date?"Updated "+lqWhen(r.date):"";}
@@ -748,8 +761,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function sc(v){var n=+v;return isFinite(n)?String(Math.round(n)):"?";}
     function who(p){var dl=p.days_left,ds=p.days_since_login,t=[];
       if(dl===0)t.push('<b class="ro">out of time</b>');else if(dl!=null&&dl!=="")t.push(esc(dl)+'d left');
-      if(ds!=null&&ds!=="")t.push(ds===0?'login today':'login '+esc(ds)+'d ago');
-      return '<td class="nm2'+(dl===0?' off':'')+'">'+esc(p.name)+'<small>'+t.join(' · ')+'</small></td>';}
+      var dd=ds!=null&&ds!==""?(ds===0?'today':esc(ds)+'d ago'):'';
+      if(!p.last_login&&dd)t.push('login '+dd);
+      return '<td class="nm2'+(dl===0?' off':'')+'">'+esc(p.name)+'<small>'+t.join(' · ')+'</small>'+(p.last_login?'<small class="ts">Login '+lqWhen(p.last_login)+(dd?' · '+dd:'')+'</small>':'')+'</td>';}
+    // v21: every attempt shows its date + time (Toronto) in small grey text under the score
+    function at(cls,txt,date){return '<span class="at"><b class="'+cls+'">'+txt+'</b><small>'+(date?lqWhen(date):'no date')+'</small></span>';}
     function ecCell(ec){ec=ec||{};var st=ec.status,d=ec.date?lqWhen(ec.date):"",n=+ec.attempts||0;
       if(st==="passed")return '<td class="ok">✓ Passed'+(d?'<small>'+d+'</small>':'')+'</td>';
       if(st==="failed")return '<td class="bad">Failed ×'+n+'</td>';
@@ -758,9 +774,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(st==="expired")return '<td class="mut">Expired'+(n?'<small>failed ×'+n+'</small>':'')+'</td>';
       return '<td class="mut">—</td>';}
     function prCell(a){a=A(a);if(!a.length)return '<td class="mut">—</td>';
-      return '<td class="sq">'+a.map(function(v,i){var last=i===a.length-1;return last?'<b class="'+(+v>=60?'g':'a')+'">'+sc(v)+'</b>':'<span>'+sc(v)+'</span>';}).join('<i>→</i>')+'</td>';}
+      return '<td class="sq">'+a.map(function(v,i){var o=v&&typeof v==="object"?v:{score:v,date:null},last=i===a.length-1;return at(last?(+o.score>=60?'g':'a'):'p',sc(o.score),o.date);}).join('<i>→</i>')+'</td>';}
     function exCell(a){a=A(a);if(!a.length)return '<td class="mut">—</td>';
-      return '<td class="sq">'+a.map(function(x){x=x||{};var ok=String(x.pf).toUpperCase()==="P";return '<b class="'+(ok?'g':'r')+'"'+(x.date?' title="'+esc(lqWhen(x.date))+'"':'')+'>'+(x.score!=null&&x.score!==""?sc(x.score):(ok?'Pass':'Fail'))+(ok?' ✓':'')+'</b>';}).join('<i>→</i>')+'</td>';}
+      return '<td class="sq">'+a.map(function(x){x=x||{};var ok=String(x.pf).toUpperCase()==="P";return at(ok?'g':'r',(x.score!=null&&x.score!==""?sc(x.score):(ok?'Pass':'Fail'))+(ok?' ✓':''),x.date);}).join('<i>→</i>')+'</td>';}
     var P=A(r&&r.practice).slice(),X=A(r&&r.exams).slice();
     // v20: most active first. 0 days left go last. Then days_since_login ascending, then latest practice/exam attempt (newest first), then study minutes, then name. Both tables share one key per person.
     var K={};function kid(o){return String(o.code||o.name||"").toLowerCase();}
@@ -781,7 +797,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var hl=A(r&&r.highlights),ac=A(r&&r.actions);
     if(!ac.length)ac=A(r&&r.needs_call).map(function(s){return {name:s.name,why:s.reason,days_left:s.days_left,days_since_login:s.days_since_login};});   // older reports
     var h='<div class="lqt">⭐ Highlights</div>'+(hl.length?'<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>':'<div class="lqe">No highlights today</div>');
-    h+='<div class="lqs call"><div class="lqt">📞 Call to action</div>'+(ac.length?ac.map(function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.why||"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+(s.days_since_login!=null&&s.days_since_login!==""?'<small>'+esc(s.days_since_login)+'d since login</small>':"")+'</em></div>';}).join(""):'<div class="lqe">No calls needed</div>')+'</div>';
+    h+='<div class="lqs call"><div class="lqt">📞 Call to action</div>'+(ac.length?ac.map(function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.why||"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+(s.days_since_login!=null&&s.days_since_login!==""?'<small>'+esc(s.days_since_login)+'d since login</small>':"")+(s.last_login?'<small class="ts">'+lqWhen(s.last_login)+'</small>':"")+'</em></div>';}).join(""):'<div class="lqe">No calls needed</div>')+'</div>';
     $("lqAct").innerHTML=h;
   }
   navBind("c",renderCert);
