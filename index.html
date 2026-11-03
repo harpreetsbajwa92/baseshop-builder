@@ -302,6 +302,12 @@ button{cursor:pointer}
 .pan .mdt.m4 td{font-size:14px;padding:5px 3px}
 .pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
 .mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
+/* v23: attempts listed one per line (oldest first): score, then its date and time in small grey, so long histories stay narrow */
+.lqt2 td.sq{white-space:nowrap;line-height:1.15}
+.lqt2 td.sq i{display:none}
+.lqt2 td.sq .at{display:block;text-align:left;margin:0 0 3px}
+.lqt2 td.sq .at b{display:inline-block;min-width:24px}
+.lqt2 td.sq .at small{display:inline;margin-left:4px}
 /* ===== v22: checked / stale notes in the Certs comments ===== */
 .lqt2 .cm small.ck{display:block;font-size:10px;color:#7f8a92;margin-top:2px;white-space:normal}
 .lqt2 .cm small.stl{display:block;font-size:10.5px;color:#F5A623;margin-top:2px;white-space:normal}
@@ -576,7 +582,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-22";
+var APP_VERSION="2026.11.02-23";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
