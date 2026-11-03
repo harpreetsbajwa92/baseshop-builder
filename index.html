@@ -331,6 +331,20 @@ button{cursor:pointer}
 .mdft{font-family:var(--fc);font-size:clamp(34px,10vw,48px);font-weight:800;letter-spacing:2px;text-transform:uppercase;line-height:1;background:linear-gradient(180deg,#FFE7A3 0%,#F5C451 45%,#C98E12 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 10px rgba(245,196,81,.25))}
 .mdfs{margin-top:6px;font-family:var(--fc);font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#aab4bb}
 #p-md .mds{margin-top:8px}
+/* v13: names chips + expanding text line on the Main tab */
+.nmc{margin-left:6px;border:1px solid #3a444c;background:#1b2226;color:#9aa5ad;border-radius:7px;font-size:10.5px;font-weight:700;padding:0 6px;line-height:16px;vertical-align:1px;cursor:pointer;white-space:nowrap}
+.nmc.on{border-color:rgba(245,196,81,.45);color:var(--gold);background:rgba(245,196,81,.08)}
+.nmc.op{border-color:var(--gold);color:#101518;background:var(--gold)}
+.nml{grid-column:1/-1}
+.nmi{width:100%;height:32px;border-radius:10px;border:1px solid rgba(245,196,81,.45);background:#12171a;color:#fff;font-size:14px;padding:0 10px;outline:none}
+.nmi:focus{box-shadow:0 0 0 3px rgba(245,196,81,.15)}
+#mRows .mt{white-space:nowrap}
+#mRows .mrow{padding:1px 0}
+#mRows .num{height:32px;font-size:17px}
+#mRows .mn{font-size:13.5px;line-height:1.15}
+#mRows .mt{margin-top:0;line-height:16px}
+#mRows .nmc{line-height:14px}
+#mRows .mhd{padding-bottom:0}
 /* v12: Licences goal header (100 licensed team) */
 .lgh{padding:14px 14px 13px}
 .lgh .goal b{font-size:clamp(30px,9vw,46px)}
@@ -455,7 +469,7 @@ button{cursor:pointer}
 </div>
 
 <nav class="tabs" id="tabs">
-  <button data-t="meet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Meetings</button>
+  <button data-t="meet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
   <button data-t="cert"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MD Factory</button>
@@ -465,7 +479,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-12";
+var APP_VERSION="2026.11.02-13";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -482,6 +496,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   var WK={nov:{pr:3,pc:5,br:3,bp:4},dec:{pr:4,pc:5,br:5,bp:6},full:{pr:4,pc:5,br:6,bp:8}};
   var MO_FULL={pr:17,pc:22,br:26,bp:34};
   var CONTACTS={d:3,w:18,m:75};
+  var SELF={d:1,w:7,m:30};   // v13: self improvement (book, training, call); not part of the recruiting/production rings
   // headline results: $100K business = 15 base recruits + 100,000 base points a month
   // week = ceil(15/4.33)=4 and round(100000/4.33)=23K; day (Mon–Sat, 26 working days) = ceil(15/26)=1 and round(100000/26)=4K
   var HL={rec:{d:1,w:4,m:15},pts:{d:4000,w:23000,m:100000}};
@@ -544,8 +559,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function inp(f,c,v,ph,res){return '<input class="num'+(res?' res':'')+'" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" data-f="'+f+'"'+(c?' data-c="'+c+'"':'')+' placeholder="'+ph+'" value="'+esc(v==null?"":v)+'">';}
   function renderRowsInputs(){
     var d=day(view),dt=dayT(view),h='<div class="mhd"><div>Meetings</div><div>#</div><div>Results</div></div>';
-    CATS.forEach(function(c){h+='<div class="mrow"><div><div class="mn">'+c.n+'</div><div class="mt">goal '+dt[c.id]+'/d · '+wkT(view)[c.id]+'/wk · '+moT(view)[c.id]+'/mo</div></div>'+inp("m",c.id,d.m[c.id],"0")+inp("r",c.id,d.r[c.id],c.res,1)+'</div>';});
-    h+='<div class="mrow"><div><div class="mn">New contacts</div><div class="mt">goal '+CONTACTS.d+'/d · '+CONTACTS.w+'/wk · '+CONTACTS.m+'/mo</div></div>'+inp("nc","",d.nc,"0")+'<div></div></div>';
+    var nm=d.nm&&typeof d.nm==="object"?d.nm:{};
+    // v13: names met per row (d.nm[row], comma-separated) and self improvement (d.si count, d.sin note), behind a small chip that opens a text line
+    function chip(id,val,kind){var n=String(val||"").split(",").filter(function(x){return x.trim();}).length;
+      return '<button type="button" class="nmc'+(n?' on':'')+(nmOpen[id]?' op':'')+'" data-nmo="'+id+'">'+(kind==="note"?(val?'✎ note':'+ note'):(n?'👤 '+n:'+ names'))+'</button>';}
+    function line(id,val,ph,attr){return nmOpen[id]?'<div class="nml"><input class="nmi" type="text" '+attr+' placeholder="'+ph+'" value="'+esc(val||"")+'" autocomplete="off" autocapitalize="words"></div>':'';}
+    CATS.forEach(function(c){h+='<div class="mrow"><div><div class="mn">'+c.n+'</div><div class="mt">goal '+dt[c.id]+'/d · '+wkT(view)[c.id]+'/wk · '+moT(view)[c.id]+'/mo'+chip(c.id,nm[c.id])+'</div></div>'+inp("m",c.id,d.m[c.id],"0")+inp("r",c.id,d.r[c.id],c.res,1)+line(c.id,nm[c.id],"Who did you meet? e.g. Raj, Simran",'data-nm="'+c.id+'"')+'</div>';});
+    h+='<div class="mrow"><div><div class="mn">New contacts</div><div class="mt">goal '+CONTACTS.d+'/d · '+CONTACTS.w+'/wk · '+CONTACTS.m+'/mo'+chip("nc",nm.nc)+'</div></div>'+inp("nc","",d.nc,"0")+'<div></div>'+line("nc",nm.nc,"New contacts' names, comma-separated",'data-nm="nc"')+'</div>';
+    h+='<div class="mrow"><div><div class="mn">Self improvement</div><div class="mt">goal '+SELF.d+'/d · '+SELF.w+'/wk · '+SELF.m+'/mo'+chip("si",d.sin,"note")+'</div></div>'+inp("si","",d.si,"0")+'<div></div>'+line("si",d.sin,"What did you do? book, training, call…",'data-tx="sin"')+'</div>';
     $("mRows").innerHTML=h;
   }
   function renderMeetRings(){
@@ -567,16 +588,24 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("dPick").value=view;$("dPick").max=today;$("dNext").disabled=view>=today;$("dToday").hidden=view===today;
   }
   function renderMeet(){renderDate();renderRowsInputs();renderMeetRings();}
-  function onInput(e){var t=e.target;if(!t.dataset.f)return;
+  var nmOpen={};
+  function onText(t){var d=day(view),v=t.value;
+    if(t.dataset.nm){var o=d.nm&&typeof d.nm==="object"?d.nm:{};if(v.trim())o[t.dataset.nm]=v;else delete o[t.dataset.nm];if(Object.keys(o).length)d.nm=o;else delete d.nm;}
+    else if(t.dataset.tx==="sin"){if(v.trim())d.sin=v;else delete d.sin;}
+    d.u=Date.now();setJ("day:"+view,d);
+    var row=t.closest(".mrow"),c=row&&row.querySelector(".nmc");if(c){var n=v.split(",").filter(function(x){return x.trim();}).length;c.classList.toggle("on",!!v.trim());c.textContent=t.dataset.tx?(v.trim()?"✎ note":"+ note"):(n?"👤 "+n:"+ names");}}
+  function onInput(e){var t=e.target;if(t.dataset.nm||t.dataset.tx)return onText(t);if(!t.dataset.f)return;
     var v=int(t.value);if(t.value!==""&&v!==null&&String(v)!==t.value)t.value=v;   // whole numbers only
-    var d=day(view);if(t.dataset.f==="nc"){if(v===null)delete d.nc;else d.nc=v;}else{var o=d[t.dataset.f];if(v===null)delete o[t.dataset.c];else o[t.dataset.c]=v;}
+    var d=day(view);if(t.dataset.f==="nc"||t.dataset.f==="si"){if(v===null)delete d[t.dataset.f];else d[t.dataset.f]=v;}else{var o=d[t.dataset.f];if(v===null)delete o[t.dataset.c];else o[t.dataset.c]=v;}
     d.u=Date.now();setJ("day:"+view,d);renderMeetRings();renderHeader();}
-  function setView(k){if(!k||k>today)k=today;view=k;renderMeet();}
+  function setView(k){if(!k||k>today)k=today;view=k;nmOpen={};renderMeet();}
   $("dPrev").addEventListener("click",function(){setView(shift(view,-1));});
   $("dNext").addEventListener("click",function(){setView(shift(view,1));});
   $("dToday").addEventListener("click",function(){setView(today);});
   $("dPick").addEventListener("change",function(){if(this.value)setView(this.value);});
   $("mRows").addEventListener("input",onInput);
+  $("mRows").addEventListener("click",function(e){var b=e.target.closest("[data-nmo]");if(!b)return;var id=b.dataset.nmo,was=!!nmOpen[id];nmOpen={};if(!was)nmOpen[id]=1;renderRowsInputs();
+    var i=document.querySelector("#mRows .nmi");if(i){i.focus();try{i.setSelectionRange(i.value.length,i.value.length);}catch(x){}}});
 
   // ---------- day pickers for certs / licences (same control as Meetings) ----------
   function inDays(e,days){return days.indexOf(e.date)>=0;}
@@ -682,6 +711,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {s:"m-pc",g:"Meetings",i:"💼",n:"Personal closing",v:function(k){return int(day(k).m.pc)||0;},T:{d:function(k){return dayT(k).pc;},w:function(k){return wkT(k).pc;},m:function(k){return moT(k).pc;}}},
     {s:"m-br",g:"Meetings",i:"👥",n:"Base recruiting",v:function(k){return int(day(k).m.br)||0;},T:{d:function(k){return dayT(k).br;},w:function(k){return wkT(k).br;},m:function(k){return moT(k).br;}}},
     {s:"m-bp",g:"Meetings",i:"🏁",n:"Base closing",v:function(k){return int(day(k).m.bp)||0;},T:{d:function(k){return dayT(k).bp;},w:function(k){return wkT(k).bp;},m:function(k){return moT(k).bp;}}},
+    {s:"si",g:"Meetings",i:"📚",n:"Self improvement",sn:"Self improv.",v:function(k){return int(day(k).si)||0;},T:{d:function(){return SELF.d;},w:function(){return SELF.w;},m:function(){return SELF.m;}}},
     {s:"nc",g:"Meetings",i:"📇",n:"New contacts",v:function(k){return int(day(k).nc)||0;},T:{d:function(){return CONTACTS.d;},w:function(){return CONTACTS.w;},m:function(){return CONTACTS.m;}}},
     {s:"rec",g:"Results",i:"🎯",n:"Recruits",v:function(k){var r=day(k).r;return (int(r.pr)||0)+(int(r.br)||0);},T:{d:function(){return HL.rec.d;},w:function(){return HL.rec.w;},m:function(){return HL.rec.m;}}},
     {s:"pts",g:"Results",i:"📈",n:"Base points",k:1,v:function(k){var r=day(k).r;return (int(r.pc)||0)+(int(r.bp)||0);},T:{d:function(){return HL.pts.d;},w:function(){return HL.pts.w;},m:function(){return HL.pts.m;}}},
@@ -795,16 +825,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var u=opt?SYNC_CONFIG.url:(alt?SY_MIRROR:SYNC_CONFIG.url)+"?_="+Date.now();
     return fetch(u,{method:opt?"POST":"GET",headers:opt?{"Content-Type":"application/json"}:(alt?{"Accept":"application/json"}:{}),body:opt?opt.body:undefined,cache:"no-store",signal:ctl?ctl.signal:undefined})
       .then(function(r){clearTimeout(to);return r.text().then(function(t){if(!r.ok){var er=new Error("HTTP "+r.status);er.status=r.status;throw er;}var d=syParse(t);if(alt)d=d&&d.contents;if(!opt&&(!d||typeof d!=="object"||Array.isArray(d)))throw new Error("bad body");return d;});},function(e){clearTimeout(to);throw e;});}
-  function syRead(){var n=0;function go(){return syHttp(null,n%2===1).catch(function(e){n++;if(n>=3)throw e;return syWait(n===1?1500:4000).then(go);});}return go();}
+  // v13: hedged read. Start the api GET; if it hasn't answered in 6 s, also start the mirror GET; first good answer wins. Up to 3 tries.
+  function syRead1(){return new Promise(function(res,rej){var done=false,pend=0,alt=false,t;
+      function fire(m){pend++;syHttp(null,m).then(function(d){if(!done){done=true;clearTimeout(t);res(d);}},function(e){pend--;if(done)return;if(!alt)startAlt();else if(pend===0){done=true;rej(e);}});}
+      function startAlt(){if(alt||done)return;alt=true;clearTimeout(t);fire(true);}
+      fire(false);t=setTimeout(startAlt,6000);});}
+  function syRead(){var n=0;function go(){return syRead1().catch(function(e){n++;if(n>=3)throw e;return syWait(n===1?1500:4000).then(go);});}return go();}
   function syWait(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function syLocalKeys(){var a=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf(PREFIX)===0)a.push(k);}return a;}
   // merge one key when BOTH sides changed: day records merge field by field (newer side wins per field); lists merge by id; else newer wins
   function syMerge(fk,a,b,ta,tb){
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
-    if(/^day:/.test(k)&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
-      for(z in (O.m||{}))r.m[z]=O.m[z];for(z in (N.m||{}))r.m[z]=N.m[z];for(z in (O.r||{}))r.r[z]=O.r[z];for(z in (N.r||{}))r.r[z]=N.r[z];
-      r.h={};for(z in (O.h||{}))r.h[z]=O.h[z];for(z in (N.h||{}))r.h[z]=N.h[z];if(N.nc!==undefined)r.nc=N.nc;else if(O.nc!==undefined)r.nc=O.nc;r.u=Math.max(+N.u||0,+O.u||0);return JSON.stringify(r);}
+    if(/^day:/.test(k)&&N&&O&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
+      // v13: keep EVERY field from both sides (newer side wins); object fields (m, r, h, nm, ...) merge key by key
+      for(z in O)r[z]=O[z];for(z in N)r[z]=N[z];
+      ["m","r","h","nm"].forEach(function(f){var a=O[f]&&typeof O[f]==="object"?O[f]:{},b=N[f]&&typeof N[f]==="object"?N[f]:{},o={},y;for(y in a)o[y]=a[y];for(y in b)o[y]=b[y];if(f!=="nm"||Object.keys(o).length)r[f]=o;});
+      r.u=Math.max(+N.u||0,+O.u||0);return JSON.stringify(r);}
     if(Array.isArray(N)&&Array.isArray(O)){var m={},out=[];O.forEach(function(x){if(x&&x.id!==undefined)m[x.id]=x;});
       N.forEach(function(x){if(x&&x.id!==undefined&&(!m[x.id]||(+x.u||0)>=(+m[x.id].u||0)))m[x.id]=x;});
       N.concat(O).forEach(function(x){if(x&&x.id!==undefined&&m[x.id]){out.push(m[x.id]);delete m[x.id];}});return JSON.stringify(out);}
