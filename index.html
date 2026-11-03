@@ -331,6 +331,19 @@ button{cursor:pointer}
 .mdft{font-family:var(--fc);font-size:clamp(34px,10vw,48px);font-weight:800;letter-spacing:2px;text-transform:uppercase;line-height:1;background:linear-gradient(180deg,#FFE7A3 0%,#F5C451 45%,#C98E12 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 10px rgba(245,196,81,.25))}
 .mdfs{margin-top:6px;font-family:var(--fc);font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#aab4bb}
 #p-md .mds{margin-top:8px}
+/* v12: Licences goal header (100 licensed team) */
+.lgh{padding:14px 14px 13px}
+.lgh .goal b{font-size:clamp(30px,9vw,46px)}
+.lghr{display:flex;align-items:center;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.07);text-align:left}
+.lghn{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.lghn b{font-family:var(--fn);font-size:44px;font-weight:700;line-height:1;color:#fff}
+.lghn span{font-family:var(--fc);font-size:14px;font-weight:700;letter-spacing:1.2px;color:#aab4bb;text-transform:uppercase;line-height:1.15}
+.lghn em{font-style:normal;color:var(--gold)}
+.lghb{flex:1;min-width:0}
+.lghbar{height:12px;border-radius:7px;background:#323b42;overflow:hidden}
+.lghbar i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,#D9A021,#F5C451 60%,#FFE7A3)}
+.lghs{display:flex;justify-content:flex-start;gap:14px;margin-top:6px;font-family:var(--fc);font-size:12.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aab4bb;white-space:nowrap}
+.lghs .g{color:var(--gold)}.lghs .b{color:#6cc3f5}.lghs span:last-child{margin-left:auto}
 .mdb thead th{background:none}
 .mdb tfoot td{border-top:1px solid rgba(245,196,81,.35)}
 .pan.sb .mdb tfoot td{border-top-color:rgba(108,195,245,.35)}
@@ -404,6 +417,7 @@ button{cursor:pointer}
 
   <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
   <section class="page" id="p-lic">
+    <div class="card mdf lgh" id="licGoal"></div>
     <div class="slbl"><span>New licences <small id="lMon"></small></span><small>goal 3 / month each</small></div>
     <div class="card lgo" id="licStats"></div>
     <div class="slbl"><span>New names <small id="nPer"></small></span></div>
@@ -451,7 +465,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-11";
+var APP_VERSION="2026.11.02-12";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -626,6 +640,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         '<div class="rb">'+(rows.length?'<table class="rt2">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td><td>'+(nb(r.cf_month)?'—':money(+r.cf_month))+'</td><td>'+(nb(r.cf_12)?'—':money(+r.cf_12))+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
         '<table class="rt2">'+cols+'<tbody><tr class="rtot"><td>Total ('+rows.length+')</td><td></td><td>'+money(tm)+'</td><td>'+money(t12)+'</td></tr></tbody></table></div>';}
     $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");
+    // v12: Licences tab goal header = 100 licensed team (base + super base roster count)
+    var nb0=Array.isArray(L.base)?L.base.length:0,ns0=Array.isArray(L.superbase)?L.superbase.length:0,tot=nb0+ns0,G=100,gf=Math.min(1,tot/G);
+    $("licGoal").innerHTML='<div class="goal"><span class="ge">GOAL</span><b>100 LICENSED TEAM</b></div>'+
+      '<div class="lghr"><div class="lghn"><b>'+tot+'</b><span>of '+G+'<br><em>'+(tot>=G?'goal hit ✓':(G-tot)+' to go')+'</em></span></div>'+
+      '<div class="lghb"><div class="lghbar"><i style="width:'+(gf*100).toFixed(1)+'%"></i></div><div class="lghs"><span class="g">Base shop '+nb0+'</span><span class="b">Super base '+ns0+'</span><span>'+Math.round(tot/G*100)+'%</span></div></div></div>';
     $("rNote").textContent="From MyWFG, updated by your bot. Sorted by 12-month cash flow.";
   }
   // v10: the Licences tab scrolls like a normal page (full roster), so no fitBoxes here; other tabs still fit one screen
@@ -750,7 +769,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // ---------- tabs ----------
   var tab="meet",TABS={meet:renderMeet,cert:renderCert,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md";renderHeader();TABS[t]();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic";renderHeader();TABS[t]();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
