@@ -600,7 +600,38 @@ button{cursor:pointer}
 #p-lb .lbnotes{font-size:12px;color:#9aa5ad;line-height:1.4;padding:10px 14px}
 #p-lb .lbnotes li{margin:3px 0 3px 14px}
 #p-lb .lbnotes b{color:#cfd6db}
-@media (min-width:900px){#p-lb{max-width:760px;margin:0 auto}}
+@media (min-width:900px){#p-lb{max-width:1100px;margin:0 auto}}
+/* ===== v31: Leaders Bulletin v2 (one table, 21 leader sections in the owner's order, roster from bs-v1:leaders_roster) ===== */
+#p-lb .lb2bar{display:flex;align-items:center;gap:8px;margin:12px 4px 6px;font-size:11.5px;color:#8c979f;font-weight:600;flex-wrap:wrap}
+#p-lb .lb2bar button{background:#1d2328;border:1px solid var(--line);color:#cfd6db;border-radius:8px;font:inherit;font-weight:700;padding:5px 10px;cursor:pointer}
+#p-lb .lb2bar .sp{margin-left:auto}
+#p-lb .lb2{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:12.5px}
+#p-lb .lb2 td:not(:first-child){min-width:46px}
+#p-lb .lb2 th{background:#1d2328;font-family:var(--fc);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8c979f;text-align:right;padding:6px 6px 5px;line-height:1.15;border-bottom:1px solid var(--line);white-space:nowrap}
+#p-lb .lb2 th.g{text-align:center;color:#14181b;background:var(--gold);font-size:10.5px;letter-spacing:1px;border-bottom:0}
+#p-lb .lb2 th.g2{background:#7fb3e0}
+#p-lb .lb2 th.gs,#p-lb .lb2 td.gs{border-left:2px solid #3a444b}
+#p-lb .lb2 th.pc{color:#6f7a82}
+#p-lb .lb2 td{padding:6px 6px;border-top:1px solid var(--line);vertical-align:top;white-space:nowrap;text-align:right;font-family:var(--fn);font-weight:600;color:#cfd6db}
+#p-lb .lb2 th.nm,#p-lb .lb2 td:first-child{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:1px 0 0 var(--line);min-width:128px;max-width:150px;white-space:normal;text-align:left;font-family:inherit}
+#p-lb .lb2 th.nm{background:#1d2328;z-index:2;vertical-align:bottom}
+#p-lb .lb2 td:first-child b{display:block;font-size:12.5px;line-height:1.2;color:#e6ebee;font-weight:600}
+#p-lb .lb2 td:first-child small{display:block;font-size:10px;font-weight:600;color:#7f8a92;margin-top:1px;line-height:1.25}
+#p-lb .lb2 td:first-child small.fl{color:#F5A623}
+#p-lb .lb2 td i{display:block;font-style:normal;font-size:9.5px;font-weight:600;color:#7f8a92;margin-top:1px}
+#p-lb .lb2 .na{color:#56616a}
+#p-lb .lb2 .np{color:#3e474e}
+#p-lb .lb2 tr.ld td{border-top:2px solid #3a444b;background:#1f2529;cursor:pointer;color:#fff;font-weight:800}
+#p-lb .lb2 tr.ld td:first-child{background:#232a2f}
+#p-lb .lb2 tr.ld td:first-child b{font-weight:800;color:var(--gold);font-size:13px}
+#p-lb .lb2 tr.ld .cv{display:inline-block;transition:transform .15s;color:#7f8a92;margin-left:3px}
+#p-lb .lb2 tbody.cl tr.ld .cv{transform:rotate(-90deg)}
+#p-lb .lb2 tbody.cl tr.tm{display:none}
+#p-lb .lb2 tr.tm td:first-child{padding-left:14px}
+#p-lb .lb2 tr.gone td:first-child b{color:#8c979f}
+#p-lb .lb2 tr.me td{background:rgba(245,196,81,.07)}#p-lb .lb2 tr.me td:first-child{background:#2c2f2a}
+#p-lb .lb2 .chip{display:inline-block;font-size:9.5px;font-weight:700;color:#14181b;background:#c9a25a;border-radius:6px;padding:0 5px;margin-left:4px;vertical-align:1px}
+#p-lb .lb2 .cnt{color:#9fd3a8}
 </style>
 </head>
 <body>
@@ -696,8 +727,8 @@ button{cursor:pointer}
   <!-- TAB 5b (v29): LEADERS BULLETIN (bs-v1:leaders, built by build_lb.py from the MyWFG Leaders Bulletin top 100 exports). Read-only; scrolls like a normal page; tables scroll sideways with a sticky name column. -->
   <section class="page" id="p-lb">
     <div class="card mdf"><div class="mdft">Leaders Bulletin</div><div class="mdfs" id="lbMeta"></div></div>
-    <div class="card lbme" id="lbMe"></div>
-    <div id="lbSecs"></div>
+    <div class="lb2bar"><span id="lbSum"></span><span class="sp"></span><button type="button" id="lbAll">Collapse all</button></div>
+    <div class="card lbx" id="lbSecs"></div>
     <div class="card lbnotes" id="lbNotes"></div>
   </section>
 
@@ -743,7 +774,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-30";
+var APP_VERSION="2026.11.03-31";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1235,39 +1266,51 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function lbMon(ym){var m=/^(\d{4})-(\d{2})/.exec(ym||"");return m?MON[+m[2]-1]+" "+m[1]:"";}
   function lbHead(L){var mo=lbMon(L.month).split(" ")[0]||"Month";return '<tr><th>Name</th>'+LBM.map(function(c){return '<th>'+c[1]+' '+(c[2]==="m"?esc(mo):"12 mo")+'<small>'+(c[2]==="m"?"month":"rolling")+'</small></th>';}).join("")+'</tr>';}
   function lbCell(m,f){var t=lbN(m[f],f),r=m.ranks&&m.ranks[f];return t===null?'<td><span class="na">—</span></td>':'<td>'+esc(t)+(r?'<i>#'+esc(r)+'</i>':'')+'</td>';}
+  // v31: one table, sections in the owner's order. "" blank = on the roster but not on this bulletin; "—" = not in that top 100; "·" = not pulled.
+  var LB2=[["prec","Pers rec"],["ppts","Pers prod"],["rec","Base rec"],["pts","Base pts"],["lic","Lic"]],lbClosed={},lbAllClosed=false;
+  function lb2Cell(m,f,L,first){var cls=first?' class="gs"':'';
+    if(m.absent)return '<td'+cls+'></td>';
+    var pers=f.charAt(0)==="p"&&f.indexOf("pts")!==0;
+    if(pers&&!(L.cols&&L.cols.personal)&&!m.me)return '<td'+cls+'><span class="np">·</span></td>';
+    var t=lbN(m[f],f.replace(/^p(?=rec|pts)/,"")),r=m.ranks&&m.ranks[f];
+    if(f==="ppts_m"||f==="ppts_12")t=lbN(m[f],"pts");
+    return t===null?'<td'+cls+'>'+(m.me?'<span class="np">·</span>':'<span class="na">—</span>')+'</td>':'<td'+cls+'>'+esc(t)+(r?'<i>#'+esc(r)+'</i>':'')+'</td>';}
   function renderLb(){
     var L=getJ("leaders",null);
-    if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base top 100";$("lbMe").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbSecs").innerHTML="";$("lbNotes").innerHTML="";return;}
-    var mo=lbMon(L.month),from=lbMon(L.r12_from);
-    $("lbMeta").textContent=[mo?"Data "+mo:"",from&&mo?"12 mo "+from.replace(/ \d{4}$/,function(y){return from.slice(-4)!==mo.slice(-4)?y:"";})+"–"+mo:"",lqUpd(L)?lqUpd(L)+" ET":""].filter(Boolean).join(" · ");
-    // Harpreet vs the #100 cutoffs
-    var me=L.me||{},own=me.own||{},C=L.cutoffs||{};
-    var you={ranks:{}};LBM.forEach(function(c){you[c[0]]=own[c[0]]!==undefined?own[c[0]]:me[c[0]];});
-    var gaps=[];[["rec_m","rec Oct"],["pts_m","pts Oct"],["rec_12","rec 12 mo"],["pts_12","pts 12 mo"]].forEach(function(g){var y=you[g[0]],c=C[g[0]];if(y!=null&&c!=null){var d=c-y;gaps.push(d>0?lbN(d,g[0])+" "+g[1].replace(/ Oct/," "+(mo.split(" ")[0]||""))+" to go":"✓ "+g[1]);}});
-    var mh='<div class="lbmh"><b>You</b> (Harpreet Singh Bajwa '+esc(me.code||"")+'): '+(me.in_top100?"in the top 100 (see your section).":"not in the Canada SMD Base top 100 yet.")+(gaps.length?' To reach #100: '+esc(gaps.join(" · "))+'.':'')
-      +'<small>Your numbers: '+esc(me.own_src||"not available")+'. Licences: not in that report.</small></div>';
-    var cut={name:"#100 cutoff",ranks:{}};LBM.forEach(function(c){cut[c[0]]=C[c[0]];});
-    mh+='<div class="tsc"><table class="lbt"><thead>'+lbHead(L)+'</thead><tbody>'
-      +'<tr class="you"><td><b>You</b><small>SMD Base, own report</small></td>'+LBM.map(function(c){return lbCell(you,c[0]);}).join("")+'</tr>'
-      +'<tr class="cut"><td><b>#100 cutoff</b><small>value at rank 100</small></td>'+LBM.map(function(c){return lbCell(cut,c[0]);}).join("")+'</tr></tbody></table></div>';
-    $("lbMe").innerHTML=mh;
-    var h="";L.sections.forEach(function(s,i){var ms=Array.isArray(s.members)?s.members:[];
-      h+='<div class="lbsl">'+(i+1)+'. '+esc(s.leader)+(s.leader==="Rohit Mehta"?"":" & team")+(ms.length?' <span class="n">'+ms.length+'</span>':'')+'</div><div class="card lbx">';
-      if(!ms.length)h+='<div class="lbno">'+esc(s.note||"Not in Canada SMD Base top 100 for Oct or 12 months")+'</div>';
-      else{h+='<div class="tsc"><table class="lbt"><thead>'+lbHead(L)+'</thead><tbody>';
-        ms.forEach(function(m){var sub=[m.code,m.title,m.upline?"up "+m.upline:""].filter(Boolean).join(" · ");
-          var miss=(m.missing||[]).length===6?"Not in any top 100":"";
-          h+='<tr class="'+(m.lead?"ld":"")+(m.me?" me":"")+'"><td><b>'+esc(m.name)+'</b><small>'+esc(sub)+'</small>'+(m.flag?'<small class="fl">'+esc(m.flag)+'</small>':miss?'<small class="fl">'+miss+'</small>':'')+'</td>'+LBM.map(function(c){return lbCell(m,c[0]);}).join("")+'</tr>';});
-        h+='</tbody></table></div>';
-        if(s.note)h+='<div class="lbsn a">'+esc(s.note)+'</div>';}
-      (s.xref||[]).forEach(function(x){h+='<div class="lbsn">'+esc(x)+'</div>';});
-      h+='</div>';});
+    if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base top 100";$("lbSum").textContent="";$("lbSecs").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbNotes").innerHTML="";return;}
+    var v2=L.v===2,mo=lbMon(L.month),from=lbMon(L.r12_from),mon=mo.split(" ")[0]||"Month";
+    $("lbMeta").textContent=[mo?mo:"",from&&mo?"12 mo "+from+"–"+mo:"",L.variant||"SMD Base",lqUpd(L)?lqUpd(L)+" ET":""].filter(Boolean).join(" · ");
+    var secs=L.sections,nt=0,nn=0;secs.forEach(function(s){nt+=s.smd_total||0;nn+=s.smd_now||0;});
+    $("lbSum").textContent=secs.length+" leaders · "+nt+" in teams · "+nn+" on this bulletin";
+    var cols=[];["m","12"].forEach(function(p){LB2.forEach(function(c,j){cols.push([c[0]+"_"+p,c[1],j===0,c[0].charAt(0)==="p"]);});});
+    var h='<div class="tsc"><table class="lb2"><thead><tr><th class="nm" rowspan="2">Leader / team</th><th class="g gs" colspan="5">Current month · '+esc(mon)+'</th><th class="g g2 gs" colspan="5">Rolling 12 months</th></tr><tr>'
+      +cols.map(function(c){return '<th class="'+(c[2]?"gs ":"")+(c[3]&&!(L.cols&&L.cols.personal)?"pc":"")+'">'+esc(c[1])+'</th>';}).join("")+'</tr></thead>';
+    secs.forEach(function(s,i){var ms=Array.isArray(s.members)?s.members:[];var key=s.leader||String(i),cl=lbClosed[key]!==undefined?lbClosed[key]:lbAllClosed;
+      h+='<tbody class="'+(cl?"cl":"")+'" data-lk="'+esc(key)+'">';
+      ms.forEach(function(m,j){var lead=!!m.lead;
+        var sub=lead?[s.title||m.title,v2?("SMDs "+(s.smd_total||0)+" · "+(s.smd_now||0)+" on bulletin"):""]:[m.title,m.code];
+        var sm='<small'+(lead?' class="cnt"':'')+'>'+esc(sub.filter(Boolean).join(" · "))+'</small>';
+        if(lead&&m.title&&s.title&&m.title!==s.title&&!m.absent)sm+='<small>bulletin: '+esc(m.title)+'</small>';
+        if(lead&&!s.found&&v2)sm+='<small class="fl">not on bulletin</small>';
+        else if(m.flag&&!(lead&&m.flag==="not on bulletin"))sm+='<small class="fl">'+esc(m.flag)+'</small>';
+        if(!lead&&m.absent)sm+='<small class="fl">not on '+esc(mon)+' bulletin'+(m.last_month?' · last '+esc(lbMon(m.last_month)):'')+'</small>';
+        if(lead&&s.xref_n)sm+='<small>+ '+esc((s.xref||[]).map(function(x){return x.replace(/ \(Upline EMD.*?section #(\d+).*/," (#$1)");}).join(", "))+' in own section</small>';
+        var nm=lead?(s.n||i+1)+'. '+(s.leader||m.name):m.name;
+        h+='<tr class="'+(lead?"ld":"tm")+(m.me?" me":"")+(m.absent&&!lead?" gone":"")+'"><td><b>'+esc(nm)+(lead&&ms.length>1?'<span class="cv">▾</span>':'')+'</b>'+sm+'</td>'
+          +cols.map(function(c){return lb2Cell(m,c[0],L,c[2]);}).join("")+'</tr>';});
+      h+='</tbody>';});
+    h+='</table></div>';
     $("lbSecs").innerHTML=h;
-    var n='<b>How to read:</b> number = value, #n = Company rank (ties share a rank). <b>—</b> = not in that top 100 (at or below the #100 value). Rows come from the Upline EMD column: each leader plus the people whose Upline EMD is that leader.';
-    var lst=(L.unmatched||[]).map(function(u){return "<li><b>"+esc(u.name)+"</b>: "+esc(u.why)+"</li>";}).concat((L.checks||[]).map(function(c){return "<li>"+esc(c)+"</li>";}));
+    $("lbAll").textContent=lbAllClosed?"Expand all":"Collapse all";
+    var n='<b>How to read:</b> value with its Company rank (#n). <b>—</b> = not in that top 100. Blank = on the team list but not on this bulletin (kept, never erased). <b>·</b> = not in the MyWFG pull. Team = everyone whose Upline EMD is the leader; a listed leader is shown once, in his own section. Tap a leader to fold his team.';
+    var lst=(L.gaps||[]).map(function(g){return "<li><b>Gap:</b> "+esc(g)+"</li>";})
+      .concat((L.checks||[]).map(function(c){return "<li>"+esc(c)+"</li>";}));
     if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
+    var C=L.cutoffs||{};if(C.pts_m!=null)n+='<div style="margin-top:6px">#100 cutoff: base rec '+esc(lbN(C.rec_m,"rec"))+' / '+esc(lbN(C.rec_12,"rec"))+' · base pts '+esc(lbN(C.pts_m,"pts"))+' / '+esc(lbN(C.pts_12,"pts"))+' · lic '+esc(lbN(C.lic_m,"lic"))+' / '+esc(lbN(C.lic_12,"lic"))+' (month / 12 mo)</div>';
     if(L.source)n+='<div style="margin-top:6px;color:#6f7a82">Source: '+esc(L.source)+'</div>';
     $("lbNotes").innerHTML=n;}
+  $("lbSecs").addEventListener("click",function(e){var tr=e.target.closest("tr.ld");if(!tr)return;var tb=tr.parentNode,k=tb.getAttribute("data-lk");var c=!tb.classList.contains("cl");tb.classList.toggle("cl",c);lbClosed[k]=c;});
+  $("lbAll").addEventListener("click",function(){lbAllClosed=!lbAllClosed;lbClosed={};renderLb();});
   function rcDate(d){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||"");return m?MON[+m[2]-1]+" "+(+m[3])+", "+m[1]:"";}
   function renderRec(){
     var R=getJ("recruits",null);
