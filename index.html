@@ -849,6 +849,7 @@ button{cursor:pointer}
     <div class="card lqx"><div class="tsc" id="lqPrac"></div></div>
     <div class="slbl"><span>Highlights &amp; calls to action</span></div>
     <div class="card lq" id="lqAct"></div>
+    <div class="note" id="lqMoved" style="text-align:left"></div>
   </section>
 
   <!-- TAB 1b (v28): GOLD PROSPECTS (bs-v1:gold, built by build_gold.py from the LinkedIn + Instagram bots). Read-only; scrolls like a normal page. -->
@@ -984,7 +985,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-39";
+var APP_VERSION="2026.11.03-40";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1194,8 +1195,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function gone(o){if(!o||typeof o!=="object")return false;var dl=o.days_left,st=String(o.status||"").toLowerCase();
       return (dl!=null&&dl!==""&&isFinite(+dl)&&+dl<=0)||o.ran_out===true||o.out_of_time===true||st==="ran_out"||st==="ran out"||st==="out_of_time"||st==="out of time";}
     var GN={},GW=[];function nk(x){return String(x||"").toLowerCase().replace(/\s+/g," ").trim();}
-    A(r&&r.practice).concat(A(r&&r.exams)).forEach(function(o){if(gone(o)&&o.name&&!GN[nk(o.name)]){GN[nk(o.name)]=1;GW.push(nk(o.name));}});
+    A(r&&r.practice).concat(A(r&&r.exams)).forEach(function(o){if((gone(o)||pHid("certs",o.name,o.code))&&o.name&&!GN[nk(o.name)]){GN[nk(o.name)]=1;GW.push(nk(o.name));}});
     var P=A(r&&r.practice).filter(function(o){return !gone(o)&&!GN[nk(o.name)];}),X=A(r&&r.exams).filter(function(o){return !gone(o)&&!GN[nk(o.name)];});
+    var MV={};A(r&&r.practice).concat(A(r&&r.exams)).forEach(function(o){if(!gone(o)&&pHid("certs",o.name,o.code))MV[o.name]=pLbl(pFind(o.name,o.code));});
+    var mvN=Object.keys(MV);if($("lqMoved"))$("lqMoved").innerHTML=mvN.length?'<b>Moved off Certs ('+mvN.length+'):</b> '+mvN.map(function(n){return esc(n)+' → '+esc(MV[n]);}).join(", ")+'. Their records stay; they show on Licences / MDs / Attendance.':'';
     // first names of hidden people, unless an active person shares that first name
     var LIVE={};P.concat(X).forEach(function(o){LIVE[nk(o.name).split(" ")[0]]=1;});
     var GF=[];GW.forEach(function(w){GF.push(w);var f=w.split(" ")[0];if(f&&!LIVE[f])GF.push(f);});
@@ -1406,8 +1409,19 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // ---------- tabs ----------
   // ---------- v24: Upcoming Licences (bs-v1:upcoming from DBI Hub; anyone on bs-v1:licensed is hidden at render time) ----------
   function upNorm(n){return String(n||"").toLowerCase().replace(/\./g," ").replace(/[^a-z ]/g,"").replace(/\s+/g," ").trim();}
+  // v40: one status per person (bs-v1:people, built daily by build_people.py): MD > Licensed > Certifications > Recruit.
+  // pHid(view,name,code): true when this person's status means they belong elsewhere (view filter only; source keys untouched).
+  function pNorm(s){return String(s||"").toLowerCase().replace(/n\\a/g," ").replace(/[^a-z ]/g," ").replace(/\s+/g," ").trim();}
+  function pReg(){var P=getJ("people",null);if(!P||typeof P!=="object"||!P.idx||!P.nm||!Array.isArray(P.people))return null;
+    if(!P._by){P._by={};P.people.forEach(function(x){P._by[x.id]=x;});P._h={};Object.keys(P.hide||{}).forEach(function(v){var m={};(P.hide[v]||[]).forEach(function(id){m[id]=1;});P._h[v]=m;});}return P;}
+  function pFind(name,code){var P=pReg();if(!P)return null;var c=String(code||"").toUpperCase().trim(),id=c&&P.idx[c];
+    if(!id&&!c){var v=P.nm[pNorm(name)];id=v&&v!=="?"?v:null;}if(!id&&c){var v2=P.nm[pNorm(name)];id=v2&&v2!=="?"&&P._by[v2]&&!P._by[v2].code?v2:null;}
+    return id?P._by[id]||null:null;}
+  function pHid(view,name,code){var P=pReg(),x=P&&pFind(name,code);if(!x)return false;if(P._h[view]&&P._h[view][x.id])return true;
+    var R=P.rules&&P.rules[view];if(!R)return false;return (Array.isArray(R.status)&&R.status.indexOf(x.status)>=0)||(Array.isArray(R.lic)&&R.lic.indexOf(x.lic)>=0);}
+  function pLbl(x){var P=pReg();return x&&P&&P.labels?P.labels[x.status]||x.status:"";}
   function upLicSet(){var L=getJ("licensed",null),c={},n={};if(L&&typeof L==="object")["base","superbase"].forEach(function(t){(Array.isArray(L[t])?L[t]:[]).forEach(function(p){if(p&&p.code)c[String(p.code).toUpperCase()]=1;if(p&&p.name)n[upNorm(p.name)]=1;});});return {c:c,n:n,ok:!!(L&&typeof L==="object")};}
-  function upIsLic(p,S){var c=p.code?String(p.code).toUpperCase():"";if(c&&S.c[c])return true;if(p.code_match_only)return false;return !!S.n[upNorm(p.name)]||(p.wfg_name&&!!S.n[upNorm(p.wfg_name)]);}   // code first, then name
+  function upIsLic(p,S){var c=p.code?String(p.code).toUpperCase():"";if(c&&S.c[c])return true;if(pHid("upcoming",p.name,p.code))return true;if(p.code_match_only)return false;return !!S.n[upNorm(p.name)]||(p.wfg_name&&!!S.n[upNorm(p.wfg_name)]);}   // code first, then name
   function upDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d||"")&&+d.slice(0,4)>=2020?d:null;}
   function upDue(p){if(p.date_invalid)return {k:2,n:null};var d=upDate(p.exam_date);if(!d)return {k:3,n:null};var n=dayDiff(today,d);return n>=0?{k:0,n:n}:{k:1,n:n};}
   function upShort(d){var x=parse(d);return MON[x.getUTCMonth()]+" "+x.getUTCDate()+(d.slice(0,4)!==today.slice(0,4)?", "+d.slice(0,4):"");}
@@ -1599,9 +1613,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderRec(){
     var R=getJ("recruits",null);
     if(!R||typeof R!=="object"||!Array.isArray(R.base)||!Array.isArray(R.superbase)){$("rcMeta").textContent="Base and Super base";$("rcSecs").innerHTML='<div class="card"><div class="rcno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from DBI Hub and MyWFG.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("rcNotes").innerHTML="";return;}
-    $("rcMeta").textContent=["Base "+R.base.length,"Super base "+R.superbase.length,lqUpd(R)?lqUpd(R)+" ET":""].filter(Boolean).join(" · ");
-    var h="";[["base","Base","My Baseshop"],["superbase","Super base","Sunchandan Singh's baseshop"]].forEach(function(S){var L=R[S[0]];
-      h+='<div class="rcsl">'+S[1]+' <span class="n">'+L.length+'</span><small>'+esc(S[2])+'</small></div><div class="card rcx">';
+    $("rcMeta").textContent=["Base "+R.base.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,"Super base "+R.superbase.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,lqUpd(R)?lqUpd(R)+" ET":""].filter(Boolean).join(" · ");
+    var h="",MVR=[];[["base","Base","My Baseshop"],["superbase","Super base","Sunchandan Singh's baseshop"]].forEach(function(S){var L=R[S[0]].filter(function(e){if(pHid("recruits",e.name,e.code)){MVR.push(e);return false;}return true;});
+      var mv=R[S[0]].length-L.length;
+      h+='<div class="rcsl">'+S[1]+' <span class="n">'+L.length+'</span><small>'+esc(S[2])+(mv?' · '+mv+' licensed / MD moved out':'')+'</small></div><div class="card rcx">';
       if(!L.length){h+='<div class="rcno">No recruits yet.</div></div>';return;}
       h+='<div class="tsc"><table class="rct"><thead><tr><th>Name</th><th>Code</th><th>Recruit date</th><th>Upline MD</th></tr></thead><tbody>';
       L.forEach(function(e){var src=(e.sources||[]).join(" + "),aka=(e.aka||[]).length?"aka "+e.aka.join(", "):"";
@@ -1610,7 +1625,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
           +'<td class="c">'+(e.code?esc(e.code):'<span class="na">—</span>')+'</td><td class="d">'+(e.date?esc(rcDate(e.date)):'<span class="na">—</span>')+'</td><td>'+up+'</td></tr>';});
       h+='</tbody></table></div></div>';});
     $("rcSecs").innerHTML=h;
-    var n='<b>How to read:</b> one row per person (duplicates merged by WFG code, then by name). Newest recruit date first. Upline MD comes from the recruiter in MyWFG; when the recruiter is not an MD, the recruiter is shown instead. <b>—</b> = not known yet; never guessed. People are never removed; later runs only add people or fill blanks.';
+    var n=(MVR.length?'<b>Moved to Licensed / MD ('+MVR.length+'):</b> '+MVR.map(function(e){var x=pFind(e.name,e.code);return esc((x&&x.name)||e.name)+' ('+esc(pLbl(x))+')';}).join(", ")+'. They are on Licences, MDs and Attendance · Licensed; their recruit records are kept.<br>':'')+'<b>How to read:</b> one row per person (duplicates merged by WFG code, then by name). Newest recruit date first. Upline MD comes from the recruiter in MyWFG; when the recruiter is not an MD, the recruiter is shown instead. <b>—</b> = not known yet; never guessed. People are never removed; later runs only add people or fill blanks.';
     var lst=(R.notes||[]).map(function(x){return "<li>"+esc(x)+"</li>";});
     if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
     $("rcNotes").innerHTML=n;}
