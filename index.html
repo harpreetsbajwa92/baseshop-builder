@@ -601,6 +601,41 @@ button{cursor:pointer}
 #p-lb .lbnotes li{margin:3px 0 3px 14px}
 #p-lb .lbnotes b{color:#cfd6db}
 @media (min-width:900px){#p-lb{max-width:1100px;margin:0 auto}}
+/* v32: Points and Recruits (#p-trends) + Admin (#p-adm) report tables */
+#p-trends,#p-adm{max-width:900px;margin:0 auto}
+.rpbar{display:flex;align-items:center;gap:6px;margin:12px 4px 6px;font-size:11.5px;color:#8c979f;font-weight:600;flex-wrap:wrap}
+.rpbar h3{margin:0 6px 0 0;font-family:var(--fc);font-size:15px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#cfd6db}
+.rpbar .ch{background:#1d2328;border:1px solid var(--line);border-radius:9px;padding:2px 8px;color:#cfd6db;font-weight:700}
+.rpbar .ch.a{color:#14181b;background:#F5A623;border-color:#F5A623}.rpbar .ch.g{color:#14181b;background:#16EC06;border-color:#16EC06}
+.rpx{padding:0;overflow:hidden}
+.rpt{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:12.5px}
+.rpt th{background:#1d2328;font-family:var(--fc);font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8c979f;text-align:right;padding:6px 7px 5px;line-height:1.15;border-bottom:1px solid var(--line);white-space:nowrap}
+.rpt th.g{text-align:center;color:#14181b;background:var(--gold);font-size:10.5px;letter-spacing:1px;border-bottom:0}
+.rpt th.g2{background:#7fb3e0}
+.rpt th.gs,.rpt td.gs{border-left:2px solid #3a444b}
+.rpt th.l,.rpt td.l{text-align:left}
+.rpt td{padding:6px 7px;border-top:1px solid var(--line);vertical-align:top;white-space:nowrap;text-align:right;font-family:var(--fn);font-weight:600;color:#cfd6db}
+.rpt td:not(:first-child){min-width:44px}
+.rpt th.nm,.rpt td:first-child{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:1px 0 0 var(--line);text-align:left;font-family:inherit}
+.rpt th.nm{background:#1d2328;z-index:2;vertical-align:bottom}
+.rpt td:first-child b{display:block;font-size:12.5px;line-height:1.2;color:#e6ebee;font-weight:700}
+.rpt td small{display:block;font-size:10px;font-weight:600;color:#7f8a92;margin-top:1px;line-height:1.25;font-family:inherit}
+.rpt td .neg{color:#ff7a6b}.rpt td .z{color:#56616a}
+.rpt tr.tot td{background:#3a3220;color:#FFE7A3;font-weight:800;border-top:1px solid #C98E12;border-bottom:1px solid #C98E12}
+.rpt tr.tot td:first-child{background:#3a3220}.rpt tr.tot td:first-child b{color:var(--gold)}
+.rpt tr.cur td:first-child b{color:var(--gold)}
+.rpt a{color:#9fd0ff;text-decoration:none}
+.rpt .st{display:inline-block;border-radius:8px;padding:1px 7px;font-size:11px;font-weight:800;font-family:var(--fn)}
+.rpt .st.ok{background:rgba(22,236,6,.14);color:#5df24f}.rpt .st.no{background:rgba(245,166,35,.18);color:#F5A623}
+.rpt .st.past{background:rgba(255,90,70,.16);color:#ff7a6b}.rpt .st.soon{background:rgba(245,196,81,.18);color:var(--gold)}
+#p-trends .pd td:first-child,#p-adm .pf td:first-child,#p-adm .td td:first-child{min-width:104px;max-width:150px;white-space:normal}
+.rpmore{display:block;width:100%;background:#1d2328;border:0;border-top:1px solid var(--line);color:#cfd6db;font:inherit;font-weight:700;font-size:12.5px;padding:10px;cursor:pointer}
+.rpnote{font-size:11.5px;color:#8c979f;line-height:1.4;padding:4px 8px 0}
+#p-trends .dly{margin-top:18px}
+#p-trends .dly>summary{list-style:none;cursor:pointer;font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#cfd6db;margin:0 4px 6px;display:flex;align-items:baseline;gap:8px}
+#p-trends .dly>summary::-webkit-details-marker{display:none}
+#p-trends .dly>summary small{font-family:var(--fn);font-size:11px;letter-spacing:0;color:#7f8a92;font-weight:600;text-transform:none}
+#p-trends .dly>summary:after{content:"▾";margin-left:auto;color:#7f8a92}#p-trends .dly:not([open])>summary:after{content:"▸"}
 /* ===== v31: Leaders Bulletin v2 (one table, 21 leader sections in the owner's order, roster from bs-v1:leaders_roster) ===== */
 #p-lb .lb2bar{display:flex;align-items:center;gap:8px;margin:12px 4px 6px;font-size:11.5px;color:#8c979f;font-weight:600;flex-wrap:wrap}
 #p-lb .lb2bar button{background:#1d2328;border:1px solid var(--line);color:#cfd6db;border-radius:8px;font:inherit;font-weight:700;padding:5px 10px;cursor:pointer}
@@ -738,9 +773,23 @@ button{cursor:pointer}
     <div class="card"><div class="wait">System Builder MD Club 3-3-30, contests and events will live here. Content coming soon.</div></div>
   </section>
 
-  <!-- TAB 5: TRENDS -->
+  <!-- TAB 5 (v32): POINTS AND RECRUITS (hash #trends kept). MyWFG report from bs-v1:pointsrecruits on top; the old Trends dashboard (daily inputs) below. -->
   <section class="page" id="p-trends">
-    <div id="tDash"></div>
+    <div class="card mdf"><div class="mdft">Points and Recruits</div><div class="mdfs" id="prMeta"></div></div>
+    <div class="rpbar" id="prBar"></div>
+    <div class="card rpx" id="prTbl"></div>
+    <div class="rpnote" id="prNote"></div>
+    <details class="dly" id="prDly" open><summary>Your daily numbers <small>from Main · this week</small></summary><div id="tDash"></div></details>
+  </section>
+
+  <!-- TAB 7 (v32): ADMIN. bs-v1:admin = MyWFG Platform Fee Recurring Enrollment (Super Team) + Training Deadline Report (Due in 30 days, Team All). -->
+  <section class="page" id="p-adm">
+    <div class="card mdf"><div class="mdft">Admin</div><div class="mdfs" id="admMeta"></div></div>
+    <div class="rpbar" id="pfBar"></div>
+    <div class="card rpx" id="pfTbl"></div>
+    <div class="rpbar" id="tdBar" style="margin-top:18px"></div>
+    <div class="card rpx" id="tdTbl"></div>
+    <div class="rpnote" id="admNote"></div>
   </section>
   <section class="page" id="p-tview">
     <div class="tvh"><button id="tvBack" aria-label="Back">‹</button><span>TREND VIEW</span><i></i></div>
@@ -766,15 +815,16 @@ button{cursor:pointer}
   <button data-t="rec"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
-  <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Trends</button>
+  <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
   <button data-t="lb"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.8"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c.4-3.3 2.4-5.3 5-5.3s4.6 2 5 5.3M1.8 18.5c.3-2.3 1.5-3.7 3.2-3.7 1 0 1.8.4 2.4 1.1M22.2 18.5c-.3-2.3-1.5-3.7-3.2-3.7-1 0-1.8.4-2.4 1.1"/></svg>Together</button>
+  <button data-t="adm"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg>Admin</button>
 </nav>
 
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-31";
+var APP_VERSION="2026.11.03-32";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1275,6 +1325,58 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var t=lbN(m[f],f.replace(/^p(?=rec|pts)/,"")),r=m.ranks&&m.ranks[f];
     if(f==="ppts_m"||f==="ppts_12")t=lbN(m[f],"pts");
     return t===null?'<td'+cls+'>'+(m.me?'<span class="np">·</span>':'<span class="na">—</span>')+'</td>':'<td'+cls+'>'+esc(t)+(r?'<i>#'+esc(r)+'</i>':'')+'</td>';}
+
+  // ---------- v32: Points and Recruits (bs-v1:pointsrecruits, MyWFG R11 Net Points) + Admin (bs-v1:admin) ----------
+  var prAll=false;
+  function rpWait(msg){return '<div class="lbno" style="text-align:center;padding:14px">'+(SY.loaded?msg:SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';}
+  function rpYm(ym){var a=String(ym||"").split("-");return a.length>1?MON[+a[1]-1]+" "+a[0]:String(ym||"");}
+  function rpN(v){if(v==null||v==="")return '<span class="z">·</span>';var n=+v;var t=Math.abs(n).toLocaleString("en-US");return n<0?'<span class="neg">−'+t+'</span>':n===0?'<span class="z">0</span>':t;}
+  function renderPR(){
+    renderDash();
+    var P=getJ("pointsrecruits",null);
+    if(!P||typeof P!=="object"||!Array.isArray(P.rows)){$("prMeta").textContent="MyWFG · Net Points";$("prBar").innerHTML="";$("prNote").textContent="";$("prTbl").innerHTML=rpWait("No data yet. Filled from the MyWFG Points and Recruits report.");return;}
+    var R=P.rows,G=P.groups||["Personal","SMD Base","Super Base","Super Team"];
+    $("prMeta").textContent=[(P.point_type||"Net Points"),P.as_of?"as of "+P.as_of:"",lqUpd(P)?lqUpd(P)+" ET":""].filter(Boolean).join(" · ");
+    var t1=null,ti=-1,nt=0;R.forEach(function(r,i){if(r.total){nt++;if(nt===1)t1=r;if(nt===2)ti=i;}});
+    var cut=prAll||ti<0?R.length:ti+1,nm=R.filter(function(r){return !r.total;}).length;
+    $("prBar").innerHTML='<h3>By month</h3><span class="ch">'+nm+' months</span>'+(t1?'<span class="ch a">12 mo: '+rpN(t1.pts[0])+' pers pts · '+rpN(t1.rec[1])+' base rec</span>':'');
+    var h='<div class="tsc"><table class="rpt pd"><thead><tr><th class="nm" rowspan="2">Month</th><th class="g gs" colspan="4">Points</th><th class="g g2 gs" colspan="4">Recruits</th></tr><tr>';
+    [0,1].forEach(function(){G.forEach(function(g,j){h+='<th class="'+(j===0?"gs":"")+'">'+esc(g==="Personal"?"Pers":g)+'</th>';});});
+    h+='</tr></thead><tbody>';
+    R.slice(0,cut).forEach(function(r,i){
+      var lab=r.total?'<b>12 Mo. Total</b><small>'+(r.from?esc(rpYm(r.from)+" – "+rpYm(r.to)):esc(r.label))+'</small>':'<b>'+esc(rpYm(r.ym))+'</b>'+(r.to_date?'<small>to date ('+esc(r.to_date.slice(5).replace("-","/"))+')</small>':'');
+      h+='<tr class="'+(r.total?"tot":i===0?"cur":"")+'"><td>'+lab+'</td>'+r.pts.map(function(v,j){return '<td class="'+(j===0?"gs":"")+'">'+rpN(v)+'</td>';}).join("")+r.rec.map(function(v,j){return '<td class="'+(j===0?"gs":"")+'">'+rpN(v)+'</td>';}).join("")+'</tr>';});
+    h+='</tbody></table></div>';
+    if(ti>=0&&ti+1<R.length){var last=R[R.length-1],old=R.slice(ti+1).filter(function(r){return r.ym;});h+='<button type="button" class="rpmore" id="prMore">'+(prAll?'Show fewer':'Show older months ('+old.length+', back to '+esc(old.length?rpYm(old[old.length-1].ym):"")+')')+'</button>';}
+    $("prTbl").innerHTML=h;
+    $("prNote").textContent="Newest month first. MyWFG's 12 Mo. Total = the 12 completed months Oct–Sep (the month to date starts the next window). Source: "+(P.source||"MyWFG")+".";
+  }
+  $("prTbl").addEventListener("click",function(e){if(e.target.closest("#prMore")){prAll=!prAll;renderPR();}});
+  function rpName(s){return String(s||"").toLowerCase().replace(/(^|[\s\-'])([a-z])/g,function(m,a,b){return a+b.toUpperCase();});}
+  function renderAdm(){
+    var A=getJ("admin",null);
+    if(!A||typeof A!=="object"||!A.pf||!A.td){$("admMeta").textContent="MyWFG";["pfBar","tdBar","admNote"].forEach(function(x){$(x).innerHTML="";});$("pfTbl").innerHTML=rpWait("No data yet. Filled from MyWFG each morning.");$("tdTbl").innerHTML="";return;}
+    $("admMeta").textContent=["MyWFG",lqUpd(A)?lqUpd(A)+" ET":""].filter(Boolean).join(" · ");
+    // Platform fee: not recurring first, then recurring; inactive last; then name
+    var pf=(A.pf.rows||[]).slice(),rk=function(r){return (String(r.active).toLowerCase()==="yes"?0:2)+(String(r.recurring).toLowerCase()==="recurring"?1:0);};
+    pf.sort(function(a,b){return rk(a)-rk(b)||String(a.name).localeCompare(String(b.name));});
+    var nrec=pf.filter(function(r){return String(r.recurring).toLowerCase()==="recurring";}).length,nact=pf.filter(function(r){return String(r.active).toLowerCase()==="yes";}).length;
+    $("pfBar").innerHTML='<h3>Platform Fee Recurring</h3><span class="ch">'+pf.length+'</span><span class="ch g">'+nrec+' recurring</span><span class="ch a">'+(pf.length-nrec)+' not</span>'+(nact<pf.length?'<span class="ch">'+(pf.length-nact)+' inactive</span>':'');
+    var h='<div class="tsc"><table class="rpt pf"><thead><tr><th class="nm">Name</th><th class="l">Title</th><th class="l">AgentID</th><th class="l">Recurring</th><th class="l">Active</th><th class="l">Email</th></tr></thead><tbody>';
+    pf.forEach(function(r){var rc=String(r.recurring).toLowerCase()==="recurring";
+      h+='<tr><td><b>'+esc(rpName(r.name))+'</b></td><td class="l">'+esc(r.title)+'</td><td class="l">'+esc(r.code)+'</td><td class="l"><span class="st '+(rc?"ok":"no")+'">'+esc(r.recurring)+'</span></td><td class="l">'+esc(r.active)+'</td><td class="l">'+(r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':'')+'</td></tr>';});
+    $("pfTbl").innerHTML=h+'</tbody></table></div>';
+    // Training deadlines: soonest first
+    var td=(A.td.rows||[]).slice();td.sort(function(a,b){return String(a.deadline).localeCompare(String(b.deadline))||String(a.name).localeCompare(String(b.name));});
+    var t0=new Date(today+"T00:00:00"),dd=function(r){return Math.round((new Date(r.deadline+"T00:00:00")-t0)/864e5);};
+    var npast=td.filter(function(r){return dd(r)<0;}).length,ppl={};td.forEach(function(r){ppl[r.name]=1;});
+    $("tdBar").innerHTML='<h3>Training Deadlines</h3><span class="ch">'+td.length+' courses · '+Object.keys(ppl).length+' people</span>'+(npast?'<span class="ch a">'+npast+' past deadline</span>':'')+'<span class="ch">'+(td.length-npast)+' upcoming</span>';
+    h='<div class="tsc"><table class="rpt td"><thead><tr><th class="nm">Agent</th><th class="l">Deadline</th><th class="l">Course</th><th class="l">Cell</th><th class="l">Business</th><th class="l">Email</th><th class="l">SMD</th></tr></thead><tbody>';
+    td.forEach(function(r){var d=dd(r),tel=function(p){return p?'<a href="tel:'+esc(String(p).replace(/[^0-9+]/g,""))+'">'+esc(p)+'</a>':'';};
+      h+='<tr><td><b>'+esc(rpName(r.name))+'</b></td><td class="l">'+esc(r.deadline_raw||r.deadline)+'<small><span class="st '+(d<0?"past":d<=30?"soon":"ok")+'">'+(d<0?(-d)+' d ago':d===0?'today':'in '+d+' d')+'</span></small></td><td class="l">'+esc(r.course)+'</td><td class="l">'+tel(r.cell)+'</td><td class="l">'+tel(r.bphone)+'</td><td class="l">'+(r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':'')+'</td><td class="l">'+esc(rpName(r.smd))+'</td></tr>';});
+    $("tdTbl").innerHTML=h+'</tbody></table></div>';
+    $("admNote").textContent="Platform fee: "+(A.pf.scope||"Super Team")+", not recurring first. Training: "+(A.td.scope||"")+", soonest deadline first. Source: "+(A.source||"MyWFG")+".";
+  }
   function renderLb(){
     var L=getJ("leaders",null);
     if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base top 100";$("lbSum").textContent="";$("lbSecs").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbNotes").innerHTML="";return;}
@@ -1291,7 +1393,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         var sub=lead?[s.title||m.title,v2?("SMDs "+(s.smd_total||0)+" · "+(s.smd_now||0)+" on bulletin"):""]:[m.title,m.code];
         var sm='<small'+(lead?' class="cnt"':'')+'>'+esc(sub.filter(Boolean).join(" · "))+'</small>';
         if(lead&&m.title&&s.title&&m.title!==s.title&&!m.absent)sm+='<small>bulletin: '+esc(m.title)+'</small>';
-        if(lead&&!s.found&&v2)sm+='<small class="fl">not on bulletin</small>';
+        if(lead&&!s.found&&v2)sm+='<small class="fl">not on bulletin</small>'+(m.upline?'<small>Upline EMD '+esc(m.upline)+'</small>':'');
+        if(lead&&!s.found&&m.flag&&m.flag!=="not on bulletin")sm+='<small class="fl">'+esc(m.flag)+'</small>';
         else if(m.flag&&!(lead&&m.flag==="not on bulletin"))sm+='<small class="fl">'+esc(m.flag)+'</small>';
         if(!lead&&m.absent)sm+='<small class="fl">not on '+esc(mon)+' bulletin'+(m.last_month?' · last '+esc(lbMon(m.last_month)):'')+'</small>';
         if(lead&&s.xref_n)sm+='<small>+ '+esc((s.xref||[]).map(function(x){return x.replace(/ \(Upline EMD.*?section #(\d+).*/," (#$1)");}).join(", "))+' in own section</small>';
@@ -1332,9 +1435,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("rcNotes").innerHTML=n;}
   function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
     if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
-  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,lb:renderLb,gt:function(){}};
+  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec";renderHeader();TABS[t]();navReveal();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm";renderHeader();TABS[t]();navReveal();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -1398,7 +1501,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
