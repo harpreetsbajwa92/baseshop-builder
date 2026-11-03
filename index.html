@@ -183,6 +183,89 @@ button{cursor:pointer}
 .mdt td.na{color:#5d6973}
 .legs{display:flex;align-items:center;gap:12px;padding:12px 14px}
 .note{font-size:12.5px;color:#7f8a92;text-align:center;margin:6px 4px 0}
+/* ===== v5 compact: every tab fits one screen (phone ~390x844, laptop 1280x800) ===== */
+.wrap{padding:calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 70px)}
+.card{padding:12px;margin:8px 0;border-radius:18px}
+.slbl{margin:10px 4px 5px;font-size:13.5px}
+.slbl small{font-size:12px}
+#hdr{padding:12px 12px 10px}
+.goal{gap:2px}
+.goal .ge{font-size:10.5px;letter-spacing:4px}
+.goal b{font-size:clamp(34px,10.5vw,44px)}
+.goal .gd{font-size:15px;letter-spacing:2px}
+.cd{margin-top:8px;padding-top:8px;gap:10px}
+.cdn{font-size:30px}
+.cdl{font-size:12px;line-height:1.25}
+.gls{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.gl{padding:6px 4px 7px;font-size:14px;border-radius:12px;line-height:1.2}
+.gl span{font-size:10.5px;letter-spacing:1.6px;margin-bottom:2px}
+.gl em{display:block}
+.gl small{font-size:10.5px!important}
+.dnav{margin:8px 0 2px}
+.pnav{height:36px}.pnav .pa{height:36px}.pl{height:28px}
+.tbtn{padding:5px 10px}
+/* results rings: 2 rows (recruits, points) x 3 cols (day, week, month) */
+.rg{display:grid;grid-template-columns:58px repeat(3,1fr);align-items:center;row-gap:6px;column-gap:4px}
+.rg .rh{font-family:var(--fc);font-size:11.5px;font-weight:700;letter-spacing:1.4px;color:#aab4bb;text-transform:uppercase;text-align:center}
+.rg .rn{font-family:var(--fc);font-size:12.5px;font-weight:800;letter-spacing:1.2px;color:var(--gold);text-transform:uppercase;line-height:1.1}
+.rg .rn small{display:block;color:#7f8a92;font-size:10.5px;letter-spacing:.8px}
+.rc{display:flex;align-items:center;justify-content:center;gap:7px;min-width:0}
+.rc .rin b{font-size:13.5px}
+.rc .rt{font-size:11.5px;color:#c3ccd2;font-weight:700;line-height:1.15;white-space:nowrap}
+.rc .rt small{display:block;color:#7f8a92;font-weight:600;font-size:10.5px}
+/* meeting rows */
+.mrow,.mhd{grid-template-columns:1fr 62px 78px;gap:6px}
+.mrow{padding:4px 0}
+.mhd{padding-bottom:2px;font-size:11px}
+.mn{font-size:14px}
+.mt{font-size:11px;margin-top:1px}
+.num{height:38px;font-size:18px;border-radius:12px}
+.num.res{font-size:15px}
+/* certs / licences */
+.dbig b{font-size:42px}
+.dbig span{font-size:12.5px}
+.dsm div{padding:6px 8px;min-width:64px}
+.dsm b{font-size:19px}
+.lst .it{padding:7px 0}
+.who .av{width:32px;height:32px;flex-basis:32px;font-size:12.5px}
+.note{margin-top:4px;font-size:11.5px}
+.empty{padding:12px 6px}
+/* MDs */
+.mdt td{padding:9px 4px;font-size:16px}
+.mdt td:first-child{font-size:14.5px}
+.legs{padding:8px 12px}
+/* trends dashboard: compact tile grid */
+.tgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+.dgrp{margin:8px 2px 4px;font-size:12px}
+.dt{display:flex;flex-direction:column;justify-content:space-between;gap:2px;background:#2b343b;border:1px solid var(--line);border-radius:12px;padding:7px 9px;min-height:52px;text-align:left;color:#fff}
+.dt:active{background:#3a444c}
+.dt .tn{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#cfd6db;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dt .tv{display:flex;align-items:baseline;justify-content:space-between;gap:4px}
+.dt .tv b{font-family:var(--fn);font-size:19px;line-height:1}
+.dt .tv b small{font-size:11.5px;color:#9aa5ad;margin-left:2px}
+.dt .tv i{font-style:normal;font-size:10.5px;color:#8c979f;font-weight:600;white-space:nowrap}
+.foot{margin:8px 0 0;font-size:11px}
+.foot button{font-size:11px;padding:3px 10px}
+.tabs button{min-height:52px;padding:6px 0 7px;gap:2px}
+.tabs button .ic{width:23px;height:23px}
+.tvc{max-height:44vh}
+/* laptop: wider, meetings side by side */
+.mrow{padding:3px 0}.num{height:35px}
+.slbl{margin:7px 4px 4px}
+.card{margin:6px 0}
+.rg{row-gap:4px}
+.dgrp{margin:6px 2px 3px}
+.dt{min-height:46px;padding:6px 9px}.tgrid{gap:5px}
+@media (min-width:900px){
+  .wrap{max-width:980px;padding-bottom:76px;zoom:1.12}
+  .tvc{max-height:38vh}
+  .tvins{margin:8px 0 6px}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  .tgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #p-cert,#p-lic,#p-md,#p-tview{max-width:640px;margin:0 auto}
+  .goal{flex-direction:row;justify-content:center;align-items:baseline;gap:14px}
+  .gls{max-width:760px;margin-left:auto;margin-right:auto}
+}
 </style>
 </head>
 <body>
@@ -196,12 +279,12 @@ button{cursor:pointer}
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
     <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
-    <div class="slbl">Recruiting <small>recruits vs goal</small></div>
-    <div class="card"><div class="rings" id="recRings"></div></div>
-    <div class="slbl">Production <small>base points vs goal</small></div>
-    <div class="card"><div class="rings" id="ptsRings"></div></div>
-    <div class="slbl">Log meetings <small id="logFor"></small></div>
-    <div class="card" id="mRows"></div>
+    <div class="mgrid">
+      <div><div class="slbl">Results vs goal <small id="logFor"></small></div>
+      <div class="card"><div class="rg" id="resGrid"></div></div></div>
+      <div><div class="slbl">Log meetings &amp; results</div>
+      <div class="card" id="mRows"></div></div>
+    </div>
   </section>
 
   <!-- TAB 2: CERTIFICATIONS (day by day, filled by the bot) -->
@@ -261,7 +344,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-4";
+var APP_VERSION="2026.11.02-5";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -322,7 +405,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return '<div class="ring" style="width:'+size+'px;height:'+size+'px"><svg viewBox="0 0 '+size+' '+size+'" width="'+size+'" height="'+size+'"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="#323b42" stroke-width="'+sw+'"/>'+
       (p>0?'<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-dasharray="'+(c*p).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')"/>':'')+'</svg><div class="rin">'+inner+'</div></div>';}
   function recCol(f){return f>=1?"#16EC06":f>=0.5?"#FFDE00":f>0?"#F5A623":"#FF0026";}
-  function kfmt(n,cur){n=Math.round(n||0);var s=n>=1000?Math.round(n/1000)+"K":String(n);return (cur?"$":"")+s;}
+  function kfmt(n,cur){n=Math.round(n||0);var x=n/1000,s=n<1000?String(n):(x<10&&Math.round(x)!==x?x.toFixed(1).replace(/\.0$/,""):String(Math.round(x)))+"K";return (cur?"$":"")+s;}
   function rbox(val,tgt,label,size,sw,k,cur){var f=tgt?val/tgt:0;
     return '<div class="rbox">'+ring(f,recCol(f),size,sw,'<b>'+(k?kfmt(val,cur):Math.round(val))+'</b>')+'<span class="rl">'+label+'</span><span class="rs">of '+(k?kfmt(tgt,cur):tgt)+(f>=1?' ✓':'')+'</span></div>';}
 
@@ -331,18 +414,17 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var left=Math.max(0,dayDiff(today,GOAL_DATE));$("daysLeft").textContent=left;
     $("todayLbl").textContent="Today: "+pretty(today);
     var sun=dow(today)===0;
-    var SEP='<i class="sep">·</i>';
-    $("monthGoal").innerHTML='<span>This month\'s goal</span><em>'+HL.rec.m+' base recruits</em>'+SEP+'<em>'+HL.pts.m.toLocaleString("en-US")+' base points</em><br><small style="color:#8c979f;font-size:13px">$100K business</small>';
-    $("weekGoal").innerHTML='<span>This week\'s goal</span><em>'+HL.rec.w+' base recruits</em>'+SEP+'<em>'+kfmt(HL.pts.w)+' base points</em>';
-    $("dayGoal").innerHTML='<span>Today\'s goal</span>'+(sun?'Sunday, no daily goal (Mon–Sat)':'<em>'+HL.rec.d+' base recruit</em>'+SEP+'<em>'+kfmt(HL.pts.d)+' base points</em>');
+    $("monthGoal").innerHTML='<span>Month</span><em>'+HL.rec.m+' recruits</em><em>'+kfmt(HL.pts.m)+' points</em><small style="color:#8c979f;display:block">$100K business</small>';
+    $("weekGoal").innerHTML='<span>Week</span><em>'+HL.rec.w+' recruits</em><em>'+kfmt(HL.pts.w)+' points</em>';
+    $("dayGoal").innerHTML='<span>Today</span>'+(sun?'<em>No goal</em><small style="color:#8c979f;display:block">Sunday (Mon–Sat)</small>':'<em>'+HL.rec.d+' recruit</em><em>'+kfmt(HL.pts.d)+' points</em>');
   }
 
   // ---------- tab 1: meetings ----------
   function inp(f,c,v,ph,res){return '<input class="num'+(res?' res':'')+'" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" data-f="'+f+'"'+(c?' data-c="'+c+'"':'')+' placeholder="'+ph+'" value="'+esc(v==null?"":v)+'">';}
   function renderRowsInputs(){
     var d=day(view),dt=dayT(view),h='<div class="mhd"><div>Meetings</div><div>#</div><div>Results</div></div>';
-    CATS.forEach(function(c){h+='<div class="mrow"><div><div class="mn">'+c.n+'</div><div class="mt">goal '+dt[c.id]+'/day · '+wkT(view)[c.id]+'/wk · '+moT(view)[c.id]+'/mo</div></div>'+inp("m",c.id,d.m[c.id],"0")+inp("r",c.id,d.r[c.id],c.res,1)+'</div>';});
-    h+='<div class="mrow"><div><div class="mn">New contacts</div><div class="mt">goal '+CONTACTS.d+'/day · '+CONTACTS.w+'/wk · '+CONTACTS.m+'/mo</div></div>'+inp("nc","",d.nc,"0")+'<div></div></div>';
+    CATS.forEach(function(c){h+='<div class="mrow"><div><div class="mn">'+c.n+'</div><div class="mt">goal '+dt[c.id]+'/d · '+wkT(view)[c.id]+'/wk · '+moT(view)[c.id]+'/mo</div></div>'+inp("m",c.id,d.m[c.id],"0")+inp("r",c.id,d.r[c.id],c.res,1)+'</div>';});
+    h+='<div class="mrow"><div><div class="mn">New contacts</div><div class="mt">goal '+CONTACTS.d+'/d · '+CONTACTS.w+'/wk · '+CONTACTS.m+'/mo</div></div>'+inp("nc","",d.nc,"0")+'<div></div></div>';
     $("mRows").innerHTML=h;
   }
   function renderMeetRings(){
@@ -352,9 +434,12 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function kp(n){n=Math.round(n||0);if(n<1000)return String(n);var x=n/1000;return (x>=100||x===Math.round(x)?String(Math.round(x)):x.toFixed(1).replace(/\.0$/,''))+'K';}
     function rr(val,tgt,label,unit,k){if(!tgt)return '<div class="rbox">'+ring(0,"#323b42",100,9,'<b>'+(k?kp(val):val)+'</b>')+'<span class="rl">'+label+'</span><span class="rs">no goal Sunday</span></div>';
       var f=val/tgt;return '<div class="rbox">'+ring(f,recCol(f),100,9,'<b>'+(k?kp(val):val)+'</b>')+'<span class="rl">'+label+'</span><span class="rs">'+(k?kp(val):val)+' of '+(k?kfmt(tgt):tgt)+' '+unit+(f>=1?' ✓':'')+'</span></div>';}
-    $("recRings").innerHTML=rr(dT.rec,sunV?0:HL.rec.d,lab,"recruits")+rr(wT.rec,HL.rec.w,"This week","recruits")+rr(mT.rec,HL.rec.m,"This month","recruits");
-    $("ptsRings").innerHTML=rr(dT.pts,sunV?0:HL.pts.d,lab,"pts",1)+rr(wT.pts,HL.pts.w,"This week","pts",1)+rr(mT.pts,HL.pts.m,"This month","pts",1);
-    $("logFor").textContent=view===today?"":pretty(view);
+    function rc(val,tgt,k){var v=k?kp(val):String(val);if(!tgt)return '<div class="rc">'+ring(0,"#323b42",44,5,'<b>'+v+'</b>')+'<div class="rt">—<small>no goal Sun</small></div></div>';
+      var f=val/tgt;return '<div class="rc">'+ring(f,recCol(f),44,5,'<b>'+v+'</b>')+'<div class="rt">'+(f>=1?'✓ ':'')+'of '+(k?kfmt(tgt):tgt)+'<small>'+Math.min(999,Math.round(f*100))+'%</small></div></div>';}
+    $("resGrid").innerHTML='<div></div><div class="rh">'+lab+'</div><div class="rh">Week</div><div class="rh">Month</div>'+
+      '<div class="rn">Recruiting<small>recruits</small></div>'+rc(dT.rec,sunV?0:HL.rec.d)+rc(wT.rec,HL.rec.w)+rc(mT.rec,HL.rec.m)+
+      '<div class="rn">Production<small>base pts</small></div>'+rc(dT.pts,sunV?0:HL.pts.d,1)+rc(wT.pts,HL.pts.w,1)+rc(mT.pts,HL.pts.m,1);
+    $("logFor").textContent=view===today?"today":pretty(view);
   }
   function renderDate(){
     $("dLbl").textContent=view===today?"TODAY":view===shift(today,-1)?"YESTERDAY":pretty(view).toUpperCase();
@@ -429,11 +514,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {s:"nc",g:"Meetings",i:"📇",n:"New contacts",v:function(k){return int(day(k).nc)||0;},T:{d:function(){return CONTACTS.d;},w:function(){return CONTACTS.w;},m:function(){return CONTACTS.m;}}},
     {s:"rec",g:"Results",i:"🎯",n:"Recruits",v:function(k){var r=day(k).r;return (int(r.pr)||0)+(int(r.br)||0);},T:{d:function(){return HL.rec.d;},w:function(){return HL.rec.w;},m:function(){return HL.rec.m;}}},
     {s:"pts",g:"Results",i:"📈",n:"Base points",k:1,v:function(k){var r=day(k).r;return (int(r.pc)||0)+(int(r.bp)||0);},T:{d:function(){return HL.pts.d;},w:function(){return HL.pts.w;},m:function(){return HL.pts.m;}}},
-    {s:"r-pr",g:"Row results",i:"✅",n:"Personal recruiting recruits",v:function(k){return int(day(k).r.pr)||0;},T:null},
-    {s:"r-pc",g:"Row results",i:"✅",n:"Personal closing points",k:1,v:function(k){return int(day(k).r.pc)||0;},T:null},
+    {s:"r-pr",g:"Row results",i:"✅",n:"Pers. recruiting recruits",v:function(k){return int(day(k).r.pr)||0;},T:null},
+    {s:"r-pc",g:"Row results",i:"✅",n:"Pers. closing points",k:1,v:function(k){return int(day(k).r.pc)||0;},T:null},
     {s:"r-br",g:"Row results",i:"✅",n:"Base recruiting recruits",v:function(k){return int(day(k).r.br)||0;},T:null},
     {s:"r-bp",g:"Row results",i:"✅",n:"Base closing points",k:1,v:function(k){return int(day(k).r.bp)||0;},T:null},
-    {s:"certs",g:"Team",i:"🎓",n:"Certifications passed",v:cnt("certs"),T:null},
+    {s:"certs",g:"Team",i:"🎓",n:"Certifications",v:cnt("certs"),T:null},
     {s:"lic",g:"Team",i:"🪪",n:"New licences",v:cnt("licences"),T:{w:function(){return LIC.w;},m:function(){return LIC.m;}}}
   ];
   function mBy(s){for(var i=0;i<METRICS.length;i++)if(METRICS[i].s===s)return METRICS[i];return null;}
@@ -444,10 +529,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     list("certs").concat(list("licences")).forEach(function(e){if(e.date&&e.date<f)f=e.date;});return f;}
   function renderDash(){
     var wd=weekDays(today),md=monthDays(today),o="",g="";
-    METRICS.forEach(function(m){if(m.g!==g){g=m.g;o+='<div class="dgrp">'+g+'</div>';}
+    METRICS.forEach(function(m){if(m.g!==g){if(g)o+='</div>';g=m.g;o+='<div class="dgrp">'+g+'</div><div class="tgrid">';}
       var w=sumV(m,wd),mo=sumV(m,md),tw=tgtFor(m,"W",today),tm=tgtFor(m,"M",today);
-      o+='<button class="drow" data-m="'+m.s+'"><span class="di">'+m.i+'</span><span class="dn">'+m.n+'<small>this month '+nf(mo,m.k)+(tm!=null?' of '+nf(tm,m.k):'')+'</small></span><span class="dr"><div class="dv" style="color:'+(tw!=null&&w>=tw?'#16EC06':'#fff')+'">'+nf(w,m.k)+(tw!=null?'<small> / '+nf(tw,m.k)+'</small>':'')+'</div><div class="dp">this week ›</div></span></button>';});
-    $("tDash").innerHTML='<div class="slbl" style="margin-top:6px">All metrics · tap for trend view</div>'+o;
+      o+='<button class="dt" data-m="'+m.s+'"><span class="tn">'+m.i+' '+m.n+'</span><span class="tv"><b style="color:'+(tw!=null&&w>=tw?'#16EC06':'#fff')+'">'+nf(w,m.k)+(tw!=null?'<small>/'+nf(tw,m.k)+'</small>':'')+'</b><i>mo '+nf(mo,m.k)+(tm!=null?'/'+nf(tm,m.k):'')+'</i></span></button>';});
+    $("tDash").innerHTML='<div class="slbl" style="margin-top:4px">This week · tap for trend <small>mo = this month</small></div>'+o+'</div>';
   }
   $("tDash").addEventListener("click",function(e){var b=e.target.closest("[data-m]");if(!b)return;tvOff=0;tvPushed=true;location.hash="trends/"+b.dataset.m;});
   var tvRange="W",tvOff=0,tvSlug=null,tvPushed=false;

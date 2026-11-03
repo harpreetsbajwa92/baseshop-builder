@@ -76,6 +76,13 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-5:**
+  - Compact one-screen layout. Every tab fits with no scrolling at 390×844 (phone) and 1280×800 (laptop).
+  - The header is now the gold goal line, then days left, then one centred row of Month / Week / Today goals.
+  - Meetings: the results rings are a 2×3 grid of small rings (recruiting and production × day/week/month), next to tight meeting and result rows with new contacts inline. On laptop the rings and rows sit side by side.
+  - Trends is a compact tile grid (2 columns on phone, 4 on laptop). Certs, Licences and MDs are tighter.
+  - Points under 10K now show one decimal (3.5K).
+  - No features, keys or store data changed.
 - **v2026.11.02-4:**
   - Premium look: a gold GOAL headline and centred goal tiles.
   - Meetings rings now show results (recruits and base points) instead of meetings.
