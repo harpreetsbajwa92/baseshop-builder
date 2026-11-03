@@ -823,6 +823,31 @@ button{cursor:pointer}
 .atvw{display:flex;align-items:center;gap:6px;margin:12px 2px 0;font-size:11px;color:#8c979f;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
 .atvw button{background:#2b3339;border:1px solid #3a444c;color:#cfd6db;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer;text-transform:none;letter-spacing:0}
 .atvw button.on{background:rgba(245,196,81,.16);border-color:var(--gold);color:var(--gold)}
+/* v43 simple list */
+.mdfb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 2px 8px}.mdfb label{font-family:var(--fc);font-size:11.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#8c979f}
+.mdfb .mdfs2{flex:1 1 180px;min-width:0}.mdfb select{width:100%;appearance:none;-webkit-appearance:none;background:#1d2328;color:#e6ebee;border:1px solid #3a444c;border-radius:12px;font-size:14px;font-weight:700;padding:9px 30px 9px 12px;font-family:inherit;text-overflow:ellipsis}
+.mdfb .mdfs2:after{color:#aab4bb}.mdfb.on select{border-color:var(--gold);color:var(--gold);background:rgba(245,196,81,.08)}
+.mdfb small{font-size:11.5px;color:#aab4bb;font-weight:700}.mdfb small button{background:none;border:0;color:var(--gold);font-weight:800;text-decoration:underline;cursor:pointer;padding:0;font-size:11.5px}
+.mdfh{flex-basis:100%;font-size:11px;color:#8c979f;font-style:normal}.mdfn{font-size:12px;color:#aab4bb;margin:-4px 0 8px}.mdfn b{color:var(--gold)}
+#p-att .atbar .mdfb{margin:2px 0 0}
+#p-rec .rct td .amdw select{min-width:150px}
+.lmd{margin-top:3px}.lmd .amdw select{width:100%;max-width:100%;font-size:10.5px;padding:3px 2px}
+.amdw select{width:100%;max-width:100%;background:#1d2328;color:#e6ebee;border:1px solid #3a444c;border-radius:7px;font-size:11px;font-weight:700;padding:4px 2px;font-family:inherit;text-overflow:ellipsis}.amdw.ovr select{border-color:var(--gold);color:var(--gold)}
+.atvw{flex-wrap:wrap}.atvw small{font-size:11px;color:#8c979f;font-weight:600;text-transform:none;letter-spacing:0;flex:1 1 160px}
+.att .anm small.cd{font-family:var(--fn);font-size:10.5px;color:#9aa5ad;letter-spacing:.1px}
+.att .arc{width:24%}.att .amd{width:24%}
+.arc input{width:100%;min-width:0;background:#1d2328;color:#e6ebee;border:1px solid #3a444c;border-radius:7px;font-size:11px;font-weight:700;padding:5px 4px;font-family:inherit;box-sizing:border-box}
+.arc input::placeholder{color:#56626b;font-weight:600}
+.arc .ovr input{border-color:var(--gold);color:var(--gold)}
+.amdw{position:relative}.amdw .amdm{position:absolute;top:-6px;right:-3px;background:#14181b;border:1px solid var(--gold);border-radius:999px;font-size:9px;line-height:1;padding:2px 3px;color:var(--gold);cursor:pointer;font-style:normal}
+.amdw.k-none select{color:#56626b}
+.att .anm .lk a{padding:2px 6px;font-size:12px}
+.att tr.asub.mdg td{background:rgba(245,196,81,.09);color:var(--gold);border-top:2px solid rgba(245,196,81,.4)}
+#p-att .attb.sb .att tr.asub.mdg td{background:rgba(108,195,245,.08);color:#6cc3f5;border-top-color:rgba(108,195,245,.4)}
+.att tr.asub.mdg.none td{background:#262d33;color:#aab4bb;border-top-color:#56626b}
+.att tr.asub .atcp{background:none;border:1px solid #3a444c;border-radius:7px;padding:1px 5px;font-size:12px;cursor:pointer;margin-left:6px;vertical-align:1px}
+.att .asn.L{color:#16EC06}
+@media (max-width:480px){.att .arc,.att .amd{width:22%}.att .anm{font-size:12.5px;word-break:normal;overflow-wrap:break-word;hyphens:auto}.att td.anm b,.att .anm>b{font-size:12.5px}.att .ack{width:34px!important}.att .asn{width:18px;padding-right:3px}.att .ack{width:36px}.att th{font-size:9px;letter-spacing:.4px}.arc input,.amdw select{font-size:10.5px}}
 .atmd{display:grid;grid-template-columns:1fr auto auto;font-size:13px}
 .atmd>div{padding:6px 6px;border-top:1px solid var(--line);font-weight:700;color:#e6ebee;text-align:right;white-space:nowrap}
 .atmd>div.r{text-align:left;white-space:normal;color:#cfd6db}.atmd>div.r small{color:var(--gold);font-size:10px}.atmd>div.r.sb{color:#9fd6f7}
@@ -832,6 +857,7 @@ button{cursor:pointer}
 .att .ack{width:44px;text-align:center;padding-left:0;padding-right:0}
 .att th.ack{text-align:center}
 .att .anm{line-height:1.2;word-break:break-word}
+@media (max-width:480px){.att .anm{word-break:normal;overflow-wrap:break-word}}
 .att .anm small{display:block;font-size:10.5px;color:#7f8a92;font-weight:600;margin-top:1px}
 .att .anm small.hot{color:#16EC06}
 .att .anm .lk{display:flex;flex-wrap:nowrap;gap:4px;margin-top:3px}
@@ -924,6 +950,7 @@ button{cursor:pointer}
 
   <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
   <section class="page" id="p-lic">
+    <div id="licMdf"></div>
     <div class="card mdf lgh" id="licGoal"></div>
     <div class="slbl"><span>New licences <small id="lMon"></small></span><small>goal 3 / month each</small></div>
     <div class="card lgo" id="licStats"></div>
@@ -949,6 +976,7 @@ button{cursor:pointer}
       <div class="atrow"><div class="atcol"><div class="atlb">Type of training</div><div class="atsel"><select id="attType" aria-label="Type of training"></select></div></div>
         <div class="atcol atcc"><div class="atlb">Date</div><button type="button" class="atcal" id="aPl" aria-label="Open calendar to pick a date"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="aLbl"></span><i>▾</i></button></div></div>
       <div class="atdn"><button class="pa" id="aPrev" aria-label="Previous session" title="Previous session">‹</button><span class="atdh" id="aHint"></span><button class="tbtn" id="aToday" hidden>Today</button><button class="pa" id="aNext" aria-label="Next session">›</button></div>
+      <div id="attMdf"></div>
       <div class="atss" id="attSave"></div>
     </div>
     <div class="card" id="attCounts"></div>
@@ -962,6 +990,7 @@ button{cursor:pointer}
 
   <section class="page" id="p-rec">
     <div class="card mdf"><div class="mdft">Recruits</div><div class="mdfs" id="rcMeta"></div></div>
+    <div id="rcMdf"></div>
     <div id="rcSecs"></div>
     <div class="card rcnotes" id="rcNotes"></div>
   </section>
@@ -1033,7 +1062,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-42";
+var APP_VERSION="2026.11.03-43";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1312,20 +1341,21 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var mS=mo?MONL[+mo.slice(5,7)-1].slice(0,3):"Mo";
     function km(v){v=+v;var a=Math.abs(v),t=a>=10000?(a/1000).toFixed(1).replace(/\.0$/,"")+"K":Math.round(a).toLocaleString("en-US");return (v<0?"-$":"$")+t;}
     var RC=[["rec_month",0],["rec_12",0],["cf_month",1],["cf_12",1]];
-    function pnl(team,cls,title){var rows=(Array.isArray(L[team])?L[team]:[]).slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
+    var AR=getJ("attendance_roster",null),MO=attMo(AR),nT=0,nS=0;function lp(r){var x=pFind(r.name,r.code);return mdPerson(AR,x&&x.id,r.name,r.code);}
+    function pnl(team,cls,title){var all=(Array.isArray(L[team])?L[team]:[]);nT+=all.length;var rows=all.filter(function(r){return mdfOk(AR,MO,lp(r));});nS+=rows.length;rows=rows.slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
       var tot=[0,0,0,0],has=[0,0,0,0];rows.forEach(function(r){RC.forEach(function(c,i){if(!nb(r[c[0]])){tot[i]+=+r[c[0]];has[i]=1;}});});
       function cell(v,m){return nb(v)?'<td class="na">—</td>':'<td>'+(m?km(v):Math.round(+v))+'</td>';}
       var cols='<colgroup><col class="c1"><col class="c2"><col class="c5"><col class="c5"><col class="c3"><col class="c4"></colgroup>';
-      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><table class="rt2 r6">'+cols+'<thead><tr><th>Name</th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th></tr></thead></table>'+
-        '<div class="rb">'+(rows.length?'<table class="rt2 r6">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'</tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
+      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><table class="rt2 r6">'+cols+'<thead><tr><th>Name<small>Upline MD</small></th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th></tr></thead></table>'+
+        '<div class="rb">'+(rows.length?'<table class="rt2 r6">'+cols+'<tbody>'+rows.map(function(r){var pp=lp(r);return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+(pp.id?'<div class="lmd">'+mdCell(AR,MO,pp,team)+'</div>':'')+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'</tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
         '<table class="rt2 r6">'+cols+'<tbody><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'</tr></tbody></table></div>';}
-    $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");
+    $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");$("licMdf").innerHTML=mdfSel(AR,nS,nT,MDF.v?"Filters the All licensed agents list below":"");
     // v12: Licences tab goal header = 100 licensed team (base + super base roster count)
     var nb0=Array.isArray(L.base)?L.base.length:0,ns0=Array.isArray(L.superbase)?L.superbase.length:0,tot=nb0+ns0,G=100,gf=Math.min(1,tot/G);
     $("licGoal").innerHTML='<div class="goal"><span class="ge">GOAL</span><b>100 LICENSED TEAM</b></div>'+
       '<div class="lghr"><div class="lghn"><b>'+tot+'</b><span>of '+G+'<br><em>'+(tot>=G?'goal hit ✓':(G-tot)+' to go')+'</em></span></div>'+
       '<div class="lghb"><div class="lghbar"><i style="width:'+(gf*100).toFixed(1)+'%"></i></div><div class="lghs"><span class="g">Base shop '+nb0+'</span><span class="b">Super base '+ns0+'</span><span>'+Math.round(tot/G*100)+'%</span></div></div></div>';
-    $("rNote").textContent="Licensed = MyWFG Downline Status (Life and/or Securities). Rec = personal recruits, CF = cash flow. Sorted by 12-month cash flow.";
+    $("rNote").textContent="Licensed = MyWFG Downline Status (Life and/or Securities). Rec = personal recruits, CF = cash flow. Sorted by 12-month cash flow. Upline MD (under each name) = real data or your pick, else blank; the same value as on Attendance and Recruits. The Upline MD filter only narrows this list.";
   }
   // v10: the Licences tab scrolls like a normal page (full roster), so no fitBoxes here; other tabs still fit one screen
   function fitBoxes(pg,sel){var b=[].slice.call(document.querySelectorAll("#"+pg+" "+sel)).filter(function(x){return x.offsetParent;});if(!b.length||!$(pg).classList.contains("on"))return;
@@ -1662,18 +1692,20 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var R=getJ("recruits",null);
     if(!R||typeof R!=="object"||!Array.isArray(R.base)||!Array.isArray(R.superbase)){$("rcMeta").textContent="Base and Super base";$("rcSecs").innerHTML='<div class="card"><div class="rcno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from DBI Hub and MyWFG.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("rcNotes").innerHTML="";return;}
     $("rcMeta").textContent=["Base "+R.base.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,"Super base "+R.superbase.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,lqUpd(R)?lqUpd(R)+" ET":""].filter(Boolean).join(" · ");
+    var AR=getJ("attendance_roster",null),MO=attMo(AR),nT=0,nS=0;function rp(e,sec){var x=pFind(e.name,e.code);return mdPerson(AR,x&&x.id,e.name,e.code);}
     var h="",MVR=[];[["base","Base","My Baseshop"],["superbase","Super base","Sunchandan Singh's baseshop"]].forEach(function(S){var L=R[S[0]].filter(function(e){if(pHid("recruits",e.name,e.code)){MVR.push(e);return false;}return true;});
+      nT+=L.length;L=L.filter(function(e){return mdfOk(AR,MO,rp(e,S[0]));});nS+=L.length;
       var mv=R[S[0]].length-L.length;
       h+='<div class="rcsl">'+S[1]+' <span class="n">'+L.length+'</span><small>'+esc(S[2])+(mv?' · '+mv+' licensed / MD moved out':'')+'</small></div><div class="card rcx">';
       if(!L.length){h+='<div class="rcno">No recruits yet.</div></div>';return;}
       h+='<div class="tsc"><table class="rct"><thead><tr><th>Name</th><th>Code</th><th>Recruit date</th><th>Upline MD</th></tr></thead><tbody>';
       L.forEach(function(e){var src=(e.sources||[]).join(" + "),aka=(e.aka||[]).length?"aka "+e.aka.join(", "):"";
-        var up=e.upline_md?esc(e.upline_md):e.recruiter?'<span class="rc">Recruiter: '+esc(e.recruiter)+'</span>':'<span class="na">—</span>';
+        var pp=rp(e,S[0]),up=pp.id?mdCell(AR,MO,pp,S[0]):(e.upline_md?esc(e.upline_md):'<span class="na">—</span>');if(e.recruiter)up+='<small>Recruiter: '+esc(e.recruiter)+'</small>';
         h+='<tr><td><b>'+esc(e.name)+'</b>'+(aka?'<small>'+esc(aka)+'</small>':'')+'<small'+(src==="MyWFG"?' class="w"':'')+'>'+esc(src==="MyWFG"?"MyWFG only (not on DBI)":src)+'</small></td>'
           +'<td class="c">'+(e.code?esc(e.code):'<span class="na">—</span>')+'</td><td class="d">'+(e.date?esc(rcDate(e.date)):'<span class="na">—</span>')+'</td><td>'+up+'</td></tr>';});
       h+='</tbody></table></div></div>';});
-    $("rcSecs").innerHTML=h;
-    var n=(MVR.length?'<b>Moved to Licensed / MD ('+MVR.length+'):</b> '+MVR.map(function(e){var x=pFind(e.name,e.code);return esc((x&&x.name)||e.name)+' ('+esc(pLbl(x))+')';}).join(", ")+'. They are on Licences, MDs and Attendance · Licensed; their recruit records are kept.<br>':'')+'<b>How to read:</b> one row per person (duplicates merged by WFG code, then by name). Newest recruit date first. Upline MD comes from the recruiter in MyWFG; when the recruiter is not an MD, the recruiter is shown instead. <b>—</b> = not known yet; never guessed. People are never removed; later runs only add people or fill blanks.';
+    $("rcSecs").innerHTML=h;$("rcMdf").innerHTML=mdfSel(AR,nS,nT);
+    var n=(MVR.length?'<b>Moved to Licensed / MD ('+MVR.length+'):</b> '+MVR.map(function(e){var x=pFind(e.name,e.code);return esc((x&&x.name)||e.name)+' ('+esc(pLbl(x))+')';}).join(", ")+'. They are on Licences, MDs and Attendance · Licensed; their recruit records are kept.<br>':'')+'<b>How to read:</b> one row per person (duplicates merged by WFG code, then by name). Newest recruit date first. <b>Upline MD</b> is filled only from real data (MyWFG recruiter chain) or your own pick; otherwise <b>—</b> (blank). Pick one to set it: the same value shows on Attendance and Licences, saves to the cloud and wins over the reports. The recruiter is shown under it when known. People are never removed; later runs only add people or fill blanks.';
     var lst=(R.notes||[]).map(function(x){return "<li>"+esc(x)+"</li>";});
     if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
     $("rcNotes").innerHTML=n;}
@@ -1728,7 +1760,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   var ATT_TYPES=[{id:"tue",label:"Tuesday Baseshop Training",dow:2},{id:"fri",label:"Friday Skill Set Training",dow:5},{id:"mis",label:"Mississauga Office Training (Assembly Academy)",dow:null},{id:"conv",label:"Convention",dow:null}];
   var AT={t:null,d:null,q:"",pend:false,order:null,ok:""};
   function attUi(){try{return JSON.parse(localStorage.getItem("bs-ui:att"))||{};}catch(e){return {};}}
-  function attUiSave(){try{localStorage.setItem("bs-ui:att",JSON.stringify({t:AT.t,g:AT.g!==false,rg:AT.rg||"8",rf:AT.rf||null,rt:AT.rt||null}));}catch(e){}}
+  function attUiSave(){try{localStorage.setItem("bs-ui:att",JSON.stringify({t:AT.t,sm:!!AT.sm,rg:AT.rg||"8",rf:AT.rf||null,rt:AT.rt||null}));}catch(e){}}
   // v42: range for the trend chart + MD leaderboard: last 4/8/12 sessions of the type ending at the selected date, or a from-to range
   function attRange(S){var all=attSessList(S,AT.t).filter(attHas),k=AT.d,rg=AT.rg||"8";
     if(rg==="c"&&AT.rf&&AT.rt){var f=AT.rf<AT.rt?AT.rf:AT.rt,t=AT.rf<AT.rt?AT.rt:AT.rf;return {L:all.filter(function(x){return x.date>=f&&x.date<=t;}),lbl:attShort(f)+" – "+attShort(t),c:1};}
@@ -1788,11 +1820,33 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function attMo(R){var O=getJ("attendance_md_overrides",null);if(!O||typeof O!=="object"||!O.o||typeof O.o!=="object")O={v:1,o:{}};
     var M=R&&R.merged&&typeof R.merged==="object"?R.merged:null;if(M)Object.keys(M).forEach(function(old){var n=M[old],x=O.o[old];if(x&&n&&(!O.o[n]||(+O.o[n].t||0)<(+x.t||0)))O.o[n]=x;});return O;}
   function attMdLbl(R,c,fb){if(MD_SMD[c])return MD_SMD[c];var L=(R&&R.mds)||{},f=null;["base","superbase"].forEach(function(s){(L[s]||[]).forEach(function(m){if(m.code===c||m.id===c)f=m;});});return f?f.name+" ("+(f.title||"MD")+")":(fb||c);}
-  function attEff(R,MO,p){var o=MO.o[p.id];if(o&&o.md)return {id:o.md,lbl:attMdLbl(R,o.md,o.name),k:"ovr",ovr:true};return {id:p.md_id||null,lbl:p.md||"Unknown",k:p.md_k||"unk",ovr:false};}
+  // v43: Upline MD shows ONLY real data (md = recruiter chain, owner = Harpreet said, man = via a recruiter he typed) or his pick; otherwise blank
+  function attMdData(p){return (p.md_k==="md"||p.md_k==="owner"||p.md_k==="man")&&p.md_id?{id:p.md_id,lbl:p.md}:null;}
+  function attEff(R,MO,p){var o=MO.o[p.id];if(o&&o.md)return {id:o.md,lbl:attMdLbl(R,o.md,o.name),k:"ovr",ovr:true};var d=attMdData(p);return d?{id:d.id,lbl:d.lbl,k:p.md_k,ovr:false}:{id:null,lbl:"",k:"none",ovr:false};}
+  // v43: Upline Recruiter. Data = roster rec; Harpreet's entries in bs-v1:attendance_recruiter_overrides ({v:1,o:{id:{rec:string|null,t}}}; rec "" = he blanked it, null = back to data). App-only writer.
+  function attRo(R){var O=getJ("attendance_recruiter_overrides",null);if(!O||typeof O!=="object"||!O.o||typeof O.o!=="object")O={v:1,o:{}};
+    var M=R&&R.merged&&typeof R.merged==="object"?R.merged:null;if(M)Object.keys(M).forEach(function(old){var n=M[old],x=O.o[old];if(x&&n&&(!O.o[n]||(+O.o[n].t||0)<(+x.t||0)))O.o[n]=x;});return O;}
+  function attRec(RO,p){var o=RO.o[p.id];if(o&&typeof o.rec==="string")return {v:o.rec,ovr:true};return {v:p.rec||"",ovr:false};}
+  function attRecSet(id,v){var R=getJ("attendance_roster",null),RO=attRo(R),W=attWho(R),p=W[id];if(!p)return;v=(v||"").replace(/\s+/g," ").trim();var cur=attRec(RO,p);
+    if(v===cur.v)return;RO.v=1;RO.o[id]={rec:(v===(p.rec||"")&&cur.ovr)?null:v,t:Date.now()};setJ("attendance_recruiter_overrides",RO);AT.pend=true;AT.ok="";renderAtt();}
   function attShortLbl(l,k){return k==="smd"?"SMD "+l.replace(/ \(SMD\)$/,"")+" · MD?":l;}
-  function attMdOpts(R,sec,p){var a=[{c:"1298FC",l:MD_SMD["1298FC"]},{c:"27RJEC",l:MD_SMD["27RJEC"]}];
-    (((R&&R.mds)||{})[sec]||[]).slice().sort(function(x,y){return x.name<y.name?-1:1;}).forEach(function(m){var c=m.code||m.id;if(!MD_SMD[c]&&c!==p.code&&c!==p.id)a.push({c:c,l:m.name+" ("+(m.title||"MD")+")"});});
+  function attMdOpts(R,sec,p){var a=[{c:"1298FC",l:MD_SMD["1298FC"]},{c:"27RJEC",l:MD_SMD["27RJEC"]}],seen={};
+    (((R&&R.mds)||{}).base||[]).concat((((R&&R.mds)||{}).superbase)||[]).slice().sort(function(x,y){return x.name<y.name?-1:1;}).forEach(function(m){var c=m.code||m.id;if(!MD_SMD[c]&&!seen[c]&&c!==p.code&&c!==p.id){seen[c]=1;a.push({c:c,l:m.name+" ("+(m.title||"MD")+")"});}});
     return a.filter(function(m){return m.c!==p.code;});}
+  // v43: shared Upline MD filter (Attendance, Recruits, Licences) + one per-person MD value everywhere (bs-v1:attendance_md_overrides, keyed by bs-v1:people / roster id)
+  var MDF={v:(function(){try{return localStorage.getItem("bs-ui:mdf")||"";}catch(e){return "";}})()};
+  function mdPerson(R,id,name,code){var W=attWho(R||{});if(id&&W[id])return W[id];var P=pReg(),x=id&&P&&P._by[id],u=x&&x.upline;
+    var k=u&&u.kind==="manual"?null:u&&u.kind;return {id:id||null,name:name||(x&&x.name)||"",code:code||(x&&x.code)||null,md:u&&u.md,md_id:u&&u.id,md_k:k,team:x&&x.team};}
+  function mdfOk(R,MO,p){var v=MDF.v;if(!v)return true;var e=attEff(R,MO,p);return v==="__b"?!e.id:e.id===v;}
+  function mdfLbl(R){var v=MDF.v;return !v?"":v==="__b"?"Blank / not set":attMdLbl(R,v,v);}
+  function mdfSel(R,shown,total,note){var M=(R&&R.mds)||{},v=MDF.v;function og(sec,lbl,smd){var a=[{c:smd,l:MD_SMD[smd]}];(M[sec]||[]).slice().sort(function(x,y){return x.name<y.name?-1:1;}).forEach(function(m){var c=m.code||m.id;if(c!==smd&&!MD_SMD[c])a.push({c:c,l:m.name+" ("+(m.title||"MD")+")"});});
+      return '<optgroup label="'+lbl+'">'+a.map(function(m){return '<option value="'+esc(m.c)+'"'+(m.c===v?' selected':'')+'>'+esc(m.l)+'</option>';}).join("")+'</optgroup>';}
+    return '<div class="mdfb'+(v?' on':'')+'"><label>Upline MD</label><div class="atsel mdfs2"><select data-mdf="1" aria-label="Filter by Upline MD"><option value="">All</option><option value="__b"'+(v==="__b"?' selected':'')+'>Blank / not set</option>'+og("base","Base shop","1298FC")+og("superbase","Super base","27RJEC")+'</select></div>'+
+      (v?'<small>'+shown+' of '+total+' · <button type="button" data-mdfx="1">clear</button></small>':'<small>'+total+' people</small>')+(note?'<em class="mdfh">'+note+'</em>':'')+'</div>';}
+  function mdCell(R,MO,p,sec){var e=attEff(R,MO,p),d=attMdData(p),opts=attMdOpts(R,sec,p),cur=e.ovr?e.id:"";
+    var oh='<option value="">'+(e.ovr?'↺ '+esc(d?d.lbl:'blank'):esc(d?d.lbl:'—'))+'</option>'+opts.map(function(m){return '<option value="'+esc(m.c)+'"'+(m.c===cur?' selected':'')+'>'+esc(m.l)+'</option>';}).join("");
+    if(cur&&!opts.some(function(m){return m.c===cur;}))oh+='<option value="'+esc(cur)+'" selected>'+esc(e.lbl)+'</option>';
+    return '<span class="amdw'+(e.ovr?' ovr':'')+(e.lbl?'':' k-none')+'"><select data-mdp="'+esc(p.id)+'" aria-label="Upline MD: '+esc(p.name)+'" title="'+esc(e.ovr?'Set by you (wins over the reports, same value on every tab)':(d?(p.md_src||'From the reports'):'Not known: pick one'))+'">'+oh+'</select>'+(e.ovr?'<i class="amdm" title="Set by you">✎</i>':'')+'</span>';}
   function attIsMd(R,sec,p){return (((R&&R.mds)||{})[sec]||[]).some(function(m){return m.id===p.id||(p.code&&m.code===p.code);});}
   // blocks for one section: SMD-direct first, then MDs by team size (largest first, then name), then "Upline MD not in the reports"
   function attBlocks(R,MO,sec,a){var B={},smd=sec==="superbase"?"27RJEC":"1298FC";
@@ -1803,7 +1857,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     blk(smd);
     return Object.keys(B).map(function(k){return B[k];}).sort(function(x,y){function r(b){return b.key===smd?0:b.none?3:b.smd?1:2;}return (r(x)-r(y))||(y.team.length-x.team.length)||(x.lbl<y.lbl?-1:x.lbl>y.lbl?1:0);});}
   function attCnt(ids,I,A){var c={i:0,a:0,ia:0};(ids||[]).forEach(function(id){if(I[id])c.i++;if(A[id])c.a++;if(I[id]&&A[id])c.ia++;});return c;}
-  function attMdSet(id,v){var R=getJ("attendance_roster",null),MO=attMo(R),now=Date.now(),lbl=v?attMdLbl(R,v,v):null;MO.v=1;MO.o[id]={md:v||null,name:lbl,t:now};setJ("attendance_md_overrides",MO);AT.pend=true;AT.ok="";renderAtt();}
+  function attMdSet(id,v){var R=getJ("attendance_roster",null),MO=attMo(R),now=Date.now(),lbl=v?attMdLbl(R,v,v):null;MO.v=1;MO.o[id]={md:v||null,name:lbl,t:now};setJ("attendance_md_overrides",MO);AT.pend=true;AT.ok="";if(tab==="rec")renderRec();else if(tab==="lic")renderRoster();else renderAtt();}
   function attCopyText(b){var R=getJ("attendance_roster",null),W=attWho(R),T=attTy(AT.t),ppl=b.team.map(function(id){return W[id];}).filter(Boolean);
     function ln(p,i){var t=attTel(p);return (i+1)+". "+p.name+(t?" · "+t:"");}
     var L=ppl.filter(function(p){return p.lic;}),N=ppl.filter(function(p){return !p.lic;});
@@ -1813,7 +1867,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function ovMerge(a,b){var A=syParse(a),B=syParse(b);if(!A||typeof A!=="object"||!A.o)return b;if(!B||typeof B!=="object"||!B.o)return a;var out={v:1,o:{}};
     Object.keys(B.o).concat(Object.keys(A.o)).forEach(function(id){var x=A.o[id],y=B.o[id];out.o[id]=!x?y:!y?x:((+x.t||0)>=(+y.t||0)?x:y);});return JSON.stringify(out);}
   function renderAtt(){
-    if(!AT.t){var u=attUi();AT.t=attTy(u.t).id;AT.g=u.g!==false;AT.rg=u.rg||"8";AT.rf=u.rf||null;AT.rt=u.rt||null;}
+    if(!AT.t){var u=attUi();AT.t=attTy(u.t).id;AT.sm=!!u.sm;AT.rg=u.rg||"8";AT.rf=u.rf||null;AT.rt=u.rt||null;}
     if(!AT.d)AT.d=attDefDate(AT.t);
     var R=getJ("attendance_roster",null),S=attData(),T=attTy(AT.t),k=AT.d,s=attSess(S,AT.t,k);
     var so=ATT_TYPES.map(function(x){return '<option value="'+x.id+'">'+esc(x.label)+'</option>';}).join("");if($("attType").innerHTML!==so)$("attType").innerHTML=so;$("attType").value=AT.t;
@@ -1825,48 +1879,47 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var key=AT.t+"|"+k+"|"+(R.updated||"");
     if(!AT.order||AT.order.key!==key||AT.order.n!==Object.keys(S.sessions).length)AT.order={key:key,n:Object.keys(S.sessions).length,r:attRank(R,S,AT.t,k)};
     var O=AT.order.r,inv={},att={};(s&&s.inv||[]).forEach(function(id){inv[id]=1;});(s&&s.att||[]).forEach(function(id){att[id]=1;});
-    var h='',MO=attMo(R),grp=AT.g!==false;AT.gmem={};AT.blocks=[];
-    $("attView").innerHTML='<span>View</span><button type="button" data-vw="g" class="'+(grp?'on':'')+'">Group by MD</button><button type="button" data-vw="f" class="'+(grp?'':'on')+'">Flat list</button>';
-    function rowH(x,i,sec,gm,bk,self){var p=x.p,o=x.o,e=attEff(R,MO,p);
-      var sub=o.la?'<small class="hot">last '+esc(attShort(o.la))+(o.n8?' · '+o.n8+'× in 8 wk':'')+'</small>':(p.biz||p.why)&&p.why!=="no recent activity"?'<small>'+esc(p.biz||p.why)+'</small>':'';
-      var tl=attTel(p),lk=tl?'<span class="lk"><a href="tel:'+esc(tl)+'" aria-label="Call '+esc(p.name)+'">📞 Call</a><a href="sms:'+esc(tl)+'" aria-label="Text '+esc(p.name)+'">💬 Text</a></span>':'';
-      var srch=(p.name+" "+(p.aka||[]).join(" ")+" "+(p.code||"")+" "+(p.rec||"")+" "+e.lbl).toLowerCase();
-      var opts=attMdOpts(R,sec,p),cur=e.ovr?e.id:"",oh='<option value="">'+esc((e.ovr?'Auto: '+(p.md||'Unknown'):attShortLbl(p.md||'Unknown',p.md_k)))+'</option>'+opts.map(function(m){return '<option value="'+esc(m.c)+'"'+(m.c===cur?' selected':'')+'>'+esc(m.l)+'</option>';}).join("");
+    var h='',MO=attMo(R),RO=attRo(R),sm=!!AT.sm;AT.gmem={};AT.blocks=[];
+    $("attView").innerHTML='<button type="button" data-sm="1" class="'+(sm?'on':'')+'" aria-pressed="'+sm+'">⇅ Sort by MD'+(sm?' · on':'')+'</button><small>'+(sm?'Grouped by Upline MD (blanks last). Tap again for Licensed / Non licensed.':'Licensed first, then Non licensed. Active people on top.')+'</small>';
+    var dl={};["base","superbase"].forEach(function(sec){(R.sections[sec]||[]).forEach(function(p){dl[p.name]=1;});});
+    h+='<datalist id="attRecDL">'+Object.keys(dl).sort().map(function(n){return '<option value="'+esc(n)+'">';}).join("")+'</datalist>';
+    function rowH(x,i,sec,gm){var p=x.p,o=x.o,e=attEff(R,MO,p),rc=attRec(RO,p);
+      var sub=o.la?'<small class="hot">last '+esc(attShort(o.la))+(o.n8?' · '+o.n8+'× in 8 wk':'')+'</small>':'';
+      var tl=attTel(p),lk=tl?'<span class="lk"><a href="tel:'+esc(tl)+'" aria-label="Call '+esc(p.name)+'">📞</a><a href="sms:'+esc(tl)+'" aria-label="Text '+esc(p.name)+'">💬</a></span>':'';
+      var srch=(p.name+" "+(p.aka||[]).join(" ")+" "+(p.code||"")+" "+rc.v+" "+e.lbl).toLowerCase();
+      var d=attMdData(p),opts=attMdOpts(R,sec,p),cur=e.ovr?e.id:"";
+      var oh='<option value="">'+(e.ovr?'↺ '+esc(d?d.lbl:'blank'):esc(d?d.lbl:'—'))+'</option>'+opts.map(function(m){return '<option value="'+esc(m.c)+'"'+(m.c===cur?' selected':'')+'>'+esc(m.l)+'</option>';}).join("");
       if(cur&&!opts.some(function(m){return m.c===cur;}))oh+='<option value="'+esc(cur)+'" selected>'+esc(e.lbl)+'</option>';
-      var recl=p.rec&&e.lbl.indexOf(p.rec)<0?'<small>rec. '+esc(p.rec)+'</small>':'';
-      return '<tr data-id="'+esc(p.id)+'" data-gm="'+esc(gm)+'"'+(bk?' data-bk="'+esc(bk)+'"':'')+' data-q="'+esc(srch)+'" class="'+(x.act?'':'io')+(self?' amdself':'')+'"><td class="asn">'+(self?'★':(i+1))+'</td><td class="anm"><b>'+esc(p.name)+'</b>'+(self?'<small class="mdt">'+esc(p.title||"MD")+' · leads this group</small>':sub)+lk+'</td>'+
-        '<td class="amd"><span class="amdw'+(e.ovr?' ovr':'')+' k-'+esc(e.ovr?'ovr':e.k)+'"><select data-md="1" aria-label="Upline MD: '+esc(p.name)+'" title="'+esc(e.ovr?'Set by you (wins over the reports). Reports say: '+(p.md||'Unknown'):(p.md_src||''))+'">'+oh+'</select>'+(e.ovr?'<i class="amdm" title="Set by you">✎ you</i>':'')+'</span>'+recl+'</td>'+
-        '<td class="acd'+(p.code?'':' na')+'">'+(p.code?esc(p.code):'—')+'</td>'+
+      return '<tr data-id="'+esc(p.id)+'" data-gm="'+esc(gm)+'" data-q="'+esc(srch)+'" class="'+(x.act?'':'io')+'"><td class="asn">'+(i+1)+'</td>'+
+        '<td class="anm"><b>'+esc(p.name)+'</b><small class="cd">'+(p.code?esc(p.code):'no code')+'</small>'+sub+lk+'</td>'+
+        '<td class="arc"><span class="amdw'+(rc.ovr?' ovr':'')+'"><input type="text" data-rec="1" list="attRecDL" value="'+esc(rc.v)+'" placeholder="add" aria-label="Upline recruiter: '+esc(p.name)+'" title="'+esc(rc.ovr?'Set by you (wins over the reports). Reports say: '+(p.rec||'nothing'):(p.rec?'From the reports':'Not in the reports: type it'))+'" autocomplete="off">'+(rc.ovr?'<button type="button" class="amdm" data-rr="1" title="Set by you · tap to go back to the reports" aria-label="Undo my recruiter entry for '+esc(p.name)+'">✎</button>':'')+'</span></td>'+
+        '<td class="amd"><span class="amdw'+(e.ovr?' ovr':'')+(e.lbl?'':' k-none')+'"><select data-md="1" aria-label="Upline MD: '+esc(p.name)+'" title="'+esc(e.ovr?'Set by you (wins over the reports). Reports say: '+(d?d.lbl:'nothing'):(d?(p.md_src||''):'Not known: pick one'))+'">'+oh+'</select>'+(e.ovr?'<i class="amdm" title="Set by you">✎</i>':'')+'</span></td>'+
         '<td class="ack"><input type="checkbox" data-f="i" aria-label="Invited: '+esc(p.name)+'"'+(inv[p.id]?' checked':'')+'></td><td class="ack"><input type="checkbox" data-f="a" aria-label="Attended: '+esc(p.name)+'"'+(att[p.id]?' checked':'')+'></td></tr>';}
-    function groupsH(list,sec,pre,bk){var out='';
-      [["lic","Licensed","invite first"],["rec","Recruits","not licensed yet"]].forEach(function(G){var gl=list.filter(function(x){return (G[0]==="lic")===!!x.p.lic;}),gk=pre+G[0];
-        AT.gmem[gk]=gl.map(function(x){return x.p.id;});
-        if(!gl.length&&bk)return;
-        out+='<tr class="asub '+G[0]+'" data-g="'+esc(gk)+'"'+(bk?' data-bk="'+esc(bk)+'"':'')+'><td colspan="6"><b>'+G[1]+'</b> <span class="pc">'+gl.length+'</span> <i>'+G[2]+'</i><small data-gc="'+esc(gk)+'"></small></td></tr>';
-        if(!gl.length){out+='<tr class="ina" data-div="1" data-gm="'+esc(gk)+'"><td colspan="6">No one</td></tr>';return;}
-        var shown=false;gl.forEach(function(x,i){if(!x.act&&!shown){shown=true;out+='<tr class="ina" data-div="1"'+(bk?' data-bk="'+esc(bk)+'"':'')+'><td colspan="6">Inactive · '+gl.filter(function(y){return !y.act;}).length+'</td></tr>';}
-          out+=rowH(x,i,sec,gk,bk,false);});});
-      return out;}
-    var thead='<thead><tr><th class="asn">#</th><th>Name</th><th class="amd">Upline MD</th><th class="acd">WFG code</th><th class="ack">Invited</th><th class="ack">Attended</th></tr></thead><tbody>';
-    ["base","superbase"].forEach(function(sec){var a=O[sec]||[],sb=sec==="superbase";AT.gmem[sec]=a.map(function(x){return x.p.id;});
-      h+='<div class="atsg'+(sb?' sb':'')+'"><b>'+(sb?'Super base':'Base shop')+'</b> <span class="pc">'+a.length+'</span><small>'+(sb?"SMD Sunchandan Singh's team · ":"")+'<span data-sc="'+sec+'"></span></small></div>';
+    function sub(cls,gk,title,n,extra){return '<tr class="asub '+cls+'" data-g="'+esc(gk)+'"><td colspan="6"><b>'+esc(title)+'</b> <span class="pc">'+n+'</span>'+(extra||'')+'<small data-gc="'+esc(gk)+'"></small></td></tr>';}
+    var thead='<thead><tr><th class="asn">#</th><th class="anm">Name</th><th class="arc">Upline Recruiter</th><th class="amd">Upline MD</th><th class="ack">Invited</th><th class="ack">Attended</th></tr></thead><tbody>';
+    var nT=0,nS=0;["base","superbase"].forEach(function(sec){nT+=(O[sec]||[]).length;nS+=(O[sec]||[]).filter(function(x){return mdfOk(R,MO,x.p);}).length;});$("attMdf").innerHTML=mdfSel(R,nS,nT);
+    ["base","superbase"].forEach(function(sec){var a=(O[sec]||[]).filter(function(x){return mdfOk(R,MO,x.p);}),sb=sec==="superbase";AT.gmem[sec]=a.map(function(x){return x.p.id;});
+      h+='<div class="atsg'+(sb?' sb':'')+'"><b>'+(sb?'Super base':'Baseshop')+'</b> <span class="pc">'+a.length+'</span><small>'+(sb?"Sunchandan's team · ":"")+'<span data-sc="'+sec+'"></span></small></div>';
       if(!a.length){h+='<div class="card attb"><div class="atnone">No one listed</div></div>';return;}
       h+='<div class="card attb '+(sb?'sb':'base')+'"><table class="att">'+thead;
-      if(!grp){h+=groupsH(a,sec,sec+'-',null);}
-      else{var B=attBlocks(R,MO,sec,a);
-        B.forEach(function(b){var bk=sec+'|'+b.key,ids=b.rows.map(function(x){return x.p.id;});AT.gmem[bk]=ids;
-          AT.blocks.push({sec:sec,key:b.key,bk:bk,lbl:b.lbl,none:b.none,smd:b.smd,ids:ids,head:b.head?b.head.p.id:null,team:b.team.map(function(x){return x.p.id;})});
-          h+='<tr class="amdh'+(b.none?' none':b.smd?' smd':'')+'" data-bh="'+esc(bk)+'"><td colspan="6"><div class="amdhw"><div class="amdhn"><b>'+esc(b.lbl)+'</b>'+(b.parent?'<small>under '+esc(b.parent)+'</small>':'')+(b.none?'<small>pick their MD in the Upline MD column; they move into that block</small>':b.smd&&!b.head?'<small>your direct people</small>':'')+'</div>'+
-            '<span class="amdc">team <b>'+b.team.length+'</b></span><small class="amds" data-gc="'+esc(bk)+'"></small>'+(b.none?'':'<button type="button" class="atbtn cp" data-copy="'+esc(bk)+'" aria-label="Copy names of '+esc(b.lbl)+'\'s team">📋 Copy names</button>')+'</div></td></tr>';
-          if(b.head)h+=rowH(b.head,0,sec,bk+'|md',bk,true);
-          h+=groupsH(b.team,sec,bk+'|',bk);});}
+      if(!sm){[["lic","Licensed"],["rec","Non licensed"]].forEach(function(G){var gl=a.filter(function(x){return (G[0]==="lic")===!!x.p.lic;}),gk=sec+'-'+G[0];
+          AT.gmem[gk]=gl.map(function(x){return x.p.id;});h+=sub(G[0],gk,G[1],gl.length);
+          if(!gl.length){h+='<tr class="ina" data-div="1"><td colspan="6">No one</td></tr>';return;}
+          gl.forEach(function(x,i){h+=rowH(x,i,sec,gk);});});}
+      else{var G={},ord=[];a.forEach(function(x,ix){var e=attEff(R,MO,x.p),key=e.id||"",isM=attIsMd(R,sec,x.p)&&x.p.code;
+          if(isM&&!G[x.p.code]&&key!==x.p.code){}var k2=key;if(!G[k2]){G[k2]={key:k2,lbl:k2?e.lbl:"",rows:[]};ord.push(k2);}G[k2].rows.push({x:x,ix:ix});});
+        ord.sort(function(p,q){if(!p)return 1;if(!q)return -1;var a1=G[p].lbl.toLowerCase(),b1=G[q].lbl.toLowerCase();return a1<b1?-1:a1>b1?1:0;});
+        ord.forEach(function(k2){var g=G[k2],gk=sec+'|md|'+(k2||'none');g.rows.sort(function(p,q){return ((q.x.p.lic?1:0)-(p.x.p.lic?1:0))||(p.ix-q.ix);});
+          var ids=g.rows.map(function(r){return r.x.p.id;});AT.gmem[gk]=ids;AT.blocks.push({bk:gk,lbl:g.lbl||"No Upline MD",team:ids,ids:ids,sec:sec,none:!k2});
+          var nl=g.rows.filter(function(r){return r.x.p.lic;}).length;
+          h+=sub('mdg'+(k2?'':' none'),gk,k2?g.lbl:'No Upline MD yet',g.rows.length,'<i>'+nl+' licensed · '+(g.rows.length-nl)+' non licensed</i>'+(k2?' <button type="button" class="atcp" data-copy="'+esc(gk)+'" title="Copy these names (with phones) to send to the MD" aria-label="Copy names under '+esc(g.lbl)+'">📋</button>':''));
+          g.rows.forEach(function(r,i){h+=rowH(r.x,i,sec,gk).replace('<td class="asn">','<td class="asn'+(r.x.p.lic?' L':'')+'">');});});}
       h+='</tbody></table></div>';});
     $("attSecs").innerHTML=h;
     attFilter();attSide();
     var g=R.gaps||{},gb=g.base||{},gs=g.superbase||{};
-    var mc=R.md_cov||{};function cv(t){var x=mc[t]||{};return (x.md||0)+(x.owner||0);}
-    $("attNote").innerHTML='<b>Group by MD.</b> Each block is one MD and the people under him (nearest MD above them): the MD first, then Licensed, then Recruits, inactive at the bottom. Your direct people sit in your own block first. <b>Upline MD</b> comes from the MyWFG recruit drill-down (recruiter chain up to the first MD/SMD), or from what you told me; "SMD … · MD?" means only the Upline SMD is in the reports, "Recruiter: X" means only the recruiter is known, nothing is ever guessed. Pick an MD in the dropdown to set it yourself (✎ you): your pick is saved to the cloud, wins over the reports and survives every morning refresh; pick the first option ("Auto") to go back. 📋 Copy names copies that MD\'s team (licensed first, with phones) for you to paste to him; nothing is sent. Upline MD from the reports: base '+cv("base")+', super base '+cv("superbase")+'.<br><b>How it works.</b> Same names for every training type; ticks are saved per training type and date, and sync to your other devices. Each section lists <b>Licensed</b> people first (licensed on MyWFG, or licence approved on DBI Hub; invite them first), then <b>Recruits</b> (not licensed yet); someone who gets licensed moves up on the next morning refresh and keeps their ticks. Numbers restart in each group. Within each group, active people are on top (attended in the last 8 weeks, MD/SMD, new recruit, licensing or producing), ranked by their latest attended session, then how often in the last 8 weeks; people who never attended sit below. The list refreshes every morning from DBI Hub + MyWFG and never clears your ticks. '+
-      '<br><b>Data gaps.</b> Recruiter unknown for '+((gb.no_recruiter||0)+(gs.no_recruiter||0))+', no WFG code for '+((gb.no_code||0)+(gs.no_code||0))+', no phone for '+((gb.no_phone||0)+(gs.no_phone||0))+' (phone buttons show only when MyWFG has a cell number).';
+    $("attNote").innerHTML='<b>How it works.</b> Each section lists <b>Licensed</b> people first (licensed on MyWFG, or licence approved on DBI Hub), then <b>Non licensed</b>; numbers restart in each. Inactive people stay in their list, below the active ones (active = attended in the last 8 weeks, MD/SMD, new recruit, licensing or producing). <b>Upline Recruiter</b> and <b>Upline MD</b> are filled only from real data (MyWFG recruit drill-down, DBI Hub, or what you told me); otherwise blank. Type a recruiter or pick an MD to set it yourself (✎): it saves to the cloud, wins over the reports, survives every morning refresh and feeds your bot\'s coaching. Tap ✎ (recruiter) or pick ↺ (MD) to go back to the reports. <b>⇅ Sort by MD</b> groups everyone by Upline MD so you can ask each MD to call their people (📋 copies the names with phones; nothing is sent). Ticks are saved per training type and date and sync to your other devices.'+
+      '<br><b>Data gaps.</b> No recruiter for '+((gb.no_recruiter||0)+(gs.no_recruiter||0))+', no WFG code for '+((gb.no_code||0)+(gs.no_code||0))+', no phone for '+((gb.no_phone||0)+(gs.no_phone||0))+'.';
   }
   function attFilter(){var q=(AT.q||"").trim().toLowerCase(),vis={},vb={};[].forEach.call(document.querySelectorAll("#attSecs tbody tr"),function(r){if(r.dataset.g||r.dataset.bh)return;if(r.dataset.div){r.classList.toggle("hid",!!q);return;}var h=!!q&&r.dataset.q.indexOf(q)<0;r.classList.toggle("hid",h);if(!h){vis[r.dataset.gm]=1;if(r.dataset.bk)vb[r.dataset.bk]=1;}});
     [].forEach.call(document.querySelectorAll("#attSecs tr.asub"),function(r){r.classList.toggle("hid",!!q&&!vis[r.dataset.g]);});
@@ -1876,31 +1929,21 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function sum(a,b){return {i:a.i+b.i,a:a.a+b.a,ia:a.ia+b.ia};}
     c.total=sum(c.base,c.superbase);c.total.lic=sum(c.base.lic,c.superbase.lic);c.total.rec=sum(c.base.rec,c.superbase.rec);return c;}
   function attRate(x){return x.i?Math.round(100*x.ia/x.i)+"%":"—";}
-  function attSide(){var R=getJ("attendance_roster",null);if(!R||!R.sections)return;var S=attData(),T=attTy(AT.t),k=AT.d,s=attSess(S,AT.t,k),W=attWho(R),c=attStats(s,W);
+  function attSide(){var R=getJ("attendance_roster",null);if(!R||!R.sections)return;var S=attData(),T=attTy(AT.t),k=AT.d,W=attWho(R),MO=attMo(R);
+    function fs(x){if(!x||!MDF.v)return x;function ok(id){return !!W[id]&&mdfOk(R,MO,W[id]);}var y={};Object.keys(x).forEach(function(q){y[q]=x[q];});y.inv=(x.inv||[]).filter(ok);y.att=(x.att||[]).filter(ok);return y;}
+    var s=fs(attSess(S,AT.t,k)),c=attStats(s,W),fl=mdfLbl(R);
     // counts
-    var h='<div class="athd"><b>'+esc(T.label)+'</b><span>'+esc(pretty(k))+(k>today?' · planned':'')+'</span></div><div class="atk">'+
+    var h='<div class="athd"><b>'+esc(T.label)+'</b><span>'+esc(pretty(k))+(k>today?' · planned':'')+'</span></div>'+(fl?'<div class="mdfn">Only people with Upline MD: <b>'+esc(fl)+'</b></div>':'')+'<div class="atk">'+
       '<div class="h"></div><div class="h b">Base</div><div class="h s">Super base</div><div class="h">Total</div>'+
       '<div class="r">Invited</div><div>'+c.base.i+'</div><div>'+c.superbase.i+'</div><div class="t">'+c.total.i+'</div>'+
       '<div class="r">Attended</div><div class="g">'+c.base.a+'</div><div class="g">'+c.superbase.a+'</div><div class="g t">'+c.total.a+'</div>'+
-      '<div class="r">Show-up rate</div><div>'+attRate(c.base)+'</div><div>'+attRate(c.superbase)+'</div><div class="t">'+attRate(c.total)+'</div></div>'+
-      '<div class="atk atk2"><div class="h">Att / Inv</div><div class="h b">Base</div><div class="h s">Super base</div><div class="h">Total</div>'+
-      [["lic","Licensed"],["rec","Recruits"]].map(function(G){function cl(x){return '<b class="g">'+x.a+'</b>/'+x.i+' <small>'+attRate(x)+'</small>';}
-        return '<div class="r">'+G[1]+'</div><div>'+cl(c.base[G[0]])+'</div><div>'+cl(c.superbase[G[0]])+'</div><div class="t">'+cl(c.total[G[0]])+'</div>';}).join("")+'</div>';
+      '<div class="r">Show-up rate</div><div>'+attRate(c.base)+'</div><div>'+attRate(c.superbase)+'</div><div class="t">'+attRate(c.total)+'</div></div>';
     var walk=c.total.a-c.total.ia;if(walk>0)h+='<div class="note" style="text-align:left">'+walk+' attended without an invite tick (walk-ins). Show-up rate = invited people who attended.</div>';
     $("attCounts").innerHTML=h;
     ["base","superbase"].forEach(function(sec){var e=document.querySelector('[data-sc="'+sec+'"]');if(e)e.textContent=c[sec].i+" invited · "+c[sec].a+" attended";});
     var I0={},A0={};(s&&s.inv||[]).forEach(function(id){I0[id]=1;});(s&&s.att||[]).forEach(function(id){A0[id]=1;});
     [].forEach.call(document.querySelectorAll("#attSecs [data-gc]"),function(e2){var x=attCnt((AT.gmem||{})[e2.dataset.gc],I0,A0);e2.textContent=x.i+" inv · "+x.a+" att · "+attRate(x);});
-    var BL=(AT.blocks||[]).filter(function(b){return !b.none;});
     var RG=attRange(S);
-    if(BL.length){var hs=RG.L;
-      var pm='<div class="athd" style="margin-top:12px"><b>Per MD · this session</b><span>attended / invited · show-up</span></div><div class="atmd">'+BL.map(function(b){var x=attCnt(b.ids,I0,A0);
-        return '<div class="r'+(b.sec==="superbase"?' sb':'')+'">'+esc(b.lbl.replace(/ \((MD|SMD)\)$/,""))+(b.smd?' <small>SMD</small>':'')+'</div><div><b class="g">'+x.a+'</b>/'+x.i+'</div><div>'+attRate(x)+'</div>';}).join("")+'</div>';
-      var lb=BL.map(function(b){var t={i:0,ia:0,a:0};hs.forEach(function(x){var I={},A={};(x.inv||[]).forEach(function(id){I[id]=1;});(x.att||[]).forEach(function(id){A[id]=1;});var y=attCnt(b.ids,I,A);t.i+=y.i;t.ia+=y.ia;t.a+=y.a;});return {b:b,t:t};}).filter(function(z){return z.t.i>0;})
-        .sort(function(p,q){return (q.t.ia/q.t.i-p.t.ia/p.t.i)||(q.t.a-p.t.a);});
-      pm+='<div class="athd" style="margin-top:12px"><b>MD leaderboard</b><span>show-up rate · '+hs.length+' '+esc(T.label.split(" ")[0])+' session'+(hs.length===1?'':'s')+' · '+esc(RG.lbl)+'</span></div>'+
-        (lb.length?'<div class="atlb2">'+lb.map(function(z,i){return '<div><span class="rk">'+(i+1)+'</span><span class="n">'+esc(z.b.lbl.replace(/ \((MD|SMD)\)$/,""))+'</span><b>'+attRate(z.t)+'</b><small>'+z.t.ia+'/'+z.t.i+' came</small></div>';}).join("")+'</div>':'<div class="atnone">No invite ticks yet in these sessions.</div>');
-      $("attCounts").insertAdjacentHTML("beforeend",pm);}
     // trend: last 10 sessions of this type (with ticks, or the selected one)
     function trendOf(t,cur){return attSessList(S,t).filter(function(x){return attHas(x)||(cur&&x.date===cur);}).filter(function(x){return x.date<=today||x.date===cur;});}
     function ind(list){var n=list.map(function(x){return (x.att||[]).length;});if(n.length<2)return '<span class="atind fl">▬ not enough sessions yet</span>';
@@ -1908,9 +1951,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(d>Math.max(.5,avg*.1))return '<span class="atind up">▲ up '+(avg?Math.round(100*d/avg)+'%':'')+' vs avg '+avg.toFixed(1)+'</span>';
       if(d<-Math.max(.5,avg*.1))return '<span class="atind dn">▼ down '+(avg?Math.round(-100*d/avg)+'%':'')+' vs avg '+avg.toFixed(1)+'</span>';
       return '<span class="atind fl">▬ flat vs avg '+avg.toFixed(1)+'</span>';}
-    var L=RG.L.slice();if(!RG.c&&k<=today&&!L.some(function(x){return x.date===k;})){L.push(s||{date:k,att:[],inv:[],type:AT.t});L.sort(function(a,b){return a.date<b.date?-1:1;});if(L.length>RG.n)L=L.slice(-RG.n);}
+    var L=RG.L.map(fs);if(!RG.c&&k<=today&&!L.some(function(x){return x.date===k;})){L.push(s||{date:k,att:[],inv:[],type:AT.t});L.sort(function(a,b){return a.date<b.date?-1:1;});if(L.length>RG.n)L=L.slice(-RG.n);}
     var mx=Math.max.apply(null,[1].concat(L.map(function(x){return Math.max((x.att||[]).length,(x.inv||[]).length);})));
-    var tb='<div class="athd"><b>Trend · '+L.length+' session'+(L.length===1?'':'s')+'</b><span>'+ind(L)+'</span></div>';
+    var tb='<div class="athd"><b>Trend · '+L.length+' session'+(L.length===1?'':'s')+'</b><span>'+ind(L)+'</span></div>'+(fl?'<div class="mdfn">Upline MD: <b>'+esc(fl)+'</b></div>':'');
     tb+='<div class="atrg" role="group" aria-label="Range">'+["4","8","12"].map(function(n){return '<button type="button" data-rg="'+n+'"'+((AT.rg||"8")===n?' class="on"':'')+'>Last '+n+'</button>';}).join("")+
       '<button type="button" data-rg="c"'+(AT.rg==="c"?' class="on"':'')+'>📅 '+(AT.rg==="c"&&AT.rf?esc(RG.lbl):'From – to')+'</button></div>';
     if(L.length){var ti=0,ta=0,tia=0;L.forEach(function(x){var I={};(x.inv||[]).forEach(function(id){I[id]=1;});ti+=(x.inv||[]).length;ta+=(x.att||[]).length;(x.att||[]).forEach(function(id){if(I[id])tia++;});});
@@ -1950,12 +1993,17 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var dw=T.dow,td=parse(today).getUTCDay(),nx=dw===null?null:shift(today,((dw-td+7)%7)||7),pv=dw===null?null:shift(today,-(((td-dw+7)%7)||7));
     calOpen({mode:"day",value:AT.d,title:T.label,mark:function(k){return !!mk[k];},legend:"Session / ticks for "+T.label,
       quick:[["Today",today]].concat(dw===null?[]:[["Last "+DOW[dw],pv],["Next "+DOW[dw],nx]]),pick:attSetDate});});
-  $("attSecs").addEventListener("change",function(e){var c=e.target;if(c&&c.tagName==="SELECT"&&c.dataset.md){var tr0=c.closest("tr");if(tr0){c.blur();attMdSet(tr0.dataset.id,c.value);}return;}if(!c||c.type!=="checkbox")return;var tr=c.closest("tr");if(!tr)return;attTick(tr.dataset.id,c.dataset.f,c.checked);});
+  $("attSecs").addEventListener("change",function(e){var c=e.target;if(c&&c.dataset.rec){var tr1=c.closest("tr");if(tr1)attRecSet(tr1.dataset.id,c.value);return;}if(c&&c.tagName==="SELECT"&&c.dataset.md){var tr0=c.closest("tr");if(tr0){c.blur();attMdSet(tr0.dataset.id,c.value);}return;}if(!c||c.type!=="checkbox")return;var tr=c.closest("tr");if(!tr)return;attTick(tr.dataset.id,c.dataset.f,c.checked);});
   $("attCall").addEventListener("click",function(e){var b=e.target.closest("[data-inv]");if(!b)return;var id=b.dataset.inv;attTick(id,"i",true);var cb=document.querySelector('#attSecs tr[data-id="'+(window.CSS&&CSS.escape?CSS.escape(id):id)+'"] input[data-f="i"]');if(cb)cb.checked=true;});
   $("attQ").addEventListener("input",function(){AT.q=this.value;attFilter();});
+  function mdfRe(){try{localStorage.setItem("bs-ui:mdf",MDF.v);}catch(e){}if(tab==="rec")renderRec();else if(tab==="lic")renderRoster();else if(tab==="att")renderAtt();}
+  ["attMdf","rcMdf","licMdf"].forEach(function(i){$(i).addEventListener("change",function(e){var c=e.target;if(c&&c.dataset.mdf){MDF.v=c.value;c.blur();mdfRe();}});$(i).addEventListener("click",function(e){if(e.target.closest("[data-mdfx]")){MDF.v="";mdfRe();}});});
+  ["rcSecs","roster","attSecs"].forEach(function(i){$(i).addEventListener("change",function(e){var c=e.target;if(c&&c.tagName==="SELECT"&&c.dataset.mdp){c.blur();attMdSet(c.dataset.mdp,c.value);}});});
   $("attTrend").addEventListener("click",function(e){var r=e.target.closest("[data-rg]");if(r){if(r.dataset.rg==="c"){attRangePick();return;}AT.rg=r.dataset.rg;attUiSave();attSide();return;}
     var g=e.target.closest("[data-gd]");if(g&&g.dataset.gd!==AT.d){attSetDate(g.dataset.gd);try{$("aPl").scrollIntoView({block:"nearest"});}catch(x){}}});
-  $("attView").addEventListener("click",function(e){var b=e.target.closest("[data-vw]");if(!b)return;AT.g=b.dataset.vw==="g";attUiSave();renderAtt();});
+  $("attView").addEventListener("click",function(e){var b=e.target.closest("[data-sm]");if(!b)return;AT.sm=!AT.sm;attUiSave();renderAtt();});
+  $("attSecs").addEventListener("keydown",function(e){var c=e.target;if(c&&c.dataset&&c.dataset.rec&&e.key==="Enter"){e.preventDefault();c.blur();}});
+  $("attSecs").addEventListener("click",function(e){var b=e.target.closest("[data-rr]");if(!b)return;var tr=b.closest("tr");if(!tr)return;var R=getJ("attendance_roster",null),RO=attRo(R);RO.v=1;RO.o[tr.dataset.id]={rec:null,t:Date.now()};setJ("attendance_recruiter_overrides",RO);AT.pend=true;AT.ok="";renderAtt();});
   $("attSecs").addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(!b)return;var B=(AT.blocks||[]).filter(function(x){return x.bk===b.dataset.copy;})[0];if(!B)return;
     attCopy(attCopyText(B)).then(function(ok){b.textContent=ok?"✓ Copied":"Copy failed";b.classList.toggle("ok",!!ok);setTimeout(function(){b.textContent="📋 Copy names";b.classList.remove("ok");},2200);});});
   // shared calendar on the Main + Certs day pills (the native input stays as the value holder; past dates only, like before)
@@ -2011,7 +2059,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // merge one key when BOTH sides changed: day records merge field by field (newer side wins per field); lists merge by id; else newer wins
   function syMerge(fk,a,b,ta,tb){
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
-    if(fk===PREFIX+"attendance_md_overrides"&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
+    if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
     if(/^day:/.test(k)&&N&&O&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
@@ -2038,7 +2086,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         var nv=dirty?(remoteSame?loc:syMerge(k,loc,rv,mt[k]||(sh[k]!==undefined?now:0),+r.t||0)):rv;
         if(k===PREFIX+"attendance"&&loc!==null&&rv!==null){   // v37: ALWAYS merge ticks (a tick lost to another device's whole-doc write comes back from here)
           var am=attMerge(loc,rv),ac=canon(syParse(am));nv=ac===canon(syParse(rv))?rv:ac===canon(syParse(loc))?loc:am;}
-        if(k===PREFIX+"attendance_md_overrides"&&loc!==null&&rv!==null){   // v41: ALWAYS merge MD picks the same way
+        if((k===PREFIX+"attendance_md_overrides"||k===PREFIX+"attendance_recruiter_overrides")&&loc!==null&&rv!==null){   // v41: ALWAYS merge MD picks the same way
           var om=ovMerge(loc,rv),oc=canon(syParse(om));nv=oc===canon(syParse(rv))?rv:oc===canon(syParse(loc))?loc:om;}
         if(nv!==loc){try{if(nv===null)localStorage.removeItem(k);else localStorage.setItem(k,nv);changed=true;}catch(e){return;}}
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
@@ -2064,7 +2112,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   function syRerender(){var ae=document.activeElement;if(ae&&(ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT"))return;show(tab);}
   function ago(iso){var s=Math.round((Date.now()-new Date(iso))/1000);return s<60?"just now":s<3600?Math.round(s/60)+" min ago":Math.round(s/3600)+" h ago";}
-  function syUI(){if(typeof AT==="object"&&AT&&AT.pend&&!SY.busy&&!SY.err&&SY.loaded&&!syGet("mt",{})[PREFIX+"attendance"]&&!syGet("mt",{})[PREFIX+"attendance_md_overrides"]){AT.pend=false;var d=new Date();AT.ok="✓ Saved to cloud "+d.toLocaleTimeString("en-CA",{timeZone:TZ,hour:"numeric",minute:"2-digit"})+" ET";}if(typeof attSaveUI==="function")attSaveUI();var at=syGet("at",null);$("appVer").textContent="App v"+APP_VERSION+(SY.err==="upload"?" · ☁️ loaded, upload retrying":SY.err?" · ☁️ offline, showing saved data · retrying":at?" · ☁️ synced "+ago(at):" · ☁️ syncing…");}
+  function syUI(){if(typeof AT==="object"&&AT&&AT.pend&&!SY.busy&&!SY.err&&SY.loaded&&!syGet("mt",{})[PREFIX+"attendance"]&&!syGet("mt",{})[PREFIX+"attendance_md_overrides"]&&!syGet("mt",{})[PREFIX+"attendance_recruiter_overrides"]){AT.pend=false;var d=new Date();AT.ok="✓ Saved to cloud "+d.toLocaleTimeString("en-CA",{timeZone:TZ,hour:"numeric",minute:"2-digit"})+" ET";}if(typeof attSaveUI==="function")attSaveUI();var at=syGet("at",null);$("appVer").textContent="App v"+APP_VERSION+(SY.err==="upload"?" · ☁️ loaded, upload retrying":SY.err?" · ☁️ offline, showing saved data · retrying":at?" · ☁️ synced "+ago(at):" · ☁️ syncing…");}
   $("syNow").addEventListener("click",function(){$("appVer").textContent="Syncing…";syncNow();});
 
   // ---- self-update: version.json vs APP_VERSION; reload once per new version (sessionStorage guard). Never touches localStorage. ----
