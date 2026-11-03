@@ -78,6 +78,7 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-17 (Nov 2, 2026):** Licences → New licences: the two goal cards (Base shop gold, Super base blue) are now compact cards the same size and style as the New names cards. They sit side by side on phone and laptop, with a 48px ring (count, "of 3"), "n of 3 · %", "x to go · d days left", and the ✓/green state when the goal is hit. Nothing else changed.
 - **v2026.11.02-16 (Nov 2, 2026):**
   - Licences roster fixed. The licensed list was built from the cash flow reports, so licensed agents with $0 cash flow were missing. The roster source is now the MyWFG **Downline Status** report: Team = Super Team (Base - 6th), Type = Life and/or Securities Registered, all title levels, as of 11/2/2026. That gives 29 people; Harpreet (1298FC, SMD, report owner, not listed in his own downline) is added from the cash flow / recruits reports, so 30 in total: base 22, super base 8.
   - Removed versus before (not Life/Securities registered in Downline Status): Pardeep Singh (262SPC, MD), Amit Hooda, Satnam Dass Jangra, Jasmine Malhotra. Added: Varsha Gunda, Athul Babu Kochath Babu, Tisha Patel, Rajveer Randhawa, Arpit Shah, Sumit Sumit, Simran Kaur Bhatia.

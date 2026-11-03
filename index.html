@@ -302,6 +302,18 @@ button{cursor:pointer}
 .pan .mdt.m4 td{font-size:14px;padding:5px 3px}
 .pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
 .mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
+/* ===== v17: compact New licences goal cards (match New names) ===== */
+#licStats.lgo{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px;padding:0;background:none;border:0;box-shadow:none}
+#licStats .lgb,#licStats .lgs{display:flex;align-items:center;gap:9px;margin:0;padding:9px 11px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0)),var(--card);box-shadow:0 8px 22px rgba(0,0,0,.25)}
+#licStats .lgb{border-color:rgba(245,196,81,.28)}
+#licStats .ok{border-color:rgba(22,236,6,.45)!important}
+#licStats .rin b{font-size:17px}
+#licStats .rin i{font-size:8.5px;letter-spacing:.5px;margin-top:1px}
+#licStats .lgt .tg{font-size:12px;letter-spacing:1.2px}
+#licStats .ln1{font-family:var(--fn);font-size:13px;font-weight:700;color:#fff;margin-top:2px;white-space:nowrap}
+#licStats .ok .ln1{color:#16EC06}
+#licStats .lgt .pct{margin:0;padding:0 5px;font-size:11.5px}
+#licStats .lgt .sub{font-size:11px;margin-top:2px}
 /* ===== v16: licensed roster, 6 columns ===== */
 .rt2.r6 col.c2{width:50px}.rt2.r6 col.c5{width:30px}.rt2.r6 col.c3{width:54px}.rt2.r6 col.c4{width:58px}
 .rt2.r6 th small{display:block;font-size:9.5px;letter-spacing:.5px;color:#6f7a82}
@@ -525,7 +537,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-16";
+var APP_VERSION="2026.11.02-17";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -714,10 +726,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var bl=licIn("base",M),sl=licIn("superbase",M);
     $("lMon").textContent=monN;
     // v11: both teams have a goal of LIC.m (3) a month; super base keeps its blue colour
-    function gb(n,title,cls,blue,note){var f=n/LIC.m,pct=Math.round(f*100),togo=Math.max(0,LIC.m-n);
-      var sub=n>=LIC.m?"Goal hit for "+MONL[mi]+(n>LIC.m?" (+"+(n-LIC.m)+")":"")+" 👍":togo+" to go · "+left+" day"+(left===1?"":"s")+" left";
-      return '<div class="'+cls+'">'+ring(f,f>=1?"#16EC06":blue?"#6cc3f5":recCol(f),92,8,'<b>'+n+'</b><i>of '+LIC.m+'</i>')+
-        '<div class="lgt"><div class="tg">'+title+'</div><div class="big">'+n+'<small>of '+LIC.m+(note?' · '+note:'')+'</small></div><span class="pct'+(f>=1?' ok':blue?' bl':'')+'">'+(f>=1?'✓ ':'')+Math.min(999,pct)+'%</span><div class="sub">'+esc(sub)+'</div></div></div>';}
+    // v17: compact goal cards (small 48px ring, like the New names cards)
+    function gb(n,title,cls,blue,note){var f=n/LIC.m,pct=Math.round(f*100),togo=Math.max(0,LIC.m-n),ok=f>=1;
+      var sub=ok?"Goal hit"+(n>LIC.m?" (+"+(n-LIC.m)+")":"")+" 👍":togo+" to go · "+left+" day"+(left===1?"":"s")+" left";
+      return '<div class="'+cls+(ok?' ok':'')+'"'+(note?' title="'+esc(note)+'"':'')+'>'+ring(f,ok?"#16EC06":blue?"#6cc3f5":recCol(f),48,5,'<b>'+n+'</b><i>of '+LIC.m+'</i>')+
+        '<div class="lgt"><div class="tg">'+title+'</div><div class="ln1">'+(ok?'✓ ':'')+n+' of '+LIC.m+' · <span class="pct'+(ok?' ok':blue?' bl':'')+'">'+Math.min(999,pct)+'%</span></div><div class="sub">'+esc(sub)+'</div></div></div>';}
     $("licStats").innerHTML=gb(bl.length,"Base shop","lgb",false,"")+gb(sl.length,"Super base","lgs",true,"Sunchandan");
     $("nPer").textContent=monN;
     function pan(a,cls,title){a=a.slice().sort(function(x,y){return x.date<y.date?-1:x.date>y.date?1:String(x.name).localeCompare(String(y.name));});
