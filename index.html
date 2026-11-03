@@ -334,10 +334,37 @@ button{cursor:pointer}
 #rSeg button{font-size:12px;padding:4px 8px;white-space:nowrap}
 #rMeta{white-space:nowrap;font-size:11px}
 #p-lic .slbl>span{white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* ===== v10: Licences = monthly stats + this month's names + FULL roster (page scrolls, no inner scroll box) ===== */
+.lgo{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:0;padding:12px 12px;align-items:stretch}
+.lgb{display:flex;align-items:center;gap:12px;min-width:0;padding-right:10px}
+.lgs{display:flex;align-items:center;gap:10px;min-width:0;padding-left:12px;border-left:1px solid var(--line)}
+.lgo .ring .rin{flex-direction:column;line-height:1}
+.lgo .rin b{font-family:var(--fn);font-size:30px;font-weight:700;color:#fff}
+.lgo .rin i{font-style:normal;font-family:var(--fc);font-size:11px;letter-spacing:1px;color:#9aa5ad;text-transform:uppercase;margin-top:2px}
+.lgs .rin b{font-size:22px}
+.lgt{min-width:0}
+.lgt .tg{font-family:var(--fc);font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.lgs .lgt .tg{color:#6cc3f5}
+.lgt .big{font-family:var(--fn);font-size:22px;font-weight:700;color:#fff;line-height:1.1;margin-top:2px;white-space:nowrap}
+.lgt .big small{font-size:13px;color:#9aa5ad;font-weight:600;margin-left:3px}
+.lgt .pct{display:inline-block;margin-top:4px;font-family:var(--fn);font-size:12.5px;font-weight:800;border-radius:7px;padding:1px 7px;background:rgba(245,196,81,.14);color:var(--gold)}
+.lgt .pct.ok{background:rgba(22,236,6,.14);color:#16EC06}
+.lgt .sub{font-size:11.5px;color:#8c979f;font-weight:600;margin-top:4px;line-height:1.25}
+.lnm{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.lnm .pan{padding:9px 11px}
+.lnr{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px;font-weight:700}
+.lnr:first-of-type{border-top:0}
+.lnr span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lnr small{font-family:var(--fc);font-size:12px;letter-spacing:.8px;color:#9aa5ad;text-transform:uppercase;white-space:nowrap}
+.lnm .none{color:#7f8a92;font-size:13px;font-weight:600;padding:4px 0}
+#p-lic .rb{overflow:visible;max-height:none!important}
+#p-lic .roster .pan{padding:8px 10px}
+#p-lic .rt2 td{padding:6px 3px}
+@media (max-width:599px){.lgo{grid-template-columns:minmax(0,1fr)}.lgb{padding-right:0}.lgs{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}.lgs .ring{margin-left:14px;margin-right:14px}}
 @media (min-width:900px){
-  .roster{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .roster{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
   .roster .pan.off{display:block}
-  #rSeg{display:none}
+  .lnm{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
 }
 </style>
 </head>
@@ -370,17 +397,15 @@ button{cursor:pointer}
     <div class="note">Base shop only (your own base). Updated by your bot</div>
   </section>
 
-  <!-- TAB 3: LICENCES (day by day, filled by the bot) -->
+  <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
   <section class="page" id="p-lic">
-    <div class="dnav"><div class="pnav"><button class="pa" id="lPrev" aria-label="Previous day">‹</button><div class="pl"><span id="lLbl">TODAY</span><input type="date" id="lPick" aria-label="Pick a date"></div><button class="pa" id="lNext" aria-label="Next day">›</button></div><button class="tbtn" id="lToday" hidden>Today</button></div>
-    <div class="licw">
-      <div><div class="slbl">New licences <small>base goal 1/wk · 3/mo</small></div>
-      <div class="card" style="padding:9px 10px"><div class="rg" id="licGrid"></div></div></div>
-      <div><div class="slbl"><span>New names <small id="nPer"></small></span><div class="seg" id="lSeg"><button data-r="D">Day</button><button data-r="W">Week</button><button data-r="M">Month</button></div></div>
-      <div class="card nrc" id="licSplit"></div></div>
-    </div>
-    <div class="slbl"><span>All licensed agents <small id="rMeta"></small></span><div class="seg" id="rSeg"><button data-r="base">Base</button><button data-r="superbase">Super base</button></div></div>
+    <div class="slbl"><span>New licences <small id="lMon"></small></span><small>base goal 3 / month</small></div>
+    <div class="card lgo" id="licStats"></div>
+    <div class="slbl"><span>New names <small id="nPer"></small></span></div>
+    <div class="lnm" id="licSplit"></div>
+    <div class="slbl"><span>All licensed agents <small id="rMeta"></small></span></div>
     <div class="roster" id="roster"></div>
+    <div class="note" id="rNote"></div>
   </section>
 
   <!-- TAB 4: MDs (bs-v1:mdstats, filled by the bot from MyWFG) -->
@@ -422,7 +447,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-9";
+var APP_VERSION="2026.11.02-10";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -562,25 +587,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // ---------- tab 3: licences (goal 1 a week, 3 a month) ----------
   var LIC={w:1,m:3};
   var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var lRange="D";
   function licTeam(e){return e&&e.team==="superbase"?"superbase":"base";}   // missing team = base
   function licIn(team,days){return list("licences").filter(function(e){return licTeam(e)===team&&inDays(e,days);});}
+  // monthly only (v10): base goal ring for THIS month, super base count (no goal), this month's names, full roster below
   function renderLic(){
-    navRender("l");var k=dv.l,D=[k],W=weekDays(k),M=monthDays(k),mon=MON[parse(k).getUTCMonth()];
-    var lab=k===today?"Today":k===shift(today,-1)?"Yesterday":"Day";
-    function cell(n,t,blue){if(!t){var c=n>0?(blue?"#6cc3f5":"#F5C451"):"#323b42";return '<div class="rc">'+ring(n>0?1:0,c,36,4,'<b>'+n+'</b>')+'<div class="rt"><small>no goal</small></div></div>';}
-      var f=n/t;return '<div class="rc">'+ring(f,recCol(f),36,4,'<b>'+n+'</b>')+'<div class="rt">'+(f>=1?'✓ ':'')+'of '+t+'<small>'+Math.min(999,Math.round(f*100))+'%</small></div></div>';}
-    var b=[licIn("base",D).length,licIn("base",W).length,licIn("base",M).length],sb=[licIn("superbase",D).length,licIn("superbase",W).length,licIn("superbase",M).length];
-    $("licGrid").innerHTML='<div></div><div class="rh">'+lab+'</div><div class="rh">Week</div><div class="rh">'+mon+'</div>'+
-      '<div class="rn">Base shop<small>goal</small></div>'+cell(b[0],0)+cell(b[1],LIC.w)+cell(b[2],LIC.m)+
-      '<div class="rn" style="color:#6cc3f5">Super base<small>Sunchandan</small></div>'+cell(sb[0],0,1)+cell(sb[1],0,1)+cell(sb[2],0,1);
-    [].forEach.call(document.querySelectorAll("#lSeg button"),function(x){x.classList.toggle("on",x.dataset.r===lRange);});
-    var days=lRange==="D"?D:lRange==="W"?W:M,per=lRange==="D"?forTxt(k):lRange==="W"?"week of "+pretty(W[0]):mon+" "+k.slice(0,4);
-    function pan(team,cls,title){var a=licIn(team,days).sort(function(x,y){return x.date<y.date?-1:x.date>y.date?1:0;});
-      return '<div class="nrw '+cls+'"><b>'+title+'</b><span class="pc">'+a.length+'</span><span class="nls'+(a.length?'':' e')+'">'+(a.length?a.map(function(e){return esc(e.name);}).join(", "):"None")+'</span></div>';
-      return '<div class="pan '+cls+'"><div class="ph"><div><b>'+title+'</b><small>'+esc(per)+'</small></div><span class="pc">'+a.length+'</span></div>'+
-        (a.length?a.map(function(e){return '<div class="nl">'+esc(e.name)+(lRange!=="D"||e.source||e.note?'<small>'+esc([lRange!=="D"?pretty(e.date):"",e.source,e.note].filter(Boolean).join(" · "))+'</small>':'')+'</div>';}).join(""):'<div class="empty">No new licences</div>')+'</div>';}
-    $("nPer").textContent=per;$("licSplit").innerHTML=pan("base","base","Base shop")+pan("superbase","sb","Super base");
+    var k=today,M=monthDays(k),mi=parse(k).getUTCMonth(),monN=MONL[mi]+" "+k.slice(0,4),left=dayDiff(k,M[M.length-1]);
+    var bl=licIn("base",M),sl=licIn("superbase",M),n=bl.length,f=n/LIC.m,pct=Math.round(f*100),togo=Math.max(0,LIC.m-n);
+    $("lMon").textContent=monN;
+    var sub=n>=LIC.m?"Goal hit for "+MONL[mi]+(n>LIC.m?" (+"+(n-LIC.m)+")":"")+" 👍":togo+" to go · "+left+" day"+(left===1?"":"s")+" left";
+    $("licStats").innerHTML='<div class="lgb">'+ring(f,recCol(f),92,8,'<b>'+n+'</b><i>of '+LIC.m+'</i>')+
+        '<div class="lgt"><div class="tg">Base shop · goal '+LIC.m+'</div><div class="big">'+n+'<small>new licence'+(n===1?'':'s')+'</small></div><span class="pct'+(f>=1?' ok':'')+'">'+(f>=1?'✓ ':'')+Math.min(999,pct)+'%</span><div class="sub">'+esc(sub)+'</div></div></div>'+
+      '<div class="lgs">'+ring(sl.length>0?1:0,"#6cc3f5",64,6,'<b>'+sl.length+'</b>')+
+        '<div class="lgt"><div class="tg">Super base</div><div class="big">'+sl.length+'<small>new licence'+(sl.length===1?'':'s')+'</small></div><div class="sub">Sunchandan\'s team · no goal</div></div></div>';
+    $("nPer").textContent=monN;
+    function pan(a,cls,title){a=a.slice().sort(function(x,y){return x.date<y.date?-1:x.date>y.date?1:String(x.name).localeCompare(String(y.name));});
+      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+a.length+'</span></div>'+
+        (a.length?a.map(function(e){return '<div class="lnr"><span>'+esc(e.name)+'</span><small>'+esc(pretty(e.date).replace(/^\w+, /,""))+'</small></div>';}).join(""):'<div class="none">None yet</div>')+'</div>';}
+    $("licSplit").innerHTML=pan(bl,"base","Base shop")+pan(sl,"sb","Super base");
     renderRoster();
   }
   // ---- roster of ALL licensed agents (bs-v1:licensed, filled by the bot from MyWFG) ----
@@ -591,18 +614,16 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
     var mo=/^\d{4}-\d{2}$/.test(L.month||"")?L.month:"";
     $("rMeta").textContent=(mo?MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4):"")+(L.updated?" · upd "+pretty(L.updated).replace(/^\w+, /,""):"");
-    [].forEach.call(document.querySelectorAll("#rSeg button"),function(x){x.classList.toggle("on",x.dataset.r===rTeam);});
     function pnl(team,cls,title){var rows=(Array.isArray(L[team])?L[team]:[]).slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
       var tm=0,t12=0;rows.forEach(function(r){if(!nb(r.cf_month))tm+=+r.cf_month;if(!nb(r.cf_12))t12+=+r.cf_12;});
       var cols='<colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>';
-      return '<div class="pan '+cls+(team!==rTeam?' off':'')+'"><table class="rt2">'+cols+'<thead><tr><th><b class="tl">'+title+'</b><span class="pc">'+rows.length+'</span></th><th>WFG code</th><th>'+(mo?"CF "+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(2,4):"CF month")+'</th><th>CF 12 mo ▾</th></tr></thead></table>'+
-        '<div class="rb">'+(rows.length?'<table class="rt2">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td><td>'+(nb(r.cf_month)?'—':money(+r.cf_month))+'</td><td>'+(nb(r.cf_12)?'—':money(+r.cf_12))+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">Waiting for MyWFG data</div>')+'</div>'+
+      return '<div class="pan '+cls+'"><table class="rt2">'+cols+'<thead><tr><th><b class="tl">'+title+'</b><span class="pc">'+rows.length+'</span></th><th>WFG code</th><th>'+(mo?"CF "+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(2,4):"CF month")+'</th><th>CF 12 mo ▾</th></tr></thead></table>'+
+        '<div class="rb">'+(rows.length?'<table class="rt2">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td><td>'+(nb(r.cf_month)?'—':money(+r.cf_month))+'</td><td>'+(nb(r.cf_12)?'—':money(+r.cf_12))+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
         '<table class="rt2">'+cols+'<tbody><tr class="rtot"><td>Total ('+rows.length+')</td><td></td><td>'+money(tm)+'</td><td>'+money(t12)+'</td></tr></tbody></table></div>';}
     $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");
-    fitRoster();
+    $("rNote").textContent="From MyWFG, updated by your bot. Sorted by 12-month cash flow.";
   }
-  // keep the page one screen: the roster body scrolls inside its panel
-  function fitRoster(){fitBoxes("p-lic","#roster .rb");}
+  // v10: the Licences tab scrolls like a normal page (full roster), so no fitBoxes here; other tabs still fit one screen
   function fitBoxes(pg,sel){var b=[].slice.call(document.querySelectorAll("#"+pg+" "+sel)).filter(function(x){return x.offsetParent;});if(!b.length||!$(pg).classList.contains("on"))return;
     b.forEach(function(x){x.style.maxHeight="none";});
     var se=document.scrollingElement||document.documentElement,z=parseFloat(getComputedStyle(document.querySelector(".wrap")).zoom)||1;
@@ -611,10 +632,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       var hs=b.map(function(x){return x.offsetHeight;}),h=Math.max.apply(null,hs);if(h<=84)break;
       var lo=hs.filter(function(v){return v<h-1;}),h2=lo.length?Math.max.apply(null,lo):0,grp=b.filter(function(x,k){return hs[k]>=h-1;});
       var tg=Math.max(84,h2,Math.floor(h-over/z/(stk?grp.length:1))-1);grp.forEach(function(x){x.style.maxHeight=tg+"px";});}}
-  addEventListener("resize",function(){clearTimeout(fitRoster.t);fitRoster.t=setTimeout(function(){fitRoster();fitBoxes("p-md",".mdb");fitBoxes("p-cert","#certList");},120);});
-  $("rSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;rTeam=x.dataset.r;renderRoster();});
-  $("lSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;lRange=x.dataset.r;renderLic();});
-  navBind("l",renderLic);
+  addEventListener("resize",function(){clearTimeout(fitBoxes.t);fitBoxes.t=setTimeout(function(){fitBoxes("p-md",".mdb");fitBoxes("p-cert","#certList");},120);});
   // ---------- tab 4: MDs (read-only table from bs-v1:mdstats; the bot fills it from MyWFG) ----------
   function legs(){var l=getJ("legs",null);return l&&typeof l==="object"?l:{target:3,smd:[]};}
   function renderMd(){
@@ -742,7 +760,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // Bin format: {"_rev":n, "bs-v1:KEY":{"v":"<JSON string>","t":editTimeMs} | {"t":ms,"d":1} (deleted)}. localStorage stays the working copy.
   // No compare-and-swap on npoint, so each write is: read -> merge -> write -> wait 1.5 s -> re-read; if someone else wrote meanwhile, merge again (max 4 rounds).
   // Device bookkeeping (never synced): bs-sync:sh (hash of last synced value per key), bs-sync:mt (local edit time per key), bs-sync:rev, bs-sync:at.
-  var SY={busy:false,again:false,timer:null,err:"",stale:0};
+  var SY={busy:false,again:false,timer:null,err:"",stale:0,loaded:false,retry:null,fails:0};
   function syGet(k,d){try{var v=JSON.parse(localStorage.getItem("bs-sync:"+k));return v===null||v===undefined?d:v;}catch(e){return d;}}
   function sySet(k,v){try{if(v===null)localStorage.removeItem("bs-sync:"+k);else localStorage.setItem("bs-sync:"+k,JSON.stringify(v));}catch(e){}}
   function syHash(str){var h=5381;for(var i=0;i<str.length;i++)h=((h<<5)+h+str.charCodeAt(i))|0;return (h>>>0).toString(36)+"."+str.length;}
@@ -750,10 +768,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function syncTouch(fk){if(!syOn())return;var mt=syGet("mt",{});mt[fk]=Date.now();sySet("mt",mt);clearTimeout(SY.timer);SY.timer=setTimeout(updThenSync,2000);}
   function syParse(x){try{return JSON.parse(x);}catch(e){return null;}}
   function canon(o){if(Array.isArray(o))return "["+o.map(canon).join(",")+"]";if(o&&typeof o==="object")return "{"+Object.keys(o).sort().map(function(k){return JSON.stringify(k)+":"+canon(o[k]);}).join(",")+"}";return JSON.stringify(o);}
-  function syHttp(opt){var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort();},15000);
-    return fetch(SYNC_CONFIG.url+(opt?"":"?_="+Date.now()),{method:opt?"POST":"GET",headers:opt?{"Content-Type":"application/json"}:{},body:opt?opt.body:undefined,cache:"no-store",signal:ctl?ctl.signal:undefined})
-      .then(function(r){clearTimeout(to);return r.text().then(function(t){if(!r.ok){var er=new Error("HTTP "+r.status);er.status=r.status;throw er;}return syParse(t);});},function(e){clearTimeout(to);throw e;});}
-  function syRead(){return syHttp().then(function(d){return (d&&typeof d==="object"&&!Array.isArray(d))?d:{};});}
+  // v10: npoint can stall for a minute or more. Long timeouts (GET 45 s, POST 90 s), and reads retry 3x, alternating
+  // with npoint's www mirror (same document, wrapped in "contents"), before we call it offline.
+  var SY_MIRROR=SYNC_CONFIG.url.replace("://api.npoint.io/","://www.npoint.io/documents/");
+  function syHttp(opt,alt){var ms=opt?90000:45000,ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort();},ms);
+    var u=opt?SYNC_CONFIG.url:(alt?SY_MIRROR:SYNC_CONFIG.url)+"?_="+Date.now();
+    return fetch(u,{method:opt?"POST":"GET",headers:opt?{"Content-Type":"application/json"}:(alt?{"Accept":"application/json"}:{}),body:opt?opt.body:undefined,cache:"no-store",signal:ctl?ctl.signal:undefined})
+      .then(function(r){clearTimeout(to);return r.text().then(function(t){if(!r.ok){var er=new Error("HTTP "+r.status);er.status=r.status;throw er;}var d=syParse(t);if(alt)d=d&&d.contents;if(!opt&&(!d||typeof d!=="object"||Array.isArray(d)))throw new Error("bad body");return d;});},function(e){clearTimeout(to);throw e;});}
+  function syRead(){var n=0;function go(){return syHttp(null,n%2===1).catch(function(e){n++;if(n>=3)throw e;return syWait(n===1?1500:4000).then(go);});}return go();}
   function syWait(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function syLocalKeys(){var a=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf(PREFIX)===0)a.push(k);}return a;}
   // merge one key when BOTH sides changed: day records merge field by field (newer side wins per field); lists merge by id; else newer wins
@@ -784,6 +806,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
@@ -796,18 +819,20 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(canon(D2)===canon(N)||n>=4){done();return;}
         return round(n+1,D2);});
     }
-    return syRead().then(function(D){return round(1,D);}).then(function(){SY.err="";sySet("at",new Date().toISOString());},function(e){
-        if(e&&e.stale){setTimeout(syncNow,4000);return;}SY.err="offline";})
-      .then(function(){SY.busy=false;syUI();if(changed)syRerender();if(SY.again){SY.again=false;return syncNow();}});
+    return syRead().then(function(D){return round(1,D);}).then(function(){SY.err="";SY.fails=0;sySet("at",new Date().toISOString());},function(e){
+        if(e&&e.stale){setTimeout(syncNow,4000);return;}SY.err=SY.loaded?"upload":"offline";SY.fails++;
+        clearTimeout(SY.retry);SY.retry=setTimeout(function(){if(!document.hidden)syncNow();},Math.min(60000,10000*SY.fails));})
+      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&tab==="lic"))syRerender();if(SY.again){SY.again=false;return syncNow();}});
   }
   function syRerender(){var ae=document.activeElement;if(ae&&(ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT"))return;show(tab);}
   function ago(iso){var s=Math.round((Date.now()-new Date(iso))/1000);return s<60?"just now":s<3600?Math.round(s/60)+" min ago":Math.round(s/3600)+" h ago";}
-  function syUI(){var at=syGet("at",null);$("appVer").textContent="App v"+APP_VERSION+(SY.err?" · ☁️ offline, saved on this device":at?" · ☁️ synced "+ago(at):" · ☁️ syncing…");}
+  function syUI(){var at=syGet("at",null);$("appVer").textContent="App v"+APP_VERSION+(SY.err==="upload"?" · ☁️ loaded, upload retrying":SY.err?" · ☁️ offline, showing saved data · retrying":at?" · ☁️ synced "+ago(at):" · ☁️ syncing…");}
   $("syNow").addEventListener("click",function(){$("appVer").textContent="Syncing…";syncNow();});
 
   // ---- self-update: version.json vs APP_VERSION; reload once per new version (sessionStorage guard). Never touches localStorage. ----
   function checkUpdate(){
-    try{return fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(j){
+    try{var vc=window.AbortController?new AbortController():null;setTimeout(function(){if(vc)vc.abort();},8000);
+      return fetch("version.json?t="+Date.now(),{cache:"no-store",signal:vc?vc.signal:undefined}).then(function(r){return r.ok?r.json():null;}).then(function(j){
       if(!j||typeof j.v!=="string"||!j.v||j.v===APP_VERSION)return false;
       var g="bs-upd:"+j.v;try{if(sessionStorage.getItem(g))return false;sessionStorage.setItem(g,"1");}catch(e){return false;}
       location.replace(location.pathname+"?v="+encodeURIComponent(j.v)+location.hash);return true;
