@@ -78,6 +78,13 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-16 (Nov 2, 2026):**
+  - Licences roster fixed. The licensed list was built from the cash flow reports, so licensed agents with $0 cash flow were missing. The roster source is now the MyWFG **Downline Status** report: Team = Super Team (Base - 6th), Type = Life and/or Securities Registered, all title levels, as of 11/2/2026. That gives 29 people; Harpreet (1298FC, SMD, report owner, not listed in his own downline) is added from the cash flow / recruits reports, so 30 in total: base 22, super base 8.
+  - Removed versus before (not Life/Securities registered in Downline Status): Pardeep Singh (262SPC, MD), Amit Hooda, Satnam Dass Jangra, Jasmine Malhotra. Added: Varsha Gunda, Athul Babu Kochath Babu, Tisha Patel, Rajveer Randhawa, Arpit Shah, Sumit Sumit, Simran Kaur Bhatia.
+  - Each person gets `rec_month` (Custom Report Personal Recruits, Oct 2026), `rec_12` (Personal Recruits, Nov 2025–Oct 2026), `cf_month` (R09) and `cf_12` (R08). These reports list only non-zero people, so anyone not listed gets 0.
+  - Base vs super base comes from the Upline SMD column (recruits 12 mo, then R08/R09). If there is none, the Platform Fee report "Team: MD Base" (1298FC) puts them in base (Varsha, Athul, Rajveer, Sumit). Unconfirmed (no upline in any file, put in base): Tisha Patel 32BSZC and Arpit Shah 369BDC. Both are in the Super Team platform fee list but not the MD Base list, so they may be Sunchandan's.
+  - Licences tab "All licensed agents" tables: Name, Code, Rec Oct, Rec 12, CF Oct, CF 12 (sorted ▾), with totals. Compact on phone: names wrap, $10K+ shows as $37.3K. The 100 LICENSED TEAM header counts the new roster (30).
+  - Store: `bs-v1:licensed` replaced (rev 24 → 25). `bs-v1:mdstats` got `recruits_12` from the Personal Recruits Nov 2025–Oct 2026 report, 0 if not listed (rev 25 → 26). Every MD's Oct `recruits` matches the Oct 2026 Personal Recruits report.
 - **v2026.11.02-15 (Nov 2, 2026):**
   - MD Factory: both tables (My base MDs, Sunchandan's team) now show 4 numbers per MD with totals: Rec <month> (`recruits`), Rec 12 mo (`recruits_12`), CF <month> (`cashflow`), CF 12 mo (`cf_12`). Blank/null shows "—". Cash flow of $10K or more shows as e.g. $37.3K. Still one screen on phone and laptop, no inner scroll.
   - Store: `bs-v1:mdstats` rows got `cf_12` (copied from `bs-v1:licensed` by WFG code, = R08 Custom Report "Top 100 Total CashFlow in Associate's Entire Hierarchy" Nov 2025–Oct 2026) and `recruits_12: null` (no per-MD rolling-12 recruit count exists in the local exports). Write-merge rev 23 → 24, only this key changed.

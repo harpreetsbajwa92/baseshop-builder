@@ -302,6 +302,16 @@ button{cursor:pointer}
 .pan .mdt.m4 td{font-size:14px;padding:5px 3px}
 .pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
 .mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
+/* ===== v16: licensed roster, 6 columns ===== */
+.rt2.r6 col.c2{width:50px}.rt2.r6 col.c5{width:30px}.rt2.r6 col.c3{width:54px}.rt2.r6 col.c4{width:58px}
+.rt2.r6 th small{display:block;font-size:9.5px;letter-spacing:.5px;color:#6f7a82}
+.rt2.r6 td{font-size:12.5px;padding:5px 2px}
+.rt2.r6 th{padding:0 2px 4px}
+.rt2.r6 td:first-child{font-size:12.5px;white-space:normal;line-height:1.2}
+.rt2.r6 td.cd2{font-size:10.5px;letter-spacing:-.2px}
+.rt2.r6 td.na{color:#5d6973}
+#p-lic .roster .ph{margin-bottom:2px}
+@media (min-width:900px){.rt2.r6 col.c2{width:60px}.rt2.r6 col.c5{width:38px}.rt2.r6 col.c3{width:62px}.rt2.r6 col.c4{width:68px}.rt2.r6 td,.rt2.r6 td:first-child{font-size:13px}}
 /* ===== v14: daily LLQP report card (bs-v1:llqpreport) ===== */
 .lq{padding:10px 12px;border-color:rgba(245,196,81,.32)}
 .lqh{font-size:14px;font-weight:800;line-height:1.3;background:linear-gradient(180deg,#FFE7A3 0%,#F5C451 45%,#C98E12 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -515,7 +525,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-15";
+var APP_VERSION="2026.11.02-16";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -724,19 +734,24 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
     var mo=/^\d{4}-\d{2}$/.test(L.month||"")?L.month:"";
     $("rMeta").textContent=(mo?MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4):"")+(L.updated?" · upd "+pretty(L.updated).replace(/^\w+, /,""):"");
+    // v16: roster = MyWFG Downline Status (Life and/or Securities Registered); 4 numbers each: personal recruits month / rolling 12, cash flow month / rolling 12
+    var mS=mo?MONL[+mo.slice(5,7)-1].slice(0,3):"Mo";
+    function km(v){v=+v;var a=Math.abs(v),t=a>=10000?(a/1000).toFixed(1).replace(/\.0$/,"")+"K":Math.round(a).toLocaleString("en-US");return (v<0?"-$":"$")+t;}
+    var RC=[["rec_month",0],["rec_12",0],["cf_month",1],["cf_12",1]];
     function pnl(team,cls,title){var rows=(Array.isArray(L[team])?L[team]:[]).slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
-      var tm=0,t12=0;rows.forEach(function(r){if(!nb(r.cf_month))tm+=+r.cf_month;if(!nb(r.cf_12))t12+=+r.cf_12;});
-      var cols='<colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>';
-      return '<div class="pan '+cls+'"><table class="rt2">'+cols+'<thead><tr><th><b class="tl">'+title+'</b><span class="pc">'+rows.length+'</span></th><th>WFG code</th><th>'+(mo?"CF "+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(2,4):"CF month")+'</th><th>CF 12 mo ▾</th></tr></thead></table>'+
-        '<div class="rb">'+(rows.length?'<table class="rt2">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td><td>'+(nb(r.cf_month)?'—':money(+r.cf_month))+'</td><td>'+(nb(r.cf_12)?'—':money(+r.cf_12))+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
-        '<table class="rt2">'+cols+'<tbody><tr class="rtot"><td>Total ('+rows.length+')</td><td></td><td>'+money(tm)+'</td><td>'+money(t12)+'</td></tr></tbody></table></div>';}
+      var tot=[0,0,0,0],has=[0,0,0,0];rows.forEach(function(r){RC.forEach(function(c,i){if(!nb(r[c[0]])){tot[i]+=+r[c[0]];has[i]=1;}});});
+      function cell(v,m){return nb(v)?'<td class="na">—</td>':'<td>'+(m?km(v):Math.round(+v))+'</td>';}
+      var cols='<colgroup><col class="c1"><col class="c2"><col class="c5"><col class="c5"><col class="c3"><col class="c4"></colgroup>';
+      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><table class="rt2 r6">'+cols+'<thead><tr><th>Name</th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th></tr></thead></table>'+
+        '<div class="rb">'+(rows.length?'<table class="rt2 r6">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'</tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
+        '<table class="rt2 r6">'+cols+'<tbody><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'</tr></tbody></table></div>';}
     $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");
     // v12: Licences tab goal header = 100 licensed team (base + super base roster count)
     var nb0=Array.isArray(L.base)?L.base.length:0,ns0=Array.isArray(L.superbase)?L.superbase.length:0,tot=nb0+ns0,G=100,gf=Math.min(1,tot/G);
     $("licGoal").innerHTML='<div class="goal"><span class="ge">GOAL</span><b>100 LICENSED TEAM</b></div>'+
       '<div class="lghr"><div class="lghn"><b>'+tot+'</b><span>of '+G+'<br><em>'+(tot>=G?'goal hit ✓':(G-tot)+' to go')+'</em></span></div>'+
       '<div class="lghb"><div class="lghbar"><i style="width:'+(gf*100).toFixed(1)+'%"></i></div><div class="lghs"><span class="g">Base shop '+nb0+'</span><span class="b">Super base '+ns0+'</span><span>'+Math.round(tot/G*100)+'%</span></div></div></div>';
-    $("rNote").textContent="From MyWFG, updated by your bot. Sorted by 12-month cash flow.";
+    $("rNote").textContent="Licensed = MyWFG Downline Status (Life and/or Securities). Rec = personal recruits, CF = cash flow. Sorted by 12-month cash flow.";
   }
   // v10: the Licences tab scrolls like a normal page (full roster), so no fitBoxes here; other tabs still fit one screen
   function fitBoxes(pg,sel){var b=[].slice.call(document.querySelectorAll("#"+pg+" "+sel)).filter(function(x){return x.offsetParent;});if(!b.length||!$(pg).classList.contains("on"))return;
