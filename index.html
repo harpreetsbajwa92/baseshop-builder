@@ -573,6 +573,27 @@ button{cursor:pointer}
 #p-lb .lbsl .n{font-family:var(--fn);font-size:11.5px;letter-spacing:0;color:#14181b;background:var(--gold);border-radius:9px;padding:1px 7px;font-weight:800}
 #p-lb .lbsl small{margin-left:auto;font-family:var(--fn);font-size:11px;letter-spacing:0;color:#7f8a92;font-weight:600;text-transform:none}
 #p-lb .lbx{padding:0;overflow:hidden}
+/* v30 Recruits tab */
+#p-rec .rct{border-collapse:separate;border-spacing:0;width:100%;min-width:430px;font-size:13px}
+#p-rec .rct th{background:#1d2328;font-family:var(--fc);font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:#8c979f;text-align:left;padding:7px 8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+#p-rec .rct td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top;white-space:nowrap;color:#e6ebee}
+#p-rec .rct tr:first-child td{border-top:0}
+#p-rec .rct th:first-child,#p-rec .rct td:first-child{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:1px 0 0 var(--line);min-width:128px;max-width:150px;white-space:normal}
+#p-rec .rct th:first-child{background:#1d2328;z-index:2}
+#p-rec .rct td:first-child b{display:block;font-size:13px;line-height:1.2;color:#fff}
+#p-rec .rct td small{display:block;font-size:10.5px;font-weight:600;color:#8c979f;margin-top:2px;line-height:1.25;white-space:normal}
+#p-rec .rct td small.w{color:#F5A623}
+#p-rec .rct td.c{font-family:var(--fn);font-weight:700;letter-spacing:.3px}
+#p-rec .rct td.d{font-family:var(--fn);font-weight:700}
+#p-rec .rct .na{color:#56616a;font-weight:600}
+#p-rec .rct .rc{color:#9aa5ad}
+#p-rec .rcsl{font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin:14px 4px 6px;display:flex;align-items:baseline;gap:8px;color:#cfd6db}
+#p-rec .rcsl .n{font-family:var(--fn);font-size:11.5px;letter-spacing:0;color:#14181b;background:var(--gold);border-radius:9px;padding:1px 7px;font-weight:800}
+#p-rec .rcsl small{margin-left:auto;font-family:var(--fn);font-size:11px;letter-spacing:0;color:#7f8a92;font-weight:600;text-transform:none}
+#p-rec .rcx{padding:0;overflow:hidden}
+#p-rec .rcno{padding:14px;color:#8c979f;font-size:13px}
+#p-rec .rcnotes{font-size:12px;color:#aab4bb;line-height:1.45}
+#p-rec .rcnotes li{margin:3px 0 0 16px}
 #p-lb .lbno{color:#7f8a92;font-size:13px;font-weight:600;padding:12px}
 #p-lb .lbsn{font-size:11.5px;color:#8c979f;padding:6px 12px 9px;border-top:1px solid var(--line);line-height:1.35}
 #p-lb .lbsn.a{color:#c9a25a}
@@ -665,6 +686,13 @@ button{cursor:pointer}
     <div class="note" id="mdUpd"></div>
   </section>
 
+  <!-- TAB 4b (v30): RECRUITS (bs-v1:recruits, built by build_recruits.py from DBI Hub + MyWFG recruit drill-down). Read-only; append-only list; Base and Super base sections, newest recruit date first. -->
+  <section class="page" id="p-rec">
+    <div class="card mdf"><div class="mdft">Recruits</div><div class="mdfs" id="rcMeta"></div></div>
+    <div id="rcSecs"></div>
+    <div class="card rcnotes" id="rcNotes"></div>
+  </section>
+
   <!-- TAB 5b (v29): LEADERS BULLETIN (bs-v1:leaders, built by build_lb.py from the MyWFG Leaders Bulletin top 100 exports). Read-only; scrolls like a normal page; tables scroll sideways with a sticky name column. -->
   <section class="page" id="p-lb">
     <div class="card mdf"><div class="mdft">Leaders Bulletin</div><div class="mdfs" id="lbMeta"></div></div>
@@ -704,6 +732,7 @@ button{cursor:pointer}
   <button data-t="gold"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Gold</button>
   <button data-t="cert"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
   <button data-t="up"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
+  <button data-t="rec"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
   <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Trends</button>
@@ -714,7 +743,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-29";
+var APP_VERSION="2026.11.03-30";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1239,11 +1268,30 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
     if(L.source)n+='<div style="margin-top:6px;color:#6f7a82">Source: '+esc(L.source)+'</div>';
     $("lbNotes").innerHTML=n;}
+  function rcDate(d){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||"");return m?MON[+m[2]-1]+" "+(+m[3])+", "+m[1]:"";}
+  function renderRec(){
+    var R=getJ("recruits",null);
+    if(!R||typeof R!=="object"||!Array.isArray(R.base)||!Array.isArray(R.superbase)){$("rcMeta").textContent="Base and Super base";$("rcSecs").innerHTML='<div class="card"><div class="rcno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from DBI Hub and MyWFG.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("rcNotes").innerHTML="";return;}
+    $("rcMeta").textContent=["Base "+R.base.length,"Super base "+R.superbase.length,lqUpd(R)?lqUpd(R)+" ET":""].filter(Boolean).join(" · ");
+    var h="";[["base","Base","My Baseshop"],["superbase","Super base","Sunchandan Singh's baseshop"]].forEach(function(S){var L=R[S[0]];
+      h+='<div class="rcsl">'+S[1]+' <span class="n">'+L.length+'</span><small>'+esc(S[2])+'</small></div><div class="card rcx">';
+      if(!L.length){h+='<div class="rcno">No recruits yet.</div></div>';return;}
+      h+='<div class="tsc"><table class="rct"><thead><tr><th>Name</th><th>Code</th><th>Recruit date</th><th>Upline MD</th></tr></thead><tbody>';
+      L.forEach(function(e){var src=(e.sources||[]).join(" + "),aka=(e.aka||[]).length?"aka "+e.aka.join(", "):"";
+        var up=e.upline_md?esc(e.upline_md):e.recruiter?'<span class="rc">Recruiter: '+esc(e.recruiter)+'</span>':'<span class="na">—</span>';
+        h+='<tr><td><b>'+esc(e.name)+'</b>'+(aka?'<small>'+esc(aka)+'</small>':'')+'<small'+(src==="MyWFG"?' class="w"':'')+'>'+esc(src==="MyWFG"?"MyWFG only (not on DBI)":src)+'</small></td>'
+          +'<td class="c">'+(e.code?esc(e.code):'<span class="na">—</span>')+'</td><td class="d">'+(e.date?esc(rcDate(e.date)):'<span class="na">—</span>')+'</td><td>'+up+'</td></tr>';});
+      h+='</tbody></table></div></div>';});
+    $("rcSecs").innerHTML=h;
+    var n='<b>How to read:</b> one row per person (duplicates merged by WFG code, then by name). Newest recruit date first. Upline MD comes from the recruiter in MyWFG; when the recruiter is not an MD, the recruiter is shown instead. <b>—</b> = not known yet; never guessed. People are never removed; later runs only add people or fill blanks.';
+    var lst=(R.notes||[]).map(function(x){return "<li>"+esc(x)+"</li>";});
+    if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
+    $("rcNotes").innerHTML=n;}
   function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
     if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
-  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,lb:renderLb,gt:function(){}};
+  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,lb:renderLb,gt:function(){}};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb";renderHeader();TABS[t]();navReveal();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec";renderHeader();TABS[t]();navReveal();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -1307,7 +1355,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
