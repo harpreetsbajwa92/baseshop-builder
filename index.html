@@ -508,10 +508,10 @@ button{cursor:pointer}
     <div class="card lq" id="lqCard"></div>
     </div></div>
     <!-- v18: every ACTIVE Oliver's recruit (bs-v1:llqpreport practice / exams / highlights / actions) -->
-    <div class="slbl"><span>Practice tests <small id="lqPn"></small></span><small>date order · green ≥60</small></div>
-    <div class="card lqx"><div class="tsc" id="lqPrac"></div></div>
     <div class="slbl"><span>Certification exams <small id="lqXn"></small></span><small>✓ pass · red fail</small></div>
     <div class="card lqx"><div class="tsc" id="lqExam"></div></div>
+    <div class="slbl"><span>Practice tests <small id="lqPn"></small></span><small>date order · green ≥60</small></div>
+    <div class="card lqx"><div class="tsc" id="lqPrac"></div></div>
     <div class="slbl"><span>Highlights &amp; calls to action</span></div>
     <div class="card lq" id="lqAct"></div>
   </section>
@@ -566,7 +566,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-18";
+var APP_VERSION="2026.11.02-19";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
