@@ -246,7 +246,7 @@ button{cursor:pointer}
 .dt .tv i{font-style:normal;font-size:10.5px;color:#8c979f;font-weight:600;white-space:nowrap}
 .foot{margin:8px 0 0;font-size:11px}
 .foot button{font-size:11px;padding:3px 10px}
-.tabs button{min-height:52px;padding:6px 0 7px;gap:2px}
+.tabs button{min-height:52px;padding:6px 0 7px;gap:2px;font-size:10.5px;letter-spacing:-.1px;white-space:nowrap}
 .tabs button .ic{width:23px;height:23px}
 .tvc{max-height:44vh}
 /* laptop: wider, meetings side by side */
@@ -600,6 +600,12 @@ button{cursor:pointer}
     <div class="note" id="mdUpd"></div>
   </section>
 
+  <!-- TAB 6 (v27): GET TOGETHER. Placeholder only (no store key yet); Harpreet builds front liners here: System Builder MD Club 3-3-30, contests, events. -->
+  <section class="page" id="p-gt">
+    <div class="card mdf"><div class="mdft">Get Together</div><div class="mdfs">Building front liners, coming soon</div></div>
+    <div class="card"><div class="wait">System Builder MD Club 3-3-30, contests and events will live here. Content coming soon.</div></div>
+  </section>
+
   <!-- TAB 5: TRENDS -->
   <section class="page" id="p-trends">
     <div id="tDash"></div>
@@ -625,14 +631,15 @@ button{cursor:pointer}
   <button data-t="cert"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
   <button data-t="up"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
-  <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MD Factory</button>
+  <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
   <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Trends</button>
+  <button data-t="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.8"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c.4-3.3 2.4-5.3 5-5.3s4.6 2 5 5.3M1.8 18.5c.3-2.3 1.5-3.7 3.2-3.7 1 0 1.8.4 2.4 1.1M22.2 18.5c-.3-2.3-1.5-3.7-3.2-3.7-1 0-1.8.4-2.4 1.1"/></svg>Together</button>
 </nav>
 
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-26";
+var APP_VERSION="2026.11.03-27";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1103,9 +1110,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("upHl").innerHTML='<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>';
     $("upNote").textContent="From DBI Hub (Business Tracker → Licensing). Grey italic code = DBI Hub only, not found on MyWFG. Anyone licensed on MyWFG drops off automatically"+(S.ok?".":" (licensed list still loading).");
   }
-  var tab="meet",TABS={meet:renderMeet,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV};
+  var tab="meet",TABS={meet:renderMeet,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,gt:function(){}};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up";renderHeader();TABS[t]();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt";renderHeader();TABS[t]();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
