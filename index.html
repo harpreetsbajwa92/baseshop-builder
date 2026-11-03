@@ -489,6 +489,41 @@ button{cursor:pointer}
   .roster .pan.off{display:block}
   .lnm{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
 }
+/* ===== v24: Upcoming Licences tab (bs-v1:upcoming; page scrolls, no inner scroll boxes; tables scroll sideways with a sticky name column) ===== */
+#p-up .mdf{margin-bottom:2px}
+#p-up .upg{font-family:var(--fc);font-size:12.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);margin:8px 4px 4px;display:flex;align-items:center;gap:8px}
+#p-up .upg.sb{color:#6cc3f5}
+#p-up .upg .pc{font-family:var(--fn);font-size:15px;color:#fff;letter-spacing:0}
+#p-up .upg small{color:#7f8a92;font-size:11px;letter-spacing:.8px;margin-left:auto}
+#p-up .lqx.base{border-color:rgba(245,196,81,.28)}
+#p-up .lqx.sb{border-color:rgba(108,195,245,.28)}
+.upt{min-width:0}
+.upt td:first-child,.upt th:first-child{min-width:112px;max-width:150px}
+.upt td,.upt th{padding-left:7px;padding-right:7px}
+.upt .chip.blk{display:table;margin-top:3px}
+@media (max-width:599px){.upt .chip.a{white-space:normal;max-width:84px;line-height:1.2;padding:2px 6px}.upt td:first-child,.upt th:first-child{min-width:100px}.upt td.cdv{font-size:11.5px}}
+.upt td.md2{white-space:normal;min-width:84px}
+.upt .md2 span{display:block;margin-top:1px}
+@media (min-width:900px){.upt .chip.blk{display:inline-block;margin-top:0}.upt .md2 span{display:inline}}
+.upt td{vertical-align:middle}
+.upt td.cdv{font-family:var(--fn);font-size:12.5px;letter-spacing:.2px;color:#cfd6db}
+.upt td.cdv.dbi{color:#8c979f;font-style:italic}
+.upt td.cdv.na{color:#5d6973;font-style:normal}
+.upt .dte{font-family:var(--fn);font-size:13px;margin-right:6px}
+.upt .chip{display:inline-block;border-radius:7px;padding:1px 7px;font-size:11.5px;font-weight:800;white-space:nowrap}
+.upt .chip.g{background:rgba(22,236,6,.14);color:#16EC06}
+.upt .chip.a{background:rgba(245,166,35,.16);color:#F5A623}
+.upt .chip.n{background:#323b42;color:#9aa5ad}
+.upt .md2 b{font-family:var(--fn);font-size:14px;margin-right:4px}
+.upt .md2 b.g{color:#16EC06}.upt .md2 b.z{color:#6f7a82}
+.upt .md2 span{font-size:12px;font-weight:600;color:#cfd6db}
+.upt .yn{font-family:var(--fn);font-size:14px;text-align:center}
+.upt th.c{text-align:center}
+.upt .yn.y{color:#16EC06}.upt .yn.n{color:#6f7a82}
+.upt td small.wn{font-size:10px;color:#7f8a92}
+#upHl .lqhl{margin:2px 0 2px 18px}
+#p-up .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 12px}
+@media (min-width:900px){#p-up{max-width:760px;margin:0 auto}}
 </style>
 </head>
 <body>
@@ -530,6 +565,18 @@ button{cursor:pointer}
     <div class="card lqx"><div class="tsc" id="lqPrac"></div></div>
     <div class="slbl"><span>Highlights &amp; calls to action</span></div>
     <div class="card lq" id="lqAct"></div>
+  </section>
+
+  <!-- TAB 2b (v24): UPCOMING LICENCES (bs-v1:upcoming, filled by the bot from DBI Hub; filtered against bs-v1:licensed at render time). Scrolls like a normal page. -->
+  <section class="page" id="p-up">
+    <div class="card mdf"><div class="mdft">Upcoming Licences</div><div class="mdfs" id="upMeta"></div></div>
+    <div class="slbl"><span>Government exams <small id="upGn"></small></span><small>provincial exam phase</small></div>
+    <div id="upGov"></div>
+    <div class="slbl"><span>Licence in registration <small id="upRn"></small></span><small>exam passed · not on MyWFG yet</small></div>
+    <div id="upReg"></div>
+    <div class="slbl"><span>Highlights</span></div>
+    <div class="card lq" id="upHl"></div>
+    <div class="note" id="upNote"></div>
   </section>
 
   <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
@@ -574,6 +621,7 @@ button{cursor:pointer}
 <nav class="tabs" id="tabs">
   <button data-t="meet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
   <button data-t="cert"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
+  <button data-t="up"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MD Factory</button>
   <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Trends</button>
@@ -582,7 +630,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-23";
+var APP_VERSION="2026.11.02-24";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -990,9 +1038,60 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("tvNext").addEventListener("click",function(){if(tvOff>0)tvOff--;renderTV();});
 
   // ---------- tabs ----------
-  var tab="meet",TABS={meet:renderMeet,cert:renderCert,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV};
+  // ---------- v24: Upcoming Licences (bs-v1:upcoming from DBI Hub; anyone on bs-v1:licensed is hidden at render time) ----------
+  function upNorm(n){return String(n||"").toLowerCase().replace(/\./g," ").replace(/[^a-z ]/g,"").replace(/\s+/g," ").trim();}
+  function upLicSet(){var L=getJ("licensed",null),c={},n={};if(L&&typeof L==="object")["base","superbase"].forEach(function(t){(Array.isArray(L[t])?L[t]:[]).forEach(function(p){if(p&&p.code)c[String(p.code).toUpperCase()]=1;if(p&&p.name)n[upNorm(p.name)]=1;});});return {c:c,n:n,ok:!!(L&&typeof L==="object")};}
+  function upIsLic(p,S){var c=p.code?String(p.code).toUpperCase():"";if(c&&S.c[c])return true;return !!S.n[upNorm(p.name)]||(p.wfg_name&&!!S.n[upNorm(p.wfg_name)]);}   // code first, then name
+  function upDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d||"")&&+d.slice(0,4)>=2020?d:null;}
+  function upDue(p){var d=upDate(p.exam_date);if(!d)return {k:2,n:null};var n=dayDiff(today,d);return n>=0?{k:0,n:n}:{k:1,n:n};}
+  function upShort(d){var x=parse(d);return MON[x.getUTCMonth()]+" "+x.getUTCDate()+(d.slice(0,4)!==today.slice(0,4)?", "+d.slice(0,4):"");}
+  var UPM=[["ethics","Ethics"],["life","Life"],["as","A&S"],["seg","Seg"]];
+  function upMods(p){var m=p.mods&&typeof p.mods==="object"?p.mods:{},a=UPM.filter(function(x){return m[x[0]];}).map(function(x){return x[1];});return {n:a.length,t:a.join(", ")};}
+  function upFirst(n){var w=String(n||"").split(" ");return w[0].length<=3&&w[1]?w[0]+" "+w[1]:w[0];}
+  function renderUp(){
+    var U=getJ("upcoming",null),S=upLicSet();
+    if(!U||typeof U!=="object"){$("upMeta").textContent="Base shop + Sunchandan's team";var w='<div class="card"><div class="wait">'+(SY.loaded?"No data yet. Your bot fills this from DBI Hub.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("upGov").innerHTML=w;$("upReg").innerHTML="";$("upHl").innerHTML="";$("upGn").textContent="";$("upRn").textContent="";$("upNote").textContent="";return;}
+    $("upMeta").textContent=(lqUpd(U)?lqUpd(U)+" ET":"")+" · Base + Sunchandan's team";
+    function A(x){return Array.isArray(x)?x:[];}
+    var gov=A(U.gov).filter(function(p){return p&&!upIsLic(p,S);}),reg=A(U.reg).filter(function(p){return p&&!upIsLic(p,S);});
+    function team(a,t){return a.filter(function(p){return (p.team==="superbase"?"superbase":"base")===t;});}
+    function nmCell(p){return '<td><div class="nm2">'+esc(p.name)+(p.wfg_name?'<small class="wn">MyWFG: '+esc(p.wfg_name)+'</small>':'')+'</div></td>';}
+    function cdCell(p){return p.code?'<td class="cdv'+(p.code_src==="MyWFG"?'':' dbi')+'" title="'+(p.code_src==="MyWFG"?'Confirmed on MyWFG':'From DBI Hub, not found in the MyWFG exports')+'">'+esc(p.code)+'</td>':'<td class="cdv na">—</td>';}
+    // Section 1: government exams. Upcoming (soonest first), then date passed (most recent first), then no date.
+    function govSort(a){return a.slice().sort(function(x,y){var a1=upDue(x),b1=upDue(y);if(a1.k!==b1.k)return a1.k-b1.k;if(a1.k===0)return a1.n-b1.n;if(a1.k===1)return b1.n-a1.n;return String(x.name).localeCompare(String(y.name));});}
+    function govRow(p){var d=upDue(p),dt=upDate(p.exam_date),c;
+      if(d.k===0)c='<span class="chip g'+(dt?' blk':'')+'">'+(d.n===0?"today":d.n===1?"tomorrow":"in "+d.n+" days")+'</span>';
+      else if(d.k===1)c='<span class="chip a blk">date passed, rebook?</span>';else c='<span class="chip n">no date</span>';
+      var m=upMods(p);
+      return '<tr>'+nmCell(p)+cdCell(p)+'<td>'+(dt?'<span class="dte">'+upShort(dt)+'</span>':'')+c+(p.exam_note?'<small>'+esc(p.exam_note)+'</small>':'')+'</td>'+
+        '<td class="md2"><b class="'+(m.n?'g':'z')+'">'+m.n+'/4</b><span>'+(m.n?esc(m.t):'none yet')+'</span></td></tr>';}
+    function regSort(a){return a.slice().sort(function(x,y){return (+!!y.licence_approved)-(+!!x.licence_approved)||(+!!y.gov_fee)-(+!!x.gov_fee)||String(x.name).localeCompare(String(y.name));});}
+    function yn(v){return '<td class="yn '+(v?'y':'n')+'">'+(v?'Y':'N')+'</td>';}
+    function regRow(p){var dt=upDate(p.exam_date);return '<tr>'+nmCell(p)+cdCell(p)+'<td>'+(dt?'<span class="dte">'+upShort(dt)+'</span>':'<span class="mut">—</span>')+'</td>'+yn(p.gov_fee)+yn(p.licence_approved)+'</tr>';}
+    function grp(a,t,title,head,row,srt,cls,none){var r=team(a,t);
+      return '<div class="upg'+(t==="superbase"?' sb':'')+'">'+title+' <span class="pc">'+r.length+'</span>'+(t==="superbase"?'<small>Sunchandan</small>':'')+'</div>'+
+        (r.length?'<div class="card lqx '+(t==="superbase"?'sb':'base')+'"><div class="tsc"><table class="lqt2 upt '+cls+'"><thead><tr>'+head+'</tr></thead><tbody>'+srt(r).map(row).join("")+'</tbody></table></div></div>':'<div class="card lqx"><div class="none">'+none+'</div></div>');}
+    var gh='<th>Name</th><th>WFG code</th><th>Exam date</th><th>Modules passed</th>',rh='<th>Name</th><th>WFG code</th><th>Exam date</th><th class="c">Gov fee</th><th class="c">Licence<br>approved</th>';
+    $("upGn").textContent=gov.length;$("upRn").textContent=reg.length;
+    $("upGov").innerHTML=grp(gov,"base","Base shop",gh,govRow,govSort,"gov","No one in the exam phase")+grp(gov,"superbase","Super base",gh,govRow,govSort,"gov","No one in the exam phase");
+    $("upReg").innerHTML=grp(reg,"base","Base shop",rh,regRow,regSort,"reg","No one waiting on MyWFG")+grp(reg,"superbase","Super base",rh,regRow,regSort,"reg","No one waiting on MyWFG");
+    // highlights (computed now, so they stay true as days pass and MyWFG catches up)
+    var hl=[],soon=govSort(gov).filter(function(p){var d=upDue(p);return d.k===0&&d.n<=14;});
+    soon.slice(0,3).forEach(function(p){var n=upDue(p).n;hl.push(upFirst(p.name)+"'s exam is "+(n===0?"today":n===1?"tomorrow":"in "+n+" days")+" ("+upShort(p.exam_date)+(p.mods?", "+upMods(p).n+"/4 passed":"")+").");});
+    var past=gov.filter(function(p){return upDue(p).k===1;}),nod=gov.filter(function(p){return upDue(p).k===2;});
+    if(past.length)hl.push(past.length+" exam date"+(past.length===1?" has":"s have")+" passed with modules still open: "+past.map(function(p){return upFirst(p.name);}).join(", ")+". Rebook or confirm the results.");
+    if(nod.length)hl.push(nod.length+" in the exam phase "+(nod.length===1?"has":"have")+" no date booked.");
+    if(reg.length){var fee=reg.filter(function(p){return p.gov_fee;}).length,ap=reg.filter(function(p){return p.licence_approved;});
+      hl.push(reg.length+" passed the exam and "+(reg.length===1?"is":"are")+" waiting on MyWFG: "+fee+" paid the gov fee, "+ap.length+" show licence approved on DBI.");
+      if(ap.length)hl.push("Approved on DBI but not on MyWFG yet: "+ap.map(function(p){return upFirst(p.name);}).join(", ")+". Chase the MyWFG update.");
+      var nf=reg.filter(function(p){return !p.gov_fee;});if(nf.length)hl.push("Gov fee not paid yet: "+nf.map(function(p){return upFirst(p.name);}).join(", ")+".");}
+    if(!gov.length&&!reg.length)hl.push("Nobody in the exam or registration phase right now.");
+    $("upHl").innerHTML='<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>';
+    $("upNote").textContent="From DBI Hub (Business Tracker → Licensing). Grey italic code = DBI Hub only, not found on MyWFG. Anyone licensed on MyWFG drops off automatically"+(S.ok?".":" (licensed list still loading).");
+  }
+  var tab="meet",TABS={meet:renderMeet,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic";renderHeader();TABS[t]();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up";renderHeader();TABS[t]();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -1056,7 +1155,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
@@ -1072,7 +1171,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return syRead().then(function(D){return round(1,D);}).then(function(){SY.err="";SY.fails=0;sySet("at",new Date().toISOString());},function(e){
         if(e&&e.stale){setTimeout(syncNow,4000);return;}SY.err=SY.loaded?"upload":"offline";SY.fails++;
         clearTimeout(SY.retry);SY.retry=setTimeout(function(){if(!document.hidden)syncNow();},Math.min(60000,10000*SY.fails));})
-      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
+      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert"||tab==="up")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
   }
   function syRerender(){var ae=document.activeElement;if(ae&&(ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT"))return;show(tab);}
   function ago(iso){var s=Math.round((Date.now()-new Date(iso))/1000);return s<60?"just now":s<3600?Math.round(s/60)+" min ago":Math.round(s/3600)+" h ago";}
