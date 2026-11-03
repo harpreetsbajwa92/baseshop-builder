@@ -543,6 +543,43 @@ button{cursor:pointer}
 #p-gold .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 0}
 @media (max-width:430px){.tabs button{font-size:10px;letter-spacing:-.25px}.tabs button .ic{width:22px;height:22px}}
 @media (min-width:900px){#p-gold{max-width:640px;margin:0 auto}}
+/* ===== v29: bottom bar scrolls sideways on a phone (room for 10 tabs) ===== */
+.tabs{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;justify-content:flex-start;overscroll-behavior-x:contain}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-width:54px;padding-left:4px;padding-right:4px}
+@media (max-width:430px){.tabs button{min-width:52px;font-size:10.5px;letter-spacing:-.1px}}
+/* ===== v29: Leaders Bulletin tab (bs-v1:leaders, built by build_lb.py from MyWFG Leaders Bulletin R02-R07; read-only; page scrolls) ===== */
+#p-lb .lbme{padding:0;overflow:hidden}
+#p-lb .lbmh{font-size:12.5px;font-weight:700;color:#cfd6db;padding:10px 12px 6px;line-height:1.35}
+#p-lb .lbmh b{color:var(--gold)}
+#p-lb .lbmh small{display:block;font-size:11px;font-weight:600;color:#7f8a92;margin-top:2px}
+#p-lb .lbt{border-collapse:separate;border-spacing:0;width:100%;min-width:560px;font-size:13px}
+#p-lb .lbt th{background:#1d2328;font-family:var(--fc);font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:#8c979f;text-align:right;padding:7px 8px 6px;line-height:1.15;border-bottom:1px solid var(--line);white-space:nowrap}
+#p-lb .lbt th small{display:block;font-size:9.5px;letter-spacing:.4px;color:#6f7a82}
+#p-lb .lbt td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top;white-space:nowrap;text-align:right;font-family:var(--fn);font-weight:700;color:#e6ebee}
+#p-lb .lbt tr:first-child td{border-top:0}
+#p-lb .lbt th:first-child,#p-lb .lbt td:first-child{position:sticky;left:0;z-index:1;background:var(--card);box-shadow:1px 0 0 var(--line);min-width:120px;max-width:140px;white-space:normal;text-align:left;font-family:inherit}
+#p-lb .lbt th:first-child{background:#1d2328;z-index:2}
+#p-lb .lbt td:first-child b{display:block;font-size:13px;line-height:1.2;color:#fff}
+#p-lb .lbt td:first-child small{display:block;font-size:10.5px;font-weight:600;color:#8c979f;margin-top:2px;line-height:1.25}
+#p-lb .lbt td:first-child small.fl{color:#F5A623}
+#p-lb .lbt tr.ld td:first-child b{color:var(--gold)}
+#p-lb .lbt tr.me td{background:rgba(245,196,81,.07)}#p-lb .lbt tr.me td:first-child{background:#2c2f2a}
+#p-lb .lbt td i{display:block;font-style:normal;font-size:10px;font-weight:600;color:#7f8a92;margin-top:1px}
+#p-lb .lbt td .na{color:#56616a;font-weight:600}
+#p-lb .lbt tr.cut td{color:#9aa5ad}
+#p-lb .lbt tr.you td:first-child b{color:var(--gold)}
+#p-lb .lbsl{font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin:14px 4px 6px;display:flex;align-items:baseline;gap:8px;color:#cfd6db}
+#p-lb .lbsl .n{font-family:var(--fn);font-size:11.5px;letter-spacing:0;color:#14181b;background:var(--gold);border-radius:9px;padding:1px 7px;font-weight:800}
+#p-lb .lbsl small{margin-left:auto;font-family:var(--fn);font-size:11px;letter-spacing:0;color:#7f8a92;font-weight:600;text-transform:none}
+#p-lb .lbx{padding:0;overflow:hidden}
+#p-lb .lbno{color:#7f8a92;font-size:13px;font-weight:600;padding:12px}
+#p-lb .lbsn{font-size:11.5px;color:#8c979f;padding:6px 12px 9px;border-top:1px solid var(--line);line-height:1.35}
+#p-lb .lbsn.a{color:#c9a25a}
+#p-lb .lbnotes{font-size:12px;color:#9aa5ad;line-height:1.4;padding:10px 14px}
+#p-lb .lbnotes li{margin:3px 0 3px 14px}
+#p-lb .lbnotes b{color:#cfd6db}
+@media (min-width:900px){#p-lb{max-width:760px;margin:0 auto}}
 </style>
 </head>
 <body>
@@ -628,6 +665,14 @@ button{cursor:pointer}
     <div class="note" id="mdUpd"></div>
   </section>
 
+  <!-- TAB 5b (v29): LEADERS BULLETIN (bs-v1:leaders, built by build_lb.py from the MyWFG Leaders Bulletin top 100 exports). Read-only; scrolls like a normal page; tables scroll sideways with a sticky name column. -->
+  <section class="page" id="p-lb">
+    <div class="card mdf"><div class="mdft">Leaders Bulletin</div><div class="mdfs" id="lbMeta"></div></div>
+    <div class="card lbme" id="lbMe"></div>
+    <div id="lbSecs"></div>
+    <div class="card lbnotes" id="lbNotes"></div>
+  </section>
+
   <!-- TAB 6 (v27): GET TOGETHER. Placeholder only (no store key yet); Harpreet builds front liners here: System Builder MD Club 3-3-30, contests, events. -->
   <section class="page" id="p-gt">
     <div class="card mdf"><div class="mdft">Get Together</div><div class="mdfs">Building front liners, coming soon</div></div>
@@ -662,13 +707,14 @@ button{cursor:pointer}
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
   <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Trends</button>
+  <button data-t="lb"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.8"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c.4-3.3 2.4-5.3 5-5.3s4.6 2 5 5.3M1.8 18.5c.3-2.3 1.5-3.7 3.2-3.7 1 0 1.8.4 2.4 1.1M22.2 18.5c-.3-2.3-1.5-3.7-3.2-3.7-1 0-1.8.4-2.4 1.1"/></svg>Together</button>
 </nav>
 
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-28";
+var APP_VERSION="2026.11.03-29";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1153,9 +1199,51 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("goldLi").innerHTML=L.h;$("goldIg").innerHTML=I.h;$("goldLn").textContent=L.n;$("goldIn").textContent=I.n;
     $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation.";
   }
-  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,gt:function(){}};
+  // ---------- v29: Leaders Bulletin (bs-v1:leaders from build_lb.py; read-only) ----------
+  var LBM=[["rec_m","Rec","m"],["rec_12","Rec","12"],["pts_m","Pts","m"],["pts_12","Pts","12"],["lic_m","Lic","m"],["lic_12","Lic","12"]];
+  function lbN(v,f){if(v===null||v===undefined||v==="")return null;v=+v;if(isNaN(v))return null;if(f.indexOf("pts")!==0)return String(Math.round(v));var a=Math.abs(v);
+    return a>=1e6?(v/1e6).toFixed(2)+"M":a>=1e5?Math.round(v/1e3)+"K":a>=1e4?(v/1e3).toFixed(1)+"K":Math.round(v).toLocaleString("en-US");}
+  function lbMon(ym){var m=/^(\d{4})-(\d{2})/.exec(ym||"");return m?MON[+m[2]-1]+" "+m[1]:"";}
+  function lbHead(L){var mo=lbMon(L.month).split(" ")[0]||"Month";return '<tr><th>Name</th>'+LBM.map(function(c){return '<th>'+c[1]+' '+(c[2]==="m"?esc(mo):"12 mo")+'<small>'+(c[2]==="m"?"month":"rolling")+'</small></th>';}).join("")+'</tr>';}
+  function lbCell(m,f){var t=lbN(m[f],f),r=m.ranks&&m.ranks[f];return t===null?'<td><span class="na">—</span></td>':'<td>'+esc(t)+(r?'<i>#'+esc(r)+'</i>':'')+'</td>';}
+  function renderLb(){
+    var L=getJ("leaders",null);
+    if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base top 100";$("lbMe").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbSecs").innerHTML="";$("lbNotes").innerHTML="";return;}
+    var mo=lbMon(L.month),from=lbMon(L.r12_from);
+    $("lbMeta").textContent=[mo?"Data "+mo:"",from&&mo?"12 mo "+from.replace(/ \d{4}$/,function(y){return from.slice(-4)!==mo.slice(-4)?y:"";})+"–"+mo:"",lqUpd(L)?lqUpd(L)+" ET":""].filter(Boolean).join(" · ");
+    // Harpreet vs the #100 cutoffs
+    var me=L.me||{},own=me.own||{},C=L.cutoffs||{};
+    var you={ranks:{}};LBM.forEach(function(c){you[c[0]]=own[c[0]]!==undefined?own[c[0]]:me[c[0]];});
+    var gaps=[];[["rec_m","rec Oct"],["pts_m","pts Oct"],["rec_12","rec 12 mo"],["pts_12","pts 12 mo"]].forEach(function(g){var y=you[g[0]],c=C[g[0]];if(y!=null&&c!=null){var d=c-y;gaps.push(d>0?lbN(d,g[0])+" "+g[1].replace(/ Oct/," "+(mo.split(" ")[0]||""))+" to go":"✓ "+g[1]);}});
+    var mh='<div class="lbmh"><b>You</b> (Harpreet Singh Bajwa '+esc(me.code||"")+'): '+(me.in_top100?"in the top 100 (see your section).":"not in the Canada SMD Base top 100 yet.")+(gaps.length?' To reach #100: '+esc(gaps.join(" · "))+'.':'')
+      +'<small>Your numbers: '+esc(me.own_src||"not available")+'. Licences: not in that report.</small></div>';
+    var cut={name:"#100 cutoff",ranks:{}};LBM.forEach(function(c){cut[c[0]]=C[c[0]];});
+    mh+='<div class="tsc"><table class="lbt"><thead>'+lbHead(L)+'</thead><tbody>'
+      +'<tr class="you"><td><b>You</b><small>SMD Base, own report</small></td>'+LBM.map(function(c){return lbCell(you,c[0]);}).join("")+'</tr>'
+      +'<tr class="cut"><td><b>#100 cutoff</b><small>value at rank 100</small></td>'+LBM.map(function(c){return lbCell(cut,c[0]);}).join("")+'</tr></tbody></table></div>';
+    $("lbMe").innerHTML=mh;
+    var h="";L.sections.forEach(function(s,i){var ms=Array.isArray(s.members)?s.members:[];
+      h+='<div class="lbsl">'+(i+1)+'. '+esc(s.leader)+(s.leader==="Rohit Mehta"?"":" & team")+(ms.length?' <span class="n">'+ms.length+'</span>':'')+'</div><div class="card lbx">';
+      if(!ms.length)h+='<div class="lbno">'+esc(s.note||"Not in Canada SMD Base top 100 for Oct or 12 months")+'</div>';
+      else{h+='<div class="tsc"><table class="lbt"><thead>'+lbHead(L)+'</thead><tbody>';
+        ms.forEach(function(m){var sub=[m.code,m.title,m.upline?"up "+m.upline:""].filter(Boolean).join(" · ");
+          var miss=(m.missing||[]).length===6?"Not in any top 100":"";
+          h+='<tr class="'+(m.lead?"ld":"")+(m.me?" me":"")+'"><td><b>'+esc(m.name)+'</b><small>'+esc(sub)+'</small>'+(m.flag?'<small class="fl">'+esc(m.flag)+'</small>':miss?'<small class="fl">'+miss+'</small>':'')+'</td>'+LBM.map(function(c){return lbCell(m,c[0]);}).join("")+'</tr>';});
+        h+='</tbody></table></div>';
+        if(s.note)h+='<div class="lbsn a">'+esc(s.note)+'</div>';}
+      (s.xref||[]).forEach(function(x){h+='<div class="lbsn">'+esc(x)+'</div>';});
+      h+='</div>';});
+    $("lbSecs").innerHTML=h;
+    var n='<b>How to read:</b> number = value, #n = Company rank (ties share a rank). <b>—</b> = not in that top 100 (at or below the #100 value). Rows come from the Upline EMD column: each leader plus the people whose Upline EMD is that leader.';
+    var lst=(L.unmatched||[]).map(function(u){return "<li><b>"+esc(u.name)+"</b>: "+esc(u.why)+"</li>";}).concat((L.checks||[]).map(function(c){return "<li>"+esc(c)+"</li>";}));
+    if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
+    if(L.source)n+='<div style="margin-top:6px;color:#6f7a82">Source: '+esc(L.source)+'</div>';
+    $("lbNotes").innerHTML=n;}
+  function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
+    if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
+  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,lic:renderLic,md:renderMd,trends:renderDash,tview:renderTV,lb:renderLb,gt:function(){}};
   function show(t){t=t||"";if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold";renderHeader();TABS[t]();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb";renderHeader();TABS[t]();navReveal();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -1219,7 +1307,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold")show(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb")show(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
