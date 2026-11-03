@@ -571,10 +571,11 @@ button{cursor:pointer}
   <!-- TAB 2b (v24): UPCOMING LICENCES (bs-v1:upcoming, filled by the bot from DBI Hub; filtered against bs-v1:licensed at render time). Scrolls like a normal page. -->
   <section class="page" id="p-up">
     <div class="card mdf"><div class="mdft">Upcoming Licences</div><div class="mdfs" id="upMeta"></div></div>
-    <div class="slbl"><span>Government exams <small id="upGn"></small></span><small>provincial exam phase</small></div>
-    <div id="upGov"></div>
+    <!-- v26: Licence in registration first, then Government exams, then Highlights -->
     <div class="slbl"><span>Licence in registration <small id="upRn"></small></span><small>exam passed · not on MyWFG yet</small></div>
     <div id="upReg"></div>
+    <div class="slbl"><span>Government exams <small id="upGn"></small></span><small>provincial exam phase</small></div>
+    <div id="upGov"></div>
     <div class="slbl"><span>Highlights</span></div>
     <div class="card lq" id="upHl"></div>
     <div class="note" id="upNote"></div>
@@ -631,7 +632,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-25";
+var APP_VERSION="2026.11.03-26";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -801,7 +802,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var ct=r.counts&&typeof r.counts==="object"?r.counts:{},h="";
     $("lqUpd").textContent=lqUpd(r);
     if(r.headline)h+='<div class="lqh">'+esc(r.headline)+'</div>';
-    h+='<div class="lqc"><span><b>'+n(ct.active)+'</b>Active</span><span><b>'+n(ct.studied_24h)+'</b>Studied 24h</span><span><b>'+n(ct.ran_out)+'</b>Ran out</span></div>';
+    h+='<div class="lqc"><span><b>'+n(ct.active)+'</b>Active</span><span><b>'+n(ct.studied_24h)+'</b>Studied 24h</span></div>';   // v26: "Ran out" chip removed
     function sec(title,arr,row,none,cls){return '<div class="lqs'+(cls?' '+cls:'')+'"><div class="lqt">'+title+'</div>'+(arr.length?arr.map(row).join(""):'<div class="lqe">'+none+'</div>')+'</div>';}
     // fresh passes: one line per recruit
     var fg=[],fm={};A(r.fresh).forEach(function(f){var k=String(f.name||"");if(!fm[k]){fm[k]={name:k,p:[]};fg.push(fm[k]);}fm[k].p.push(f);});
@@ -837,7 +838,17 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       return '<td class="sq">'+a.map(function(x){x=x||{};var ok=String(x.pf).toUpperCase()==="P";return at(ok?'g':'r',(x.score!=null&&x.score!==""?sc(x.score):(ok?'Pass':'Fail'))+(ok?' ✓':''),x.date);}).join('<i>→</i>')+'</td>';}
     // v22: "checked" note (pull confirmed no practice tests) and stale note (pull failed for this person)
     function cmx(o){return (o.none_checked?'<small class="ck">✓ checked '+lqWhen(o.none_checked)+'</small>':'')+(o.stale_note?'<small class="stl">⚠ '+esc(o.stale_note)+'</small>':'');}
-    var P=A(r&&r.practice).slice(),X=A(r&&r.exams).slice();
+    // v26: out-of-time recruits (days_left <= 0 or a ran-out status) are hidden everywhere on Certs (tables, highlights, calls). Render-time filter only; the stored report is untouched.
+    function gone(o){if(!o||typeof o!=="object")return false;var dl=o.days_left,st=String(o.status||"").toLowerCase();
+      return (dl!=null&&dl!==""&&isFinite(+dl)&&+dl<=0)||o.ran_out===true||o.out_of_time===true||st==="ran_out"||st==="ran out"||st==="out_of_time"||st==="out of time";}
+    var GN={},GW=[];function nk(x){return String(x||"").toLowerCase().replace(/\s+/g," ").trim();}
+    A(r&&r.practice).concat(A(r&&r.exams)).forEach(function(o){if(gone(o)&&o.name&&!GN[nk(o.name)]){GN[nk(o.name)]=1;GW.push(nk(o.name));}});
+    var P=A(r&&r.practice).filter(function(o){return !gone(o)&&!GN[nk(o.name)];}),X=A(r&&r.exams).filter(function(o){return !gone(o)&&!GN[nk(o.name)];});
+    // first names of hidden people, unless an active person shares that first name
+    var LIVE={};P.concat(X).forEach(function(o){LIVE[nk(o.name).split(" ")[0]]=1;});
+    var GF=[];GW.forEach(function(w){GF.push(w);var f=w.split(" ")[0];if(f&&!LIVE[f])GF.push(f);});
+    function mentionsGone(t){t=" "+nk(t).replace(/[^a-z0-9 ]/g," ")+" ";if(/out of time|ran out/.test(t))return true;
+      return GF.some(function(w){return t.indexOf(" "+w+" ")>=0;});}
     // v20: most active first. 0 days left go last. Then days_since_login ascending, then latest practice/exam attempt (newest first), then study minutes, then name. Both tables share one key per person.
     var K={};function kid(o){return String(o.code||o.name||"").toLowerCase();}
     function fold(o){var k=kid(o),q=K[k]||(K[k]={off:false,ds:null,la:"",sm:-1,nm:String(o.name||"")});
@@ -854,8 +865,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       P.map(function(p){return '<tr'+(p.days_left===0?' class="off"':'')+'>'+who(p)+ecCell(p.ec)+prCell(p.ethics)+prCell(p.life)+prCell(p.as)+prCell(p.seg)+'<td class="cm">'+esc(p.comment||"")+cmx(p)+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No practice data yet. Your bot adds it each morning.</div>';
     $("lqExam").innerHTML=X.length?'<table class="lqt2"><thead><tr><th>Name</th><th>Ethics</th><th>Life</th><th>A&amp;S</th><th>Seg<br>Funds</th><th>Passed</th><th class="cm">Comment</th></tr></thead><tbody>'+
       X.map(function(e){var n=+e.passed||0;return '<tr'+(e.days_left===0?' class="off"':'')+'>'+who(e)+exCell(e.ethics)+exCell(e.life)+exCell(e.as)+exCell(e.seg)+'<td class="pz'+(n>=4?' g':n?' a':'')+'">'+n+'/4</td><td class="cm">'+esc(e.comment||"")+cmx(e)+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No exam data yet. Your bot adds it each morning.</div>';
-    var hl=A(r&&r.highlights),ac=A(r&&r.actions);
+    var hl=A(r&&r.highlights).filter(function(x){return !mentionsGone(x);}),ac=A(r&&r.actions);
     if(!ac.length)ac=A(r&&r.needs_call).map(function(s){return {name:s.name,why:s.reason,days_left:s.days_left,days_since_login:s.days_since_login};});   // older reports
+    ac=ac.filter(function(s){return !gone(s)&&!GN[nk(s&&s.name)];});
     var h='<div class="lqt">⭐ Highlights</div>'+(hl.length?'<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>':'<div class="lqe">No highlights today</div>');
     h+='<div class="lqs call"><div class="lqt">📞 Call to action</div>'+(ac.length?ac.map(function(s){return '<div class="lqr"><span>'+esc(s.name)+'<small>'+esc(s.why||"")+'</small></span><em>'+(s.days_left!=null&&s.days_left!==""?esc(s.days_left)+"d left":"")+(s.days_since_login!=null&&s.days_since_login!==""?'<small>'+esc(s.days_since_login)+'d since login</small>':"")+(s.last_login?'<small class="ts">'+lqWhen(s.last_login)+'</small>':"")+'</em></div>';}).join(""):'<div class="lqe">No calls needed</div>')+'</div>';
     $("lqAct").innerHTML=h;
