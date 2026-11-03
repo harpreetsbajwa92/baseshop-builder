@@ -548,12 +548,14 @@ button{cursor:pointer}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{flex:1 0 auto;min-width:54px;padding-left:4px;padding-right:4px}
 @media (max-width:430px){.tabs button{min-width:52px;font-size:10.5px;letter-spacing:-.1px}}
-/* v33: highlighted tabs. Admin, Certs, Upcoming = green; Leaders = gold. Tinted when inactive, filled pill when active. */
+/* v34: tab colour groups. Green = Admin, Certs, Upcoming; gold = Leaders, Pts & Rec; blue = Main ... Together. Tinted + top stripe when inactive, filled pill when active. */
 .tabs button.tgr{color:#5fe27a;background:rgba(22,236,6,.07);box-shadow:inset 0 2px 0 rgba(22,236,6,.55)}
 .tabs button.tgr.on{color:#0c1a0c;background:linear-gradient(180deg,#5af06a,#18c93a);box-shadow:none}
 .tabs button.tgo{color:#F5C451;background:rgba(245,196,81,.08);box-shadow:inset 0 2px 0 rgba(245,196,81,.6)}
 .tabs button.tgo.on{color:#1d1503;background:linear-gradient(180deg,#FFE7A3,#E2AA2A);box-shadow:none}
-.tabs button.tgr+.tgo{margin-left:1px}.tabs button.tgo{margin-right:2px}
+.tabs button.tbl{color:#5cb8f5;background:rgba(0,147,231,.07);box-shadow:inset 0 2px 0 rgba(0,147,231,.55)}
+.tabs button.tbl.on{color:#fff;background:linear-gradient(180deg,#35aef5,#0076c2);box-shadow:none}
+.tabs button.tgr+.tgo,.tabs button.tgo+.tbl{margin-left:2px}
 /* ===== v29: Leaders Bulletin tab (bs-v1:leaders, built by build_lb.py from MyWFG Leaders Bulletin R02-R07; read-only; page scrolls) ===== */
 #p-lb .lbme{padding:0;overflow:hidden}
 #p-lb .lbmh{font-size:12.5px;font-weight:700;color:#cfd6db;padding:10px 12px 6px;line-height:1.35}
@@ -643,7 +645,7 @@ button{cursor:pointer}
 #p-trends .pd td:first-child,#p-adm .pf td:first-child,#p-adm .td td:first-child{min-width:104px;max-width:150px;white-space:normal}
 .rpmore{display:block;width:100%;background:#1d2328;border:0;border-top:1px solid var(--line);color:#cfd6db;font:inherit;font-weight:700;font-size:12.5px;padding:10px;cursor:pointer}
 .rpnote{font-size:11.5px;color:#8c979f;line-height:1.4;padding:4px 8px 0}
-#p-trends .dly{margin-top:18px}
+#p-trends .prsec{margin-top:22px}
 #p-trends .dly>summary{list-style:none;cursor:pointer;font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#cfd6db;margin:0 4px 6px;display:flex;align-items:baseline;gap:8px}
 #p-trends .dly>summary::-webkit-details-marker{display:none}
 #p-trends .dly>summary small{font-family:var(--fn);font-size:11px;letter-spacing:0;color:#7f8a92;font-weight:600;text-transform:none}
@@ -792,7 +794,7 @@ button{cursor:pointer}
     <div class="rpbar" id="prBar"></div>
     <div class="card rpx" id="prTbl"></div>
     <div class="rpnote" id="prNote"></div>
-    <details class="dly" id="prDly" open><summary>Your daily numbers <small>from Main · this week</small></summary><div id="tDash"></div></details>
+    <div id="prOthers"></div>
   </section>
 
   <!-- TAB 7 (v32): ADMIN. bs-v1:admin = MyWFG Platform Fee Recurring Enrollment (Super Team) + Training Deadline Report (Due in 30 days, Team All). -->
@@ -825,19 +827,19 @@ button{cursor:pointer}
   <button data-t="cert" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
   <button data-t="up" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
   <button data-t="lb" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
-  <button data-t="meet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
-  <button data-t="gold"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Gold</button>
-  <button data-t="rec"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
-  <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
-  <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
-  <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
-  <button data-t="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.8"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c.4-3.3 2.4-5.3 5-5.3s4.6 2 5 5.3M1.8 18.5c.3-2.3 1.5-3.7 3.2-3.7 1 0 1.8.4 2.4 1.1M22.2 18.5c-.3-2.3-1.5-3.7-3.2-3.7-1 0-1.8.4-2.4 1.1"/></svg>Together</button>
+  <button data-t="trends" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
+  <button data-t="meet" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
+  <button data-t="gold" class="tbl" aria-label="Gold Prospects"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Gold Prospects</button>
+  <button data-t="rec" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
+  <button data-t="lic" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
+  <button data-t="md" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
+  <button data-t="gt" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.8"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c.4-3.3 2.4-5.3 5-5.3s4.6 2 5 5.3M1.8 18.5c.3-2.3 1.5-3.7 3.2-3.7 1 0 1.8.4 2.4 1.1M22.2 18.5c-.3-2.3-1.5-3.7-3.2-3.7-1 0-1.8.4-2.4 1.1"/></svg>Together</button>
 </nav>
 
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-33";
+var APP_VERSION="2026.11.03-34";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1188,7 +1190,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function tgtFor(m,r,k){if(!m.T)return null;var f=m.T[r==="W"?"w":"m"];return f?f(k):null;}
   function firstDate(){var f=today;for(var i=0;i<localStorage.length;i++){var x=localStorage.key(i),mm=x&&x.match(/^bs-v1:day:(\d{4}-\d{2}-\d{2})$/);if(mm&&mm[1]<f)f=mm[1];}
     list("certs").concat(list("licences")).forEach(function(e){if(e.date&&e.date<f)f=e.date;});return f;}
-  function renderDash(){
+  function renderDash(){if(!$("tDash"))return;   // v34: the daily-numbers dashboard is no longer shown (Pts & Rec); the trend view #trends/<slug> stays intact
     var wd=weekDays(today),md=monthDays(today),o="",g="";
     METRICS.forEach(function(m){if(m.g!==g){if(g)o+='</div>';g=m.g;o+='<div class="dgrp">'+g+'</div><div class="tgrid'+(g==="Team"?' c3':'')+'">';}
       var w=sumV(m,wd),mo=sumV(m,md),tw=tgtFor(m,"W",today),tm=tgtFor(m,"M",today);
@@ -1196,7 +1198,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("tDash").innerHTML='<div class="slbl" style="margin-top:4px">This week · tap for trend <small>mo = this month</small></div>'+o+'</div>';
   }
   $("lbMon").addEventListener("change",function(){lbMonSel=this.value;renderLb();});
-  $("tDash").addEventListener("click",function(e){var b=e.target.closest("[data-m]");if(!b)return;tvOff=0;tvPushed=true;location.hash="trends/"+b.dataset.m;});
+  if($("tDash"))$("tDash").addEventListener("click",function(e){var b=e.target.closest("[data-m]");if(!b)return;tvOff=0;tvPushed=true;location.hash="trends/"+b.dataset.m;});
   var tvRange="W",tvOff=0,tvSlug=null,tvPushed=false;
   function tvWin(){
     if(tvRange==="W"){var s=shift(weekStart(today),-7*tvOff),a=[];for(var i=0;i<7;i++)a.push(shift(s,i));return {days:a,lab:a[0],prev:shift(s,-7)};}
@@ -1347,15 +1349,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function rpWait(msg){return '<div class="lbno" style="text-align:center;padding:14px">'+(SY.loaded?msg:SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';}
   function rpYm(ym){var a=String(ym||"").split("-");return a.length>1?MON[+a[1]-1]+" "+a[0]:String(ym||"");}
   function rpN(v){if(v==null||v==="")return '<span class="z">·</span>';var n=+v;var t=Math.abs(n).toLocaleString("en-US");return n<0?'<span class="neg">−'+t+'</span>':n===0?'<span class="z">0</span>':t;}
-  function renderPR(){
-    renderDash();
-    var P=getJ("pointsrecruits",null);
-    if(!P||typeof P!=="object"||!Array.isArray(P.rows)){$("prMeta").textContent="MyWFG · Net Points";$("prBar").innerHTML="";$("prNote").textContent="";$("prTbl").innerHTML=rpWait("No data yet. Filled from the MyWFG Points and Recruits report.");return;}
-    var R=P.rows,G=P.groups||["Personal","SMD Base","Super Base","Super Team"];
-    $("prMeta").textContent=[(P.point_type||"Net Points"),P.as_of?"as of "+P.as_of:"",lqUpd(P)?lqUpd(P)+" ET":""].filter(Boolean).join(" · ");
-    var t1=null,ti=-1,nt=0;R.forEach(function(r,i){if(r.total){nt++;if(nt===1)t1=r;if(nt===2)ti=i;}});
-    var cut=prAll||ti<0?R.length:ti+1,nm=R.filter(function(r){return !r.total;}).length;
-    $("prBar").innerHTML='<h3>By month</h3><span class="ch">'+nm+' months</span>'+(t1?'<span class="ch a">12 mo: '+rpN(t1.pts[0])+' pers pts · '+rpN(t1.rec[1])+' base rec</span>':'');
+  var prOpen={};
+  function prTable(R,G,all,mid){   // one Points and Recruits table (newest first, 12 Mo. Totals highlighted, older years behind a toggle)
+    var ti=-1,nt=0;R.forEach(function(r,i){if(r.total){nt++;if(nt===2)ti=i;}});
+    var cut=all||ti<0?R.length:ti+1;
     var h='<div class="tsc"><table class="rpt pd"><thead><tr><th class="nm" rowspan="2">Month</th><th class="g gs" colspan="4">Points</th><th class="g g2 gs" colspan="4">Recruits</th></tr><tr>';
     [0,1].forEach(function(){G.forEach(function(g,j){h+='<th class="'+(j===0?"gs":"")+'">'+esc(g==="Personal"?"Pers":g)+'</th>';});});
     h+='</tr></thead><tbody>';
@@ -1363,11 +1360,27 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       var lab=r.total?'<b>12 Mo. Total</b><small>'+(r.from?esc(rpYm(r.from)+" – "+rpYm(r.to)):esc(r.label))+'</small>':'<b>'+esc(rpYm(r.ym))+'</b>'+(r.to_date?'<small>to date ('+esc(r.to_date.slice(5).replace("-","/"))+')</small>':'');
       h+='<tr class="'+(r.total?"tot":i===0?"cur":"")+'"><td>'+lab+'</td>'+r.pts.map(function(v,j){return '<td class="'+(j===0?"gs":"")+'">'+rpN(v)+'</td>';}).join("")+r.rec.map(function(v,j){return '<td class="'+(j===0?"gs":"")+'">'+rpN(v)+'</td>';}).join("")+'</tr>';});
     h+='</tbody></table></div>';
-    if(ti>=0&&ti+1<R.length){var last=R[R.length-1],old=R.slice(ti+1).filter(function(r){return r.ym;});h+='<button type="button" class="rpmore" id="prMore">'+(prAll?'Show fewer':'Show older months ('+old.length+', back to '+esc(old.length?rpYm(old[old.length-1].ym):"")+')')+'</button>';}
-    $("prTbl").innerHTML=h;
+    if(ti>=0&&ti+1<R.length){var old=R.slice(ti+1).filter(function(r){return r.ym;});h+='<button type="button" class="rpmore" data-more="'+mid+'">'+(all?'Show fewer':'Show older months ('+old.length+', back to '+esc(old.length?rpYm(old[old.length-1].ym):"")+')')+'</button>';}
+    return h;}
+  function prBarH(R,title){var t1=null;R.some(function(r){if(r.total){t1=r;return true;}});var nm=R.filter(function(r){return !r.total;}).length;
+    return '<h3>'+title+'</h3><span class="ch">'+nm+' months</span>'+(t1?'<span class="ch a">12 mo: '+rpN(t1.pts[0])+' pers pts · '+rpN(t1.rec[1])+' base rec</span>':'');}
+  function renderPR(){
+    var P=getJ("pointsrecruits",null);
+    if(!P||typeof P!=="object"||!Array.isArray(P.rows)){$("prMeta").textContent="MyWFG · Net Points";$("prBar").innerHTML="";$("prNote").textContent="";$("prTbl").innerHTML=rpWait("No data yet. Filled from the MyWFG Points and Recruits report.");$("prOthers").innerHTML="";return;}
+    var R=P.rows,G=P.groups||["Personal","SMD Base","Super Base","Super Team"];
+    $("prMeta").textContent=[(P.point_type||"Net Points"),P.as_of?"as of "+P.as_of:"",lqUpd(P)?lqUpd(P)+" ET":""].filter(Boolean).join(" · ");
+    $("prBar").innerHTML=prBarH(R,"Your numbers · by month");
+    $("prTbl").innerHTML=prTable(R,G,!!prOpen.me,"me");
     $("prNote").textContent="Newest month first. MyWFG's 12 Mo. Total = the 12 completed months Oct–Sep (the month to date starts the next window). Source: "+(P.source||"MyWFG")+".";
+    var o="";(Array.isArray(P.others)?P.others:[]).forEach(function(x){if(!x||!x.code)return;
+      var nm=esc((x.name||x.code)+(x.level?" ("+x.level+")":""))+" – Points and Recruits",ok=Array.isArray(x.rows)&&x.rows.length;
+      o+='<div class="prsec"><div class="rpbar">'+(ok?prBarH(x.rows,nm):'<h3>'+nm+'</h3>')+'</div>';
+      if(!ok){o+='<div class="card rpx">'+rpWait("Not pulled yet. Filled from the MyWFG Points and Recruits report for associate "+esc(x.code)+".")+'</div></div>';return;}
+      o+='<div class="rpnote" style="margin-top:0">'+esc([x.point_type||"Net Points",x.as_of?"as of "+x.as_of:"",x.code,x.pulled?"pulled "+String(x.pulled).slice(0,16).replace("T"," "):""].filter(Boolean).join(" · "))+'</div>';
+      o+='<div class="card rpx">'+prTable(x.rows,x.groups||G,!!prOpen[x.code],x.code)+'</div><div class="rpnote">Source: '+esc(x.source||"MyWFG")+'.</div></div>';});
+    $("prOthers").innerHTML=o;
   }
-  $("prTbl").addEventListener("click",function(e){if(e.target.closest("#prMore")){prAll=!prAll;renderPR();}});
+  $("p-trends").addEventListener("click",function(e){var b=e.target.closest("[data-more]");if(!b)return;prOpen[b.dataset.more]=!prOpen[b.dataset.more];renderPR();});
   function rpName(s){return String(s||"").toLowerCase().replace(/(^|[\s\-'])([a-z])/g,function(m,a,b){return a+b.toUpperCase();});}
   function renderAdm(){
     var A=getJ("admin",null);
