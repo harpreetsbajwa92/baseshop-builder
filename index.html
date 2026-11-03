@@ -324,6 +324,11 @@ button{cursor:pointer}
 .rt2 th .tl{font-size:13px;letter-spacing:1.2px;color:var(--gold);margin-right:6px}.pan.sb .rt2 th .tl{color:#6cc3f5}
 .rt2 th .pc{font-size:15px;color:#fff;letter-spacing:0}
 .rt2 thead th{vertical-align:bottom}
+.mdb{overflow:auto;-webkit-overflow-scrolling:touch}
+.mdb thead th{position:sticky;top:0;background:var(--card);z-index:1}
+.mdb tfoot td{position:sticky;bottom:0;background:var(--card);border-top:1px solid rgba(245,196,81,.35)}
+.pan.sb .mdb tfoot td{border-top-color:rgba(108,195,245,.35)}
+.pan .mdt td{padding:5px 3px}
 #p-lic .rg{row-gap:2px}#p-lic .rg .rt{font-size:11px}
 #rSeg button{font-size:12px;padding:4px 8px;white-space:nowrap}
 #rMeta{white-space:nowrap;font-size:11px}
@@ -415,7 +420,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-7";
+var APP_VERSION="2026.11.02-8";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -584,19 +589,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function pnl(team,cls,title){var rows=(Array.isArray(L[team])?L[team]:[]).slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
       var tm=0,t12=0;rows.forEach(function(r){if(!nb(r.cf_month))tm+=+r.cf_month;if(!nb(r.cf_12))t12+=+r.cf_12;});
       var cols='<colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>';
-      return '<div class="pan '+cls+(team!==rTeam?' off':'')+'"><table class="rt2">'+cols+'<thead><tr><th><b class="tl">'+title+'</b><span class="pc">'+rows.length+'</span></th><th>WFG code</th><th>CF month</th><th>CF 12 mo ▾</th></tr></thead></table>'+
+      return '<div class="pan '+cls+(team!==rTeam?' off':'')+'"><table class="rt2">'+cols+'<thead><tr><th><b class="tl">'+title+'</b><span class="pc">'+rows.length+'</span></th><th>WFG code</th><th>'+(mo?"CF "+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(2,4):"CF month")+'</th><th>CF 12 mo ▾</th></tr></thead></table>'+
         '<div class="rb">'+(rows.length?'<table class="rt2">'+cols+'<tbody>'+rows.map(function(r){return '<tr><td title="'+esc(r.name)+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td><td>'+(nb(r.cf_month)?'—':money(+r.cf_month))+'</td><td>'+(nb(r.cf_12)?'—':money(+r.cf_12))+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">Waiting for MyWFG data</div>')+'</div>'+
         '<table class="rt2">'+cols+'<tbody><tr class="rtot"><td>Total ('+rows.length+')</td><td></td><td>'+money(tm)+'</td><td>'+money(t12)+'</td></tr></tbody></table></div>';}
     $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");
     fitRoster();
   }
   // keep the page one screen: the roster body scrolls inside its panel
-  function fitRoster(){var b=[].slice.call(document.querySelectorAll("#roster .rb"));if(!b.length||!$("p-lic").classList.contains("on"))return;
+  function fitRoster(){fitBoxes("p-lic","#roster .rb");}
+  function fitBoxes(pg,sel){var b=[].slice.call(document.querySelectorAll("#"+pg+" "+sel)).filter(function(x){return x.offsetParent;});if(!b.length||!$(pg).classList.contains("on"))return;
     b.forEach(function(x){x.style.maxHeight="none";});
     var se=document.scrollingElement||document.documentElement,z=parseFloat(getComputedStyle(document.querySelector(".wrap")).zoom)||1;
-    var over=se.scrollHeight-innerHeight,h=Math.max.apply(null,b.map(function(x){return x.offsetHeight;}));
-    var mh=Math.max(84,Math.floor(h-Math.max(0,over)/z)-2);b.forEach(function(x){x.style.maxHeight=mh+"px";});}
-  addEventListener("resize",function(){clearTimeout(fitRoster.t);fitRoster.t=setTimeout(fitRoster,120);});
+    var stk=b.length>1&&b[0].getBoundingClientRect().top!==b[1].getBoundingClientRect().top;
+    for(var it=0;it<10;it++){var over=se.scrollHeight-innerHeight;if(over<=1)break;
+      var hs=b.map(function(x){return x.offsetHeight;}),h=Math.max.apply(null,hs);if(h<=84)break;
+      var lo=hs.filter(function(v){return v<h-1;}),h2=lo.length?Math.max.apply(null,lo):0,grp=b.filter(function(x,k){return hs[k]>=h-1;});
+      var tg=Math.max(84,h2,Math.floor(h-over/z/(stk?grp.length:1))-1);grp.forEach(function(x){x.style.maxHeight=tg+"px";});}}
+  addEventListener("resize",function(){clearTimeout(fitRoster.t);fitRoster.t=setTimeout(function(){fitRoster();fitBoxes("p-md",".mdb");},120);});
   $("rSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;rTeam=x.dataset.r;renderRoster();});
   $("lSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;lRange=x.dataset.r;renderLic();});
   navBind("l",renderLic);
@@ -608,17 +617,18 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
     var mo=/^\d{4}-\d{2}$/.test(st.month||"")?st.month:today.slice(0,7);
     $("mdMeta").textContent=MONL[+mo.slice(5,7)-1]+" "+mo.slice(0,4);
-    function tbl(rows,cls,title,sub){var tr=0,tc=0,any=false;rows.forEach(function(r){if(!nb(r.recruits)){tr+=+r.recruits;any=true;}if(!nb(r.cashflow)){tc+=+r.cashflow;any=true;}});
+    function tbl(rows,cls,title,sub){var tr=0,tc=0,any=false,anyR=false;rows.forEach(function(r){if(!nb(r.recruits)){tr+=+r.recruits;any=true;anyR=true;}if(!nb(r.cashflow)){tc+=+r.cashflow;any=true;}});
       return '<div class="pan '+cls+'"><div class="ph"><div><b>'+title+'</b><small>'+sub+'</small></div><span class="pc" style="font-size:18px">'+rows.length+'</span></div>'+
-      '<table class="mdt"><thead><tr><th>Name</th><th>Recruits</th><th>Cash flow</th></tr></thead><tbody>'+
+      '<div class="mdb"><table class="mdt"><thead><tr><th>Name</th><th>Recruits</th><th>Cash flow</th></tr></thead><tbody>'+
       (rows.length?rows.map(function(r){return '<tr><td>'+esc(r.name)+(r.title?'<span class="ttl">'+esc(r.title)+'</span>':'')+'</td>'+(nb(r.recruits)?'<td class="na">—</td>':'<td>'+Math.round(+r.recruits)+'</td>')+(nb(r.cashflow)?'<td class="na">—</td>':'<td>$'+Math.round(+r.cashflow).toLocaleString("en-US")+'</td>')+'</tr>';}).join("")+
-        (any&&rows.length>1?'<tr><td style="color:#8c979f">Total</td><td>'+Math.round(tr)+'</td><td>$'+Math.round(tc).toLocaleString("en-US")+'</td></tr>':''):'<tr><td colspan="3" class="na">None yet</td></tr>')+'</tbody></table></div>';}
-    $("mdSplit").innerHTML=tbl(base,"base","My base MDs","current month")+tbl(sup,"sb","Sunchandan's team","SMD + his MDs");
+        '</tbody>'+(any&&rows.length>1?'<tfoot><tr><td style="color:#8c979f">Total</td><td>'+(anyR?Math.round(tr):'—')+'</td><td>$'+Math.round(tc).toLocaleString("en-US")+'</td></tr></tfoot>':''):'<tr><td colspan="3" class="na">None yet</td></tr></tbody>')+'</table></div></div>';}
+    $("mdSplit").innerHTML=tbl(base,"base","My base MDs",(st.month?"cash flow ":"")+MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4))+tbl(sup,"sb","Sunchandan's team","SMD + his MDs");
     $("mdUpd").textContent=(st.updated?"From MyWFG · updated "+pretty(st.updated):"Your bot fills this from MyWFG")+(mo!==today.slice(0,7)?" · last month's numbers":"");
     var l=legs(),n=(l.smd||[]).length,t=l.target||3;
     $("legRing").innerHTML=ring(n/t,recCol(n/t),48,5,'<b style="font-size:14px">'+n+'<small>/'+t+'</small></b>');
     $("legTxt").textContent="Direct SMD legs: "+n+" of "+t;
     $("legNames").textContent=(l.smd||[]).length?l.smd.join(", "):"No SMD legs yet";
+    fitBoxes("p-md",".mdb");
   }
 
   // ---------- tab 5: trends (same approach as the fitness app: dashboard rows -> trend view with range toggle) ----------

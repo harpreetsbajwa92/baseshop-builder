@@ -77,6 +77,11 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-8:**
+  - `bs-v1:licensed` filled (interim) from the MyWFG Oct 2026 custom cash-flow reports (R08 rolling 12 Nov 2025–Oct 2026, R09 Oct 2026; MASTER_v2 sheets 8–9). Split by the "Upline SMD" column: Sunchandan Singh (27RJEC) and everyone with Upline SMD Sunchandan = super base; everyone else under 1298FC (incl. Harpreet) = base. People in the 12-month report with no Oct row get `cf_month` 0.
+  - `bs-v1:mdstats` updated from the report titles: month 2026-10, base = all 8 MDs with Upline SMD Harpreet (Oct cash flow), superbase = Sunchandan (SMD) + his 3 MDs. Recruits left blank.
+  - The app labels the cash-flow month from the key (`month`), e.g. "CF Oct 26" in the roster and "Cash flow Oct 2026" on the MD tab, instead of assuming the current month.
+  - MD tables scroll inside their panels (sticky header and total) so the MD tab stays one screen; the recruits total shows "—" when no recruits are filled.
 - **v2026.11.02-7:**
   - Meetings and Certs are base-shop-only reports and carry a gold "BASE SHOP" tag. Certs ignores any entry tagged `"team":"superbase"`.
   - Licences: compact new-licence rings (Base shop with the 1/wk, 3/mo goal; Super base counts) and a one-card list of new names for the Day/Week/Month.
