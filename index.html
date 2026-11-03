@@ -302,6 +302,9 @@ button{cursor:pointer}
 .pan .mdt.m4 td{font-size:14px;padding:5px 3px}
 .pan .mdt.m4 td:first-child{font-size:13px;white-space:normal}
 .mdt.m4 th:nth-child(4),.mdt.m4 td:nth-child(4){padding-left:8px}
+/* ===== v22: checked / stale notes in the Certs comments ===== */
+.lqt2 .cm small.ck{display:block;font-size:10px;color:#7f8a92;margin-top:2px;white-space:normal}
+.lqt2 .cm small.stl{display:block;font-size:10.5px;color:#F5A623;margin-top:2px;white-space:normal}
 /* ===== v21: timestamps on every Certs activity ===== */
 .lqt2 .at{display:inline-block;vertical-align:top;text-align:center;line-height:1.15}
 .lqt2 .at b.p{color:#9aa5ad;font-weight:600}
@@ -573,7 +576,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-21";
+var APP_VERSION="2026.11.02-22";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -777,6 +780,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       return '<td class="sq">'+a.map(function(v,i){var o=v&&typeof v==="object"?v:{score:v,date:null},last=i===a.length-1;return at(last?(+o.score>=60?'g':'a'):'p',sc(o.score),o.date);}).join('<i>→</i>')+'</td>';}
     function exCell(a){a=A(a);if(!a.length)return '<td class="mut">—</td>';
       return '<td class="sq">'+a.map(function(x){x=x||{};var ok=String(x.pf).toUpperCase()==="P";return at(ok?'g':'r',(x.score!=null&&x.score!==""?sc(x.score):(ok?'Pass':'Fail'))+(ok?' ✓':''),x.date);}).join('<i>→</i>')+'</td>';}
+    // v22: "checked" note (pull confirmed no practice tests) and stale note (pull failed for this person)
+    function cmx(o){return (o.none_checked?'<small class="ck">✓ checked '+lqWhen(o.none_checked)+'</small>':'')+(o.stale_note?'<small class="stl">⚠ '+esc(o.stale_note)+'</small>':'');}
     var P=A(r&&r.practice).slice(),X=A(r&&r.exams).slice();
     // v20: most active first. 0 days left go last. Then days_since_login ascending, then latest practice/exam attempt (newest first), then study minutes, then name. Both tables share one key per person.
     var K={};function kid(o){return String(o.code||o.name||"").toLowerCase();}
@@ -791,9 +796,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     P.sort(act);X.sort(act);
     $("lqPn").textContent=P.length?P.length+" active":"";$("lqXn").textContent=X.length?X.length+" active":"";
     $("lqPrac").innerHTML=P.length?'<table class="lqt2"><thead><tr><th>Name</th><th>Ethics<br>Compliance</th><th>Ethics</th><th>Life</th><th>A&amp;S</th><th>Seg<br>Funds</th><th class="cm">Comment</th></tr></thead><tbody>'+
-      P.map(function(p){return '<tr'+(p.days_left===0?' class="off"':'')+'>'+who(p)+ecCell(p.ec)+prCell(p.ethics)+prCell(p.life)+prCell(p.as)+prCell(p.seg)+'<td class="cm">'+esc(p.comment||"")+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No practice data yet. Your bot adds it each morning.</div>';
+      P.map(function(p){return '<tr'+(p.days_left===0?' class="off"':'')+'>'+who(p)+ecCell(p.ec)+prCell(p.ethics)+prCell(p.life)+prCell(p.as)+prCell(p.seg)+'<td class="cm">'+esc(p.comment||"")+cmx(p)+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No practice data yet. Your bot adds it each morning.</div>';
     $("lqExam").innerHTML=X.length?'<table class="lqt2"><thead><tr><th>Name</th><th>Ethics</th><th>Life</th><th>A&amp;S</th><th>Seg<br>Funds</th><th>Passed</th><th class="cm">Comment</th></tr></thead><tbody>'+
-      X.map(function(e){var n=+e.passed||0;return '<tr'+(e.days_left===0?' class="off"':'')+'>'+who(e)+exCell(e.ethics)+exCell(e.life)+exCell(e.as)+exCell(e.seg)+'<td class="pz'+(n>=4?' g':n?' a':'')+'">'+n+'/4</td><td class="cm">'+esc(e.comment||"")+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No exam data yet. Your bot adds it each morning.</div>';
+      X.map(function(e){var n=+e.passed||0;return '<tr'+(e.days_left===0?' class="off"':'')+'>'+who(e)+exCell(e.ethics)+exCell(e.life)+exCell(e.as)+exCell(e.seg)+'<td class="pz'+(n>=4?' g':n?' a':'')+'">'+n+'/4</td><td class="cm">'+esc(e.comment||"")+cmx(e)+'</td></tr>';}).join("")+'</tbody></table>':'<div class="lqe">No exam data yet. Your bot adds it each morning.</div>';
     var hl=A(r&&r.highlights),ac=A(r&&r.actions);
     if(!ac.length)ac=A(r&&r.needs_call).map(function(s){return {name:s.name,why:s.reason,days_left:s.days_left,days_since_login:s.days_since_login};});   // older reports
     var h='<div class="lqt">⭐ Highlights</div>'+(hl.length?'<ul class="lqhl">'+hl.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>':'<div class="lqe">No highlights today</div>');
