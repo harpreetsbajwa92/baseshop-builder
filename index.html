@@ -881,6 +881,22 @@ button{cursor:pointer}
 @media (min-width:700px){.att .arc{width:20%}.att .acd{width:80px}}
 .atnote{font-size:11.5px;color:#7f8a92;line-height:1.45}
 .atnote b{color:#cfd6db}
+
+/* v44: every Upline MD value / field / label = the faint WFG code style (font var(--fn), 10.5px, 600, #9aa5ad), no gold (Harpreet, Nov 3) */
+.amdw select,.amdw.ovr select,.lmd .amdw select,#p-rec .rct td .amdw select,.att .amdw select,.arc input,.arc .ovr input,.mdfb select,.mdfb.on select,.mdv{font-family:var(--fn)!important;font-size:10.5px!important;font-weight:600!important;letter-spacing:.1px!important;color:#9aa5ad!important}
+.amdw.ovr select,.arc .ovr input,.mdfb.on select{border-color:#3a444c!important;background:#1d2328!important}
+.amdw.k-none select{color:#56626b!important}.arc input::placeholder{color:#56626b}
+.mdfb select{padding:10px 30px 10px 12px}
+.amdw .amdm{background:#1d2328!important;border:1px solid #3a444c!important;color:#7f8a92!important;font-size:8px!important;font-weight:600!important;padding:1px 2px!important;top:-5px!important;right:-2px!important;opacity:.85}
+.mdfb small button{color:#9aa5ad!important;font-weight:600!important}
+.mdfn b{color:#9aa5ad!important;font-weight:600!important;font-family:var(--fn);font-size:10.5px}
+.att tr.asub.mdg td,#p-att .attb.sb .att tr.asub.mdg td,.att tr.asub.mdg.none td{background:rgba(255,255,255,.03)!important;color:#9aa5ad!important;border-top:1px solid #3a444c!important}
+.att tr.asub.mdg td b{font-family:var(--fn);font-size:10.5px;font-weight:600;letter-spacing:.1px;color:#9aa5ad;text-transform:none}
+.att tr.asub.mdg .pc{color:#9aa5ad;font-size:10.5px;font-weight:600}
+.att .anm small.mdt,.att tr.amdself .asn,.atmd>div.r small{color:#9aa5ad!important}
+.att tr.amdh td{background:rgba(255,255,255,.03)!important;border-top:1px solid #3a444c!important}
+#licMdf .mdfb{margin:6px 2px 8px}
+.atvw button.on{background:#1d2328!important;border-color:#56626b!important;color:#9aa5ad!important}
 </style>
 </head>
 <body>
@@ -950,13 +966,14 @@ button{cursor:pointer}
 
   <!-- TAB 3: LICENCES (monthly only; filled by the bot). This tab scrolls like a normal page so the full roster is readable. -->
   <section class="page" id="p-lic">
-    <div id="licMdf"></div>
     <div class="card mdf lgh" id="licGoal"></div>
+    <div id="licMdf"></div>
     <div class="slbl"><span>New licences <small id="lMon"></small></span><small>goal 3 / month each</small></div>
     <div class="card lgo" id="licStats"></div>
     <div class="slbl"><span>New names <small id="nPer"></small></span></div>
     <div class="lnm" id="licSplit"></div>
     <div class="slbl"><span>All licensed agents <small id="rMeta"></small></span></div>
+    <div id="licMdfN"></div>
     <div class="roster" id="roster"></div>
     <div class="note" id="rNote"></div>
   </section>
@@ -1062,7 +1079,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-43";
+var APP_VERSION="2026.11.03-44";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1349,7 +1366,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><table class="rt2 r6">'+cols+'<thead><tr><th>Name<small>Upline MD</small></th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th></tr></thead></table>'+
         '<div class="rb">'+(rows.length?'<table class="rt2 r6">'+cols+'<tbody>'+rows.map(function(r){var pp=lp(r);return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+(pp.id?'<div class="lmd">'+mdCell(AR,MO,pp,team)+'</div>':'')+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'</tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
         '<table class="rt2 r6">'+cols+'<tbody><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'</tr></tbody></table></div>';}
-    $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");$("licMdf").innerHTML=mdfSel(AR,nS,nT,MDF.v?"Filters the All licensed agents list below":"");
+    $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");$("licMdf").innerHTML=mdfSel(AR,nS,nT,MDF.v?"Filters the All licensed agents list below":"");$("licMdfN").innerHTML=MDF.v?'<div class="mdfn">Only people with Upline MD: <b>'+esc(mdfLbl(AR))+'</b> · '+nS+' of '+nT+'</div>':'';
     // v12: Licences tab goal header = 100 licensed team (base + super base roster count)
     var nb0=Array.isArray(L.base)?L.base.length:0,ns0=Array.isArray(L.superbase)?L.superbase.length:0,tot=nb0+ns0,G=100,gf=Math.min(1,tot/G);
     $("licGoal").innerHTML='<div class="goal"><span class="ge">GOAL</span><b>100 LICENSED TEAM</b></div>'+
@@ -1700,7 +1717,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(!L.length){h+='<div class="rcno">No recruits yet.</div></div>';return;}
       h+='<div class="tsc"><table class="rct"><thead><tr><th>Name</th><th>Code</th><th>Recruit date</th><th>Upline MD</th></tr></thead><tbody>';
       L.forEach(function(e){var src=(e.sources||[]).join(" + "),aka=(e.aka||[]).length?"aka "+e.aka.join(", "):"";
-        var pp=rp(e,S[0]),up=pp.id?mdCell(AR,MO,pp,S[0]):(e.upline_md?esc(e.upline_md):'<span class="na">—</span>');if(e.recruiter)up+='<small>Recruiter: '+esc(e.recruiter)+'</small>';
+        var pp=rp(e,S[0]),up=pp.id?mdCell(AR,MO,pp,S[0]):(e.upline_md?'<span class="mdv">'+esc(e.upline_md)+'</span>':'<span class="na">—</span>');if(e.recruiter)up+='<small>Recruiter: '+esc(e.recruiter)+'</small>';
         h+='<tr><td><b>'+esc(e.name)+'</b>'+(aka?'<small>'+esc(aka)+'</small>':'')+'<small'+(src==="MyWFG"?' class="w"':'')+'>'+esc(src==="MyWFG"?"MyWFG only (not on DBI)":src)+'</small></td>'
           +'<td class="c">'+(e.code?esc(e.code):'<span class="na">—</span>')+'</td><td class="d">'+(e.date?esc(rcDate(e.date)):'<span class="na">—</span>')+'</td><td>'+up+'</td></tr>';});
       h+='</tbody></table></div></div>';});
