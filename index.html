@@ -548,6 +548,12 @@ button{cursor:pointer}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{flex:1 0 auto;min-width:54px;padding-left:4px;padding-right:4px}
 @media (max-width:430px){.tabs button{min-width:52px;font-size:10.5px;letter-spacing:-.1px}}
+/* v33: highlighted tabs. Admin, Certs, Upcoming = green; Leaders = gold. Tinted when inactive, filled pill when active. */
+.tabs button.tgr{color:#5fe27a;background:rgba(22,236,6,.07);box-shadow:inset 0 2px 0 rgba(22,236,6,.55)}
+.tabs button.tgr.on{color:#0c1a0c;background:linear-gradient(180deg,#5af06a,#18c93a);box-shadow:none}
+.tabs button.tgo{color:#F5C451;background:rgba(245,196,81,.08);box-shadow:inset 0 2px 0 rgba(245,196,81,.6)}
+.tabs button.tgo.on{color:#1d1503;background:linear-gradient(180deg,#FFE7A3,#E2AA2A);box-shadow:none}
+.tabs button.tgr+.tgo{margin-left:1px}.tabs button.tgo{margin-right:2px}
 /* ===== v29: Leaders Bulletin tab (bs-v1:leaders, built by build_lb.py from MyWFG Leaders Bulletin R02-R07; read-only; page scrolls) ===== */
 #p-lb .lbme{padding:0;overflow:hidden}
 #p-lb .lbmh{font-size:12.5px;font-weight:700;color:#cfd6db;padding:10px 12px 6px;line-height:1.35}
@@ -601,6 +607,12 @@ button{cursor:pointer}
 #p-lb .lbnotes li{margin:3px 0 3px 14px}
 #p-lb .lbnotes b{color:#cfd6db}
 @media (min-width:900px){#p-lb{max-width:1100px;margin:0 auto}}
+/* v33: Leaders month selector */
+.lbmbar{display:flex;align-items:center;gap:8px;margin:2px 4px 10px;font-family:var(--fc);font-size:12.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#aab4bb}
+.lbmsw{position:relative;display:inline-block}
+.lbmsw:after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#14181b;pointer-events:none;font-size:12px}
+#lbMon{appearance:none;-webkit-appearance:none;background:var(--gold);color:#14181b;border:0;border-radius:10px;font-family:var(--fn);font-size:14px;font-weight:800;padding:7px 30px 7px 12px;letter-spacing:0}
+#lbMonN{font-family:var(--fn);font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;color:#7f8a92;margin-left:auto;text-align:right}
 /* v32: Points and Recruits (#p-trends) + Admin (#p-adm) report tables */
 #p-trends,#p-adm{max-width:900px;margin:0 auto}
 .rpbar{display:flex;align-items:center;gap:6px;margin:12px 4px 6px;font-size:11.5px;color:#8c979f;font-weight:600;flex-wrap:wrap}
@@ -761,6 +773,7 @@ button{cursor:pointer}
 
   <!-- TAB 5b (v29): LEADERS BULLETIN (bs-v1:leaders, built by build_lb.py from the MyWFG Leaders Bulletin top 100 exports). Read-only; scrolls like a normal page; tables scroll sideways with a sticky name column. -->
   <section class="page" id="p-lb">
+    <div class="lbmbar"><label for="lbMon">Bulletin month</label><span class="lbmsw"><select id="lbMon" aria-label="Bulletin month"></select></span><span id="lbMonN"></span></div>
     <div class="card mdf"><div class="mdft">Leaders Bulletin</div><div class="mdfs" id="lbMeta"></div></div>
     <div class="lb2bar"><span id="lbSum"></span><span class="sp"></span><button type="button" id="lbAll">Collapse all</button></div>
     <div class="card lbx" id="lbSecs"></div>
@@ -808,23 +821,23 @@ button{cursor:pointer}
 </div>
 
 <nav class="tabs" id="tabs">
+  <button data-t="adm" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg>Admin</button>
+  <button data-t="cert" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
+  <button data-t="up" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
+  <button data-t="lb" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="meet"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
   <button data-t="gold"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Gold</button>
-  <button data-t="cert"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M9.5 9l1.8 1.8 3.4-3.6M8.5 13.8 7 21l5-2.5 5 2.5-1.5-7.2"/></svg>Certs</button>
-  <button data-t="up"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9 15l2 2 4-4.2"/></svg>Upcoming</button>
   <button data-t="rec"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
   <button data-t="lic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
   <button data-t="trends"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
-  <button data-t="lb"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="gt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.8"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M7 20c.4-3.3 2.4-5.3 5-5.3s4.6 2 5 5.3M1.8 18.5c.3-2.3 1.5-3.7 3.2-3.7 1 0 1.8.4 2.4 1.1M22.2 18.5c-.3-2.3-1.5-3.7-3.2-3.7-1 0-1.8.4-2.4 1.1"/></svg>Together</button>
-  <button data-t="adm"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg>Admin</button>
 </nav>
 
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-32";
+var APP_VERSION="2026.11.03-33";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1182,6 +1195,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       o+='<button class="dt" data-m="'+m.s+'"><span class="tn">'+m.i+' '+(m.sn||m.n)+'</span><span class="tv"><b style="color:'+(tw!=null&&w>=tw?'#16EC06':'#fff')+'">'+nf(w,m.k)+(tw!=null?'<small>/'+nf(tw,m.k)+'</small>':'')+'</b><i>mo '+nf(mo,m.k)+(tm!=null?'/'+nf(tm,m.k):'')+'</i></span></button>';});
     $("tDash").innerHTML='<div class="slbl" style="margin-top:4px">This week · tap for trend <small>mo = this month</small></div>'+o+'</div>';
   }
+  $("lbMon").addEventListener("change",function(){lbMonSel=this.value;renderLb();});
   $("tDash").addEventListener("click",function(e){var b=e.target.closest("[data-m]");if(!b)return;tvOff=0;tvPushed=true;location.hash="trends/"+b.dataset.m;});
   var tvRange="W",tvOff=0,tvSlug=null,tvPushed=false;
   function tvWin(){
@@ -1318,10 +1332,12 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function lbCell(m,f){var t=lbN(m[f],f),r=m.ranks&&m.ranks[f];return t===null?'<td><span class="na">—</span></td>':'<td>'+esc(t)+(r?'<i>#'+esc(r)+'</i>':'')+'</td>';}
   // v31: one table, sections in the owner's order. "" blank = on the roster but not on this bulletin; "—" = not in that top 100; "·" = not pulled.
   var LB2=[["prec","Pers rec"],["ppts","Pers prod"],["rec","Base rec"],["pts","Base pts"],["lic","Lic"]],lbClosed={},lbAllClosed=false;
+  function lbHasP(L,f){var c=L.cols||{};return Array.isArray(c.pfields)?c.pfields.indexOf(f)>=0:!!c.personal;}
   function lb2Cell(m,f,L,first){var cls=first?' class="gs"':'';
     if(m.absent)return '<td'+cls+'></td>';
     var pers=f.charAt(0)==="p"&&f.indexOf("pts")!==0;
-    if(pers&&!(L.cols&&L.cols.personal)&&!m.me)return '<td'+cls+'><span class="np">·</span></td>';
+    if(pers&&!lbHasP(L,f)&&!m.me)return '<td'+cls+'><span class="np">·</span></td>';
+    if(pers&&m[f]==null&&!m.me)return '<td'+cls+'></td>';   // v33: not in the Personal top 500 = blank
     var t=lbN(m[f],f.replace(/^p(?=rec|pts)/,"")),r=m.ranks&&m.ranks[f];
     if(f==="ppts_m"||f==="ppts_12")t=lbN(m[f],"pts");
     return t===null?'<td'+cls+'>'+(m.me?'<span class="np">·</span>':'<span class="na">—</span>')+'</td>':'<td'+cls+'>'+esc(t)+(r?'<i>#'+esc(r)+'</i>':'')+'</td>';}
@@ -1377,16 +1393,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("tdTbl").innerHTML=h+'</tbody></table></div>';
     $("admNote").textContent="Platform fee: "+(A.pf.scope||"Super Team")+", not recurring first. Training: "+(A.td.scope||"")+", soonest deadline first. Source: "+(A.source||"MyWFG")+".";
   }
+  var lbMonSel="";
+  function lbMonths(){var H=getJ("leaders_history",null),cur=getJ("leaders",null),o={};if(H&&typeof H==="object")Object.keys(H).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k)&&H[k]&&Array.isArray(H[k].sections))o[k]=H[k];});
+    if(cur&&cur.month&&Array.isArray(cur.sections)&&(!o[cur.month]||String(cur.updated||"")>=String(o[cur.month].updated||"")))o[cur.month]=cur;return o;}
   function renderLb(){
-    var L=getJ("leaders",null);
-    if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base top 100";$("lbSum").textContent="";$("lbSecs").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbNotes").innerHTML="";return;}
+    var MO=lbMonths(),ks=Object.keys(MO).sort().reverse();if(!MO[lbMonSel])lbMonSel=ks[0]||"";
+    var so=ks.map(function(k){return '<option value="'+k+'">'+esc(lbMon(k))+'</option>';}).join("")||'<option value="">—</option>';
+    if($("lbMon").innerHTML!==so)$("lbMon").innerHTML=so;$("lbMon").value=lbMonSel;
+    $("lbMonN").textContent=ks.length?(ks.length===1?"1 month saved":ks.length+" months saved")+(lbMonSel&&lbMonSel!==ks[0]?" · past month":" · newest"):"";
+    var L=MO[lbMonSel]||getJ("leaders",null);
+    if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base bulletin";$("lbSum").textContent="";$("lbSecs").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbNotes").innerHTML="";return;}
     var v2=L.v===2,mo=lbMon(L.month),from=lbMon(L.r12_from),mon=mo.split(" ")[0]||"Month";
-    $("lbMeta").textContent=[mo?mo:"",from&&mo?"12 mo "+from+"–"+mo:"",L.variant||"SMD Base",lqUpd(L)?lqUpd(L)+" ET":""].filter(Boolean).join(" · ");
+    $("lbMeta").textContent=[mo?"Bulletin month: "+mo:"",from&&mo?"Rolling 12: "+from+"–"+mo:"",L.variant||"SMD Base",lqUpd(L)?lqUpd(L)+" ET":""].filter(Boolean).join(" · ");
     var secs=L.sections,nt=0,nn=0;secs.forEach(function(s){nt+=s.smd_total||0;nn+=s.smd_now||0;});
     $("lbSum").textContent=secs.length+" leaders · "+nt+" in teams · "+nn+" on this bulletin";
     var cols=[];["m","12"].forEach(function(p){LB2.forEach(function(c,j){cols.push([c[0]+"_"+p,c[1],j===0,c[0].charAt(0)==="p"]);});});
     var h='<div class="tsc"><table class="lb2"><thead><tr><th class="nm" rowspan="2">Leader / team</th><th class="g gs" colspan="5">Current month · '+esc(mon)+'</th><th class="g g2 gs" colspan="5">Rolling 12 months</th></tr><tr>'
-      +cols.map(function(c){return '<th class="'+(c[2]?"gs ":"")+(c[3]&&!(L.cols&&L.cols.personal)?"pc":"")+'">'+esc(c[1])+'</th>';}).join("")+'</tr></thead>';
+      +cols.map(function(c){return '<th class="'+(c[2]?"gs ":"")+(c[3]&&!lbHasP(L,c[0])?"pc":"")+'">'+esc(c[1])+'</th>';}).join("")+'</tr></thead>';
     secs.forEach(function(s,i){var ms=Array.isArray(s.members)?s.members:[];var key=s.leader||String(i),cl=lbClosed[key]!==undefined?lbClosed[key]:lbAllClosed;
       h+='<tbody class="'+(cl?"cl":"")+'" data-lk="'+esc(key)+'">';
       ms.forEach(function(m,j){var lead=!!m.lead;
@@ -1405,11 +1428,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     h+='</table></div>';
     $("lbSecs").innerHTML=h;
     $("lbAll").textContent=lbAllClosed?"Expand all":"Collapse all";
-    var n='<b>How to read:</b> value with its Company rank (#n). <b>—</b> = not in that top 100. Blank = on the team list but not on this bulletin (kept, never erased). <b>·</b> = not in the MyWFG pull. Team = everyone whose Upline EMD is the leader; a listed leader is shown once, in his own section. Tap a leader to fold his team.';
+    var n='<b>How to read:</b> value with its Company rank (#n). <b>—</b> = not in that top '+(L.top||100)+'. Blank = on the team list but not on this bulletin (kept, never erased). <b>·</b> = not in the MyWFG pull. Team = everyone whose Upline EMD is the leader; a listed leader is shown once, in his own section. Tap a leader to fold his team.';
     var lst=(L.gaps||[]).map(function(g){return "<li><b>Gap:</b> "+esc(g)+"</li>";})
       .concat((L.checks||[]).map(function(c){return "<li>"+esc(c)+"</li>";}));
     if(lst.length)n+='<ul style="margin:6px 0 0;padding:0">'+lst.join("")+'</ul>';
-    var C=L.cutoffs||{};if(C.pts_m!=null)n+='<div style="margin-top:6px">#100 cutoff: base rec '+esc(lbN(C.rec_m,"rec"))+' / '+esc(lbN(C.rec_12,"rec"))+' · base pts '+esc(lbN(C.pts_m,"pts"))+' / '+esc(lbN(C.pts_12,"pts"))+' · lic '+esc(lbN(C.lic_m,"lic"))+' / '+esc(lbN(C.lic_12,"lic"))+' (month / 12 mo)</div>';
+    var C=L.cutoffs||{};if(C.pts_m!=null)n+='<div style="margin-top:6px">#'+(L.top||100)+' cutoff: base rec '+esc(lbN(C.rec_m,"rec"))+' / '+esc(lbN(C.rec_12,"rec"))+' · base pts '+esc(lbN(C.pts_m,"pts"))+' / '+esc(lbN(C.pts_12,"pts"))+' · lic '+esc(lbN(C.lic_m,"lic"))+' / '+esc(lbN(C.lic_12,"lic"))+' (month / 12 mo)</div>';
     if(L.source)n+='<div style="margin-top:6px;color:#6f7a82">Source: '+esc(L.source)+'</div>';
     $("lbNotes").innerHTML=n;}
   $("lbSecs").addEventListener("click",function(e){var tr=e.target.closest("tr.ld");if(!tr)return;var tb=tr.parentNode,k=tb.getAttribute("data-lk");var c=!tb.classList.contains("cl");tb.classList.toggle("cl",c);lbClosed[k]=c;});
