@@ -266,6 +266,32 @@ button{cursor:pointer}
   .goal{flex-direction:row;justify-content:center;align-items:baseline;gap:14px}
   .gls{max-width:760px;margin-left:auto;margin-right:auto}
 }
+/* ===== v6: base / super base split panels ===== */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.pan{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0)),var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;min-width:0;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+.pan.base{border-color:rgba(245,196,81,.28)}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}
+.ph b{font-family:var(--fc);font-size:13px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+.pan.sb .ph b{color:#6cc3f5}
+.ph small{display:block;font-family:var(--fc);font-size:10.5px;letter-spacing:.8px;color:#7f8a92;text-transform:uppercase}
+.ph .pc{font-family:var(--fn);font-size:24px;font-weight:700;line-height:1}
+.nl{font-size:13.5px;font-weight:700;padding:6px 0;border-top:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nl small{display:block;font-size:11px;color:#8c979f;font-weight:600}
+.nl:first-of-type{border-top:0}
+.pan .empty{padding:8px 2px;font-size:12.5px;text-align:left}
+.mds{display:grid;gap:8px}
+.mdt .ttl{display:inline-block;margin-left:5px;font-size:10.5px;font-weight:800;color:#101518;background:var(--gold);border-radius:4px;padding:0 4px;vertical-align:2px}
+.pan.sb .mdt .ttl{background:#6cc3f5}
+.pan .mdt th{padding:0 3px 5px;font-size:11px}
+.pan .mdt td{padding:7px 3px;font-size:15px}
+.pan .mdt td:first-child{font-size:13.5px}
+.tgrid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.segc{display:flex;justify-content:center;margin:6px 0 2px}
+@media (min-width:900px){
+  #p-lic,#p-md{max-width:none}
+  .mds{grid-template-columns:1fr 1fr}
+  .licw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:14px;align-items:start}
+}
 </style>
 </head>
 <body>
@@ -299,16 +325,19 @@ button{cursor:pointer}
   <!-- TAB 3: LICENCES (day by day, filled by the bot) -->
   <section class="page" id="p-lic">
     <div class="dnav"><div class="pnav"><button class="pa" id="lPrev" aria-label="Previous day">‹</button><div class="pl"><span id="lLbl">TODAY</span><input type="date" id="lPick" aria-label="Pick a date"></div><button class="pa" id="lNext" aria-label="Next day">›</button></div><button class="tbtn" id="lToday" hidden>Today</button></div>
-    <div class="card dsum"><div class="dbig"><b id="lCnt">0</b><span id="lCntL">new licences</span></div><div class="dsm" id="lWM"></div></div>
-    <div class="slbl">Newly licensed <small id="lFor"></small></div>
-    <div class="card lst who" id="licList"></div>
-    <div class="note">Goal: 1 base licence a week · 3 a month. Updated by your bot</div>
+    <div class="licw">
+      <div><div class="slbl">Base licences vs goal <small>1/wk · 3/mo</small></div>
+      <div class="card"><div class="rg" id="licGrid"></div></div></div>
+      <div><div class="segc"><div class="seg" id="lSeg"><button data-r="D">Day</button><button data-r="W">Week</button><button data-r="M">Month</button></div></div>
+      <div class="split" id="licSplit"></div>
+      <div class="note">Base = your base shop · Super base = Sunchandan Singh's team. Updated by your bot from MyWFG</div></div>
+    </div>
   </section>
 
   <!-- TAB 4: MDs (bs-v1:mdstats, filled by the bot from MyWFG) -->
   <section class="page" id="p-md">
-    <div class="slbl">MD team <small id="mdMeta"></small></div>
-    <div class="card"><table class="mdt"><thead><tr><th>Name</th><th>Recruits</th><th>Cash flow</th></tr></thead><tbody id="mdBody"></tbody></table></div>
+    <div class="slbl">MD teams <small id="mdMeta"></small></div>
+    <div class="mds" id="mdSplit"></div>
     <div class="note" id="mdUpd"></div>
     <div class="card legs"><div id="legRing"></div><div><div class="mn" id="legTxt"></div><div class="mt" id="legNames"></div></div></div>
   </section>
@@ -344,7 +373,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.02-5";
+var APP_VERSION="2026.11.02-6";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -479,27 +508,45 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   navBind("c",renderCert);
   // ---------- tab 3: licences (goal 1 a week, 3 a month) ----------
   var LIC={w:1,m:3};
+  var lRange="D";
+  function licTeam(e){return e&&e.team==="superbase"?"superbase":"base";}   // missing team = base
+  function licIn(team,days){return list("licences").filter(function(e){return licTeam(e)===team&&inDays(e,days);});}
   function renderLic(){
-    navRender("l");var k=dv.l,a=list("licences"),dl=a.filter(function(e){return e.date===k;});
-    var w=a.filter(function(e){return inDays(e,weekDays(k));}).length,m=a.filter(function(e){return inDays(e,monthDays(k));}).length;
-    $("lCnt").textContent=dl.length;$("lCntL").textContent=dl.length===1?"new licence":"new licences";
-    $("lWM").innerHTML='<div><b style="color:'+(w>=LIC.w?'#16EC06':'#fff')+'">'+w+'<small>/'+LIC.w+'</small></b><span>Week</span></div><div><b style="color:'+(m>=LIC.m?'#16EC06':'#fff')+'">'+m+'<small>/'+LIC.m+'</small></b><span>'+MON[parse(k).getUTCMonth()]+'</span></div>';
-    $("lFor").textContent=forTxt(k);
-    $("licList").innerHTML=dl.length?dl.map(function(e){return '<div class="it"><div class="l"><span class="av">'+esc(ini(e.name))+'</span><div><div class="nm">'+esc(e.name)+'</div>'+(e.note||e.source?'<div class="sub">'+esc([e.source,e.note].filter(Boolean).join(" · "))+'</div>':'')+'</div></div><div><span class="pill b">Licensed</span></div></div>';}).join(""):'<div class="empty">No new licences '+forTxt(k)+'</div>';
+    navRender("l");var k=dv.l,D=[k],W=weekDays(k),M=monthDays(k),mon=MON[parse(k).getUTCMonth()];
+    var lab=k===today?"Today":k===shift(today,-1)?"Yesterday":"Day";
+    function cell(n,t,blue){if(!t){var c=n>0?(blue?"#6cc3f5":"#F5C451"):"#323b42";return '<div class="rc">'+ring(n>0?1:0,c,44,5,'<b>'+n+'</b>')+'<div class="rt"><small>no goal</small></div></div>';}
+      var f=n/t;return '<div class="rc">'+ring(f,recCol(f),44,5,'<b>'+n+'</b>')+'<div class="rt">'+(f>=1?'✓ ':'')+'of '+t+'<small>'+Math.min(999,Math.round(f*100))+'%</small></div></div>';}
+    var b=[licIn("base",D).length,licIn("base",W).length,licIn("base",M).length],sb=[licIn("superbase",D).length,licIn("superbase",W).length,licIn("superbase",M).length];
+    $("licGrid").innerHTML='<div></div><div class="rh">'+lab+'</div><div class="rh">Week</div><div class="rh">'+mon+'</div>'+
+      '<div class="rn">Base<small>goal</small></div>'+cell(b[0],0)+cell(b[1],LIC.w)+cell(b[2],LIC.m)+
+      '<div class="rn" style="color:#6cc3f5">Super base<small>Sunchandan</small></div>'+cell(sb[0],0,1)+cell(sb[1],0,1)+cell(sb[2],0,1);
+    [].forEach.call(document.querySelectorAll("#lSeg button"),function(x){x.classList.toggle("on",x.dataset.r===lRange);});
+    var days=lRange==="D"?D:lRange==="W"?W:M,per=lRange==="D"?forTxt(k):lRange==="W"?"week of "+pretty(W[0]):mon+" "+k.slice(0,4);
+    function pan(team,cls,title){var a=licIn(team,days).sort(function(x,y){return x.date<y.date?-1:x.date>y.date?1:0;});
+      return '<div class="pan '+cls+'"><div class="ph"><div><b>'+title+'</b><small>'+esc(per)+'</small></div><span class="pc">'+a.length+'</span></div>'+
+        (a.length?a.map(function(e){return '<div class="nl">'+esc(e.name)+(lRange!=="D"||e.source||e.note?'<small>'+esc([lRange!=="D"?pretty(e.date):"",e.source,e.note].filter(Boolean).join(" · "))+'</small>':'')+'</div>';}).join(""):'<div class="empty">No new licences</div>')+'</div>';}
+    $("licSplit").innerHTML=pan("base","base","Base")+pan("superbase","sb","Super base");
   }
+  $("lSeg").addEventListener("click",function(e){var x=e.target.closest("button");if(!x)return;lRange=x.dataset.r;renderLic();});
   navBind("l",renderLic);
   // ---------- tab 4: MDs (read-only table from bs-v1:mdstats; the bot fills it from MyWFG) ----------
   function legs(){var l=getJ("legs",null);return l&&typeof l==="object"?l:{target:3,smd:[]};}
   var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
   function renderMd(){
-    var st=getJ("mdstats",null);if(!st||typeof st!=="object")st={rows:[]};var rows=Array.isArray(st.rows)?st.rows:[];
+    var st=getJ("mdstats",null);if(!st||typeof st!=="object")st={};
+    var base=Array.isArray(st.base)?st.base:Array.isArray(st.rows)?st.rows:[],sup=Array.isArray(st.superbase)?st.superbase:[];   // old {rows:[]} format = base
     function nb(v){return v===null||v===undefined||v===""||!isFinite(+v);}
     var mo=/^\d{4}-\d{2}$/.test(st.month||"")?st.month:today.slice(0,7);
     $("mdMeta").textContent=MONL[+mo.slice(5,7)-1]+" "+mo.slice(0,4);
-    $("mdBody").innerHTML=rows.length?rows.map(function(r){return '<tr><td>'+esc(r.name)+'</td>'+(nb(r.recruits)?'<td class="na">—</td>':'<td>'+Math.round(+r.recruits)+'</td>')+(nb(r.cashflow)?'<td class="na">—</td>':'<td>$'+Math.round(+r.cashflow).toLocaleString("en-US")+'</td>')+'</tr>';}).join(""):'<tr><td colspan="3" class="empty">No MDs yet</td></tr>';
+    function tbl(rows,cls,title,sub){var tr=0,tc=0,any=false;rows.forEach(function(r){if(!nb(r.recruits)){tr+=+r.recruits;any=true;}if(!nb(r.cashflow)){tc+=+r.cashflow;any=true;}});
+      return '<div class="pan '+cls+'"><div class="ph"><div><b>'+title+'</b><small>'+sub+'</small></div><span class="pc" style="font-size:18px">'+rows.length+'</span></div>'+
+      '<table class="mdt"><thead><tr><th>Name</th><th>Recruits</th><th>Cash flow</th></tr></thead><tbody>'+
+      (rows.length?rows.map(function(r){return '<tr><td>'+esc(r.name)+(r.title?'<span class="ttl">'+esc(r.title)+'</span>':'')+'</td>'+(nb(r.recruits)?'<td class="na">—</td>':'<td>'+Math.round(+r.recruits)+'</td>')+(nb(r.cashflow)?'<td class="na">—</td>':'<td>$'+Math.round(+r.cashflow).toLocaleString("en-US")+'</td>')+'</tr>';}).join("")+
+        (any&&rows.length>1?'<tr><td style="color:#8c979f">Total</td><td>'+Math.round(tr)+'</td><td>$'+Math.round(tc).toLocaleString("en-US")+'</td></tr>':''):'<tr><td colspan="3" class="na">None yet</td></tr>')+'</tbody></table></div>';}
+    $("mdSplit").innerHTML=tbl(base,"base","My base MDs","current month")+tbl(sup,"sb","Sunchandan's team","SMD + his MDs");
     $("mdUpd").textContent=(st.updated?"From MyWFG · updated "+pretty(st.updated):"Your bot fills this from MyWFG")+(mo!==today.slice(0,7)?" · last month's numbers":"");
     var l=legs(),n=(l.smd||[]).length,t=l.target||3;
-    $("legRing").innerHTML=ring(n/t,recCol(n/t),56,6,'<b style="font-size:15px">'+n+'<small>/'+t+'</small></b>');
+    $("legRing").innerHTML=ring(n/t,recCol(n/t),48,5,'<b style="font-size:14px">'+n+'<small>/'+t+'</small></b>');
     $("legTxt").textContent="Direct SMD legs: "+n+" of "+t;
     $("legNames").textContent=(l.smd||[]).length?l.smd.join(", "):"No SMD legs yet";
   }
@@ -518,8 +565,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {s:"r-pc",g:"Row results",i:"✅",n:"Pers. closing points",k:1,v:function(k){return int(day(k).r.pc)||0;},T:null},
     {s:"r-br",g:"Row results",i:"✅",n:"Base recruiting recruits",v:function(k){return int(day(k).r.br)||0;},T:null},
     {s:"r-bp",g:"Row results",i:"✅",n:"Base closing points",k:1,v:function(k){return int(day(k).r.bp)||0;},T:null},
-    {s:"certs",g:"Team",i:"🎓",n:"Certifications",v:cnt("certs"),T:null},
-    {s:"lic",g:"Team",i:"🪪",n:"New licences",v:cnt("licences"),T:{w:function(){return LIC.w;},m:function(){return LIC.m;}}}
+    {s:"certs",g:"Team",i:"🎓",n:"Certifications",sn:"Certs",v:cnt("certs"),T:null},
+    {s:"lic",g:"Team",i:"🪪",n:"Base licences",sn:"Base lic.",v:function(k){return licIn("base",[k]).length;},T:{w:function(){return LIC.w;},m:function(){return LIC.m;}}},
+    {s:"lic-sb",g:"Team",i:"🪪",n:"Super base licences",sn:"Superbase",v:function(k){return licIn("superbase",[k]).length;},T:null}
   ];
   function mBy(s){for(var i=0;i<METRICS.length;i++)if(METRICS[i].s===s)return METRICS[i];return null;}
   function nf(v,k){return k?kfmt(v):String(Math.round(v));}
@@ -529,9 +577,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     list("certs").concat(list("licences")).forEach(function(e){if(e.date&&e.date<f)f=e.date;});return f;}
   function renderDash(){
     var wd=weekDays(today),md=monthDays(today),o="",g="";
-    METRICS.forEach(function(m){if(m.g!==g){if(g)o+='</div>';g=m.g;o+='<div class="dgrp">'+g+'</div><div class="tgrid">';}
+    METRICS.forEach(function(m){if(m.g!==g){if(g)o+='</div>';g=m.g;o+='<div class="dgrp">'+g+'</div><div class="tgrid'+(g==="Team"?' c3':'')+'">';}
       var w=sumV(m,wd),mo=sumV(m,md),tw=tgtFor(m,"W",today),tm=tgtFor(m,"M",today);
-      o+='<button class="dt" data-m="'+m.s+'"><span class="tn">'+m.i+' '+m.n+'</span><span class="tv"><b style="color:'+(tw!=null&&w>=tw?'#16EC06':'#fff')+'">'+nf(w,m.k)+(tw!=null?'<small>/'+nf(tw,m.k)+'</small>':'')+'</b><i>mo '+nf(mo,m.k)+(tm!=null?'/'+nf(tm,m.k):'')+'</i></span></button>';});
+      o+='<button class="dt" data-m="'+m.s+'"><span class="tn">'+m.i+' '+(m.sn||m.n)+'</span><span class="tv"><b style="color:'+(tw!=null&&w>=tw?'#16EC06':'#fff')+'">'+nf(w,m.k)+(tw!=null?'<small>/'+nf(tw,m.k)+'</small>':'')+'</b><i>mo '+nf(mo,m.k)+(tm!=null?'/'+nf(tm,m.k):'')+'</i></span></button>';});
     $("tDash").innerHTML='<div class="slbl" style="margin-top:4px">This week · tap for trend <small>mo = this month</small></div>'+o+'</div>';
   }
   $("tDash").addEventListener("click",function(e){var b=e.target.closest("[data-m]");if(!b)return;tvOff=0;tvPushed=true;location.hash="trends/"+b.dataset.m;});

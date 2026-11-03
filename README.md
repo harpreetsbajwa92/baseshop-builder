@@ -10,8 +10,8 @@ Phone-first tracker for the goal **EMD + $250K by June 30, 2027**. It is one HTM
 - **Header:** "GOAL: EMD + $250K by June 30, 2027", days left, and **results-only** goals (goal text only; the "so far" notes were removed in -3). A $100K business means 15 base recruits and 100,000 base points a month. That works out to 4 recruits and 23K points a week (15 ÷ 4.33 rounded up, 100,000 ÷ 4.33), and 1 recruit and 4K points a day, Mon–Sat (26 working days).
 1. **Meetings:** a date picker (Toronto time, so he can backfill). It has two sets of rings, each for the viewed day, its week and its month: **Recruiting** (recruits vs 1 / 4 / 15) and **Production** (base points vs 4K / 23K / 100K). Recruits = Personal recruiting + Base recruiting results. Base points = Personal closing + Base closing results; those boxes are labelled "points". Rows: Personal recruiting, Personal closing, Base recruiting, Base closing (meetings + Results), plus New contacts. Sunday has no daily goal.
 2. **Certs:** day by day, using the same date picker with arrows as Meetings (defaults to today). It shows who cleared which certification on that day, the count for that day, and small week and month counts. Filled by the bot (`bs-v1:certs`).
-3. **Licences:** the same day-by-day layout. It shows who was newly licensed on that day, the count for that day, and week x/1 and month x/3. **Goal: 1 base licence a week, 3 a month.** Filled by the bot (`bs-v1:licences`).
-4. **MDs:** a plain read-only table (Name, Current month recruits, Current month cash flow) from `bs-v1:mdstats`. Blank numbers show "—". The bot fills it from MyWFG. A small direct-SMD-legs ring (x of 3) sits below it.
+3. **Licences:** a date picker. Goal rings like Meetings: Today count (no daily goal), Week x/1, Month x/3 for the **base** goal, with a super base row of counts (no goal). Below, two panels, **Base** and **Super base** (Sunchandan Singh's team), list the licence names and count for the chosen Day, Week or Month. Filled by the bot from MyWFG.
+4. **MDs:** two read-only panels from `bs-v1:mdstats`, **My base MDs** and **Sunchandan's team** (Sunchandan Singh, SMD, plus his MDs). Each row shows Name (+ title), current month recruits and current month cash flow, with "—" until filled. The bot fills it from MyWFG. A small direct SMD legs ring (x of 3) sits below.
 5. **Trends:** a dashboard row for every metric (this week against its weekly goal, and this month). Tapping a row opens the trend view (`#trends/<slug>`), which has a metric picker and Week / Month / All. Week and Month show daily bars with a dashed daily goal line. All shows weekly bars with a dashed weekly goal line. Each view shows the total against its goal, a comparison with the prior period, and ‹ › to move between periods.
 
 ## Targets (whole numbers)
@@ -39,9 +39,9 @@ The prefix is `bs-v1:`, not `nn-v1:`. This app shares the `harpreetsbajwa92.gith
 |---|---|---|
 | `bs-v1:day:YYYY-MM-DD` | `{"m":{"pr":n,"pc":n,"br":n,"bp":n},"r":{"pr":n,"pc":n,"br":n,"bp":n},"nc":new contacts,"h":{"rec":base recruits,"pts":base points},"u":ms}`. All values are whole numbers, and a missing value means it was left blank. `bp` = **Base closing** (it was called "Base production"). `h` was added in v2026.11.02-2. Since v2026.11.02-3 it is no longer entered or shown, but the merge still keeps it and it is never deleted. Older records may still carry `m.lc`, `m.leg` and `r.lc`, `r.leg`, `r.cash`, which are kept but no longer shown. | app |
 | `bs-v1:certs` | array of `{"id","date":"YYYY-MM-DD","name","cert","score":int?,"note"?,"u":ms}` | **bot** |
-| `bs-v1:licences` | array of `{"id","date":"YYYY-MM-DD","name","source"?:"DBI Hub"\|"MyWFG","note"?,"u":ms}` | **bot** |
+| `bs-v1:licences` | array of `{"id","date":"YYYY-MM-DD","name","team"?:"base"\|"superbase","source"?:"DBI Hub"\|"MyWFG","note"?,"u":ms}`. `team` was added in v2026.11.02-6. A missing `team` counts as `"base"` (Harpreet's own base shop). `"superbase"` = Sunchandan Singh's team. | **bot** |
 | `bs-v1:mds` | (legacy, no longer shown since v2026.11.02-4. Kept and never deleted.) array of `{"id","name","title","stage","notes","next","u":ms}` | none |
-| `bs-v1:mdstats` | `{"month":"YYYY-MM","updated":"YYYY-MM-DD" or "","rows":[{"name":str,"recruits":int\|null,"cashflow":number\|null}]}`. One row per MD for the current month. `null` shows "—". Seeded on Nov 2, 2026 with Gokul Ravichandran, Saurabh Nair, Ishdeep Singh and Dhrumil Vashi (blank numbers). | **bot** (from MyWFG) |
+| `bs-v1:mdstats` | `{"month":"YYYY-MM","updated":"YYYY-MM-DD" or "","base":[{"name","title":"MD"\|"SMD"\|"","recruits":int\|null,"cashflow":number\|null}],"superbase":[{...same row shape}]}`. `base` = MDs in Harpreet's base. `superbase` = Sunchandan Singh (SMD) plus his MDs. All numbers are for the current month, and `null` shows "—". The older `{"rows":[...]}` shape is still read as `base`. Migrated at rev 18 on Nov 2, 2026: base = Gokul Ravichandran, Saurabh Nair (MD), Ishdeep Singh, Dhrumil Vashi; superbase = Sunchandan Singh (SMD). | **bot** (from MyWFG) |
 | `bs-v1:legs` | `{"target":3,"smd":["Sunchandan Singh"]}` | bot/app |
 
 `cert` must be exactly one of: `Ethics Compliance`, `Ethics`, `Life Insurance`, `A&S`, `Seg Funds`.
@@ -76,6 +76,12 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.02-6:**
+  - Licences: goal rings like Meetings (Today count, Week x/1, Month x/3 for the base goal, plus super base counts with no goal). Two panels, Base and Super base, list licence names for the Day, Week or Month.
+  - `bs-v1:licences` entries gain `team` ("base" or "superbase"; missing = base).
+  - MDs: two panels, "My base MDs" and "Sunchandan's team" (Name + title, recruits, cash flow, totals). `bs-v1:mdstats` now has `base` and `superbase` lists (migrated with a write-merge at rev 18). The SMD legs ring is kept.
+  - Trends: "Base licences" (goal 1 a week, 3 a month) and "Super base licences" (no goal).
+  - Still one screen at 390×844 and 1280×800.
 - **v2026.11.02-5:**
   - Compact one-screen layout. Every tab fits with no scrolling at 390×844 (phone) and 1280×800 (laptop).
   - The header is now the gold goal line, then days left, then one centred row of Month / Week / Today goals.
