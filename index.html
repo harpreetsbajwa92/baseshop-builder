@@ -928,6 +928,7 @@ button{cursor:pointer}
 .gcg.none b{color:#7f8a92;background:#1b2226;border-color:#3a444c;font-size:13px}
 .gca{flex:1 1 70px;min-width:70px;max-width:120px}.gca .num{height:36px;font-size:18px}
 .gcvs{align-self:center;color:#7f8a92;font-size:12px;font-weight:700;padding-bottom:0;margin-top:14px}
+.gmk{align-items:flex-end;flex-wrap:nowrap}.gmk .gmn{align-self:center;margin-top:14px}.gmk .gdone{align-self:center;margin-top:14px}.gmk .gmn{flex:0 0 74px;font-family:var(--fn);font-size:12px;font-weight:800;color:#cfd6db;letter-spacing:.04em}.gmk .gca{max-width:90px}.gmk .gcg b{font-size:15px}.gdone{font-family:var(--fn);font-size:11px;font-weight:800;padding:3px 7px;border-radius:9px;background:#2c3236;color:#7d878d;white-space:nowrap}.gdone.on{background:#1f6b3a;color:#d8ffe4}.gmkb{margin:4px 0 0 82px}
 .gct{align-self:center;margin-top:14px;font-family:var(--fn);font-size:13px;font-weight:800;color:#cfd6db}
 .gsub{margin-top:8px}.gsub+.gsub{border-top:1px solid var(--line);padding-top:6px}
 .gbar{height:7px;border-radius:5px;background:#262e34;margin-top:9px;overflow:hidden}.gbar i{display:block;height:100%;border-radius:5px;background:#FF0026;transition:width .25s}
@@ -1125,7 +1126,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.04-46";
+var APP_VERSION="2026.11.04-47";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1239,6 +1240,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderMeet(){renderDate();renderGoCards();renderRowsInputs();renderMeetRings();}
   // ---------- v46: GOAL tab (goal vs achieved) ----------
   // Goals: bs-v1:goals {"updated","days":{"YYYY-MM-DD":{reach,meetups,personal,base:{goal,how[]},day:{recruits,points,how[]},source,updated}}} (bot only).
+  // v47: + marketing:{goal:{min,max},how[]} (missing on a goal day = default 4–5, no bullets). Achieved mk:{li,ig,wa} = posts/statuses Harpreet posted himself (app only tracks it).
   // Achieved: this day's bs-v1:day record (app only): ro = reach-outs, mu = meetups, m.pr+m.pc = personal meetings, m.br+m.bp = base meetings, h.rec / h.pts = day's results.
   function goalsAll(){var G=getJ("goals",null);return G&&typeof G==="object"&&G.days&&typeof G.days==="object"?G:null;}
   function goalDay(k){var G=goalsAll();var g=G&&G.days[k];return g&&typeof g==="object"?g:null;}
@@ -1248,6 +1250,18 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     {id:"meetups",n:"Meetups",sub:"Coffee or Zoom 1-on-1s booked with a date and time (set today, or held today)",f:[["mu","","Meetups"]]},
     {id:"personal",n:"Personal meetings",sub:"Appointments you run yourself: Step 1 / BPM presentations (recruiting) + closing / client meetings",f:[["m","pr","Recruiting"],["m","pc","Closing"]]},
     {id:"base",n:"Base meetings",sub:"Meetings with or for your base agents and MDs: field training, 3-ways, setup, base trainings",f:[["m","br","Recruiting"],["m","bp","Closing"]]}];
+  var MKP=[["li","LinkedIn"],["ig","Instagram"],["wa","WhatsApp"]];
+  function mkGoal(g){var M=g&&g.marketing&&typeof g.marketing==="object"?g.marketing:{},x=M.goal,mn=4,mx=5;
+    if(x&&typeof x==="object"){mn=int(x.min);mx=int(x.max);if(mn==null)mn=mx;if(mx==null||mx<mn)mx=mn;}else if(int(x)!=null){mn=mx=int(x);}
+    if(mn==null){mn=4;mx=5;}return {min:mn,max:mx,how:M.how};}
+  function mkStat(d,G){var o=d.mk&&typeof d.mk==="object"?d.mk:{},t=0;MKP.forEach(function(p){t+=Math.min(int(o[p[0]])||0,G.min);});return {o:o,f:G.min>0?Math.round(t/(G.min*MKP.length)*100):null,done:MKP.filter(function(p){return (int(o[p[0]])||0)>=G.min&&G.min>0;}).length};}
+  function renderMk(g,d,fut){var G=mkGoal(g),S=mkStat(d,G),gl=G.min===G.max?String(G.min):G.min+"\u2013"+G.max,h='<div class="card gc" data-gc="marketing"><div class="gch"><div><b>Marketing</b><small>Posts or statuses you post yourself on each platform. Report at the end of the day; '+G.min+' or more = done</small></div><span class="gpc '+gcls(S.f)+'" data-gp="mk">'+(S.f==null?"\u2014":S.f+"%")+'</span></div>';
+    MKP.forEach(function(p){var v=int(S.o[p[0]]),ok=(v||0)>=G.min&&G.min>0,f=G.min>0?Math.round(Math.min(v||0,G.min)/G.min*100):null;
+      h+='<div class="gcr gmk"><span class="gmn">'+p[1]+'</span><div class="gcg"><span class="gl2">Goal</span><b>'+gl+'</b></div><span class="gcvs">vs</span><div class="gca"><span class="gl2">Posted</span>'+ginp("mk",p[0],v,fut)+'</div><span class="gdone'+(ok?' on':'')+'" data-mt="'+p[0]+'">'+(ok?"\u2713 Done":"Not yet")+'</span></div><div class="gmkb" data-gb="mk-'+p[0]+'">'+gbar(f)+'</div>';});
+    return h+'<div class="gsrc" data-mkd="1" style="margin-top:6px">'+S.done+' of 3 platforms done</div>'+ghow(G.how)+'</div>';}
+  function mkProg(g,d){var G=mkGoal(g),S=mkStat(d,G),p=document.querySelector('#goCards [data-gp="mk"]');if(!p)return;p.textContent=S.f==null?"\u2014":S.f+"%";p.className="gpc "+gcls(S.f);
+    MKP.forEach(function(x){var v=int(S.o[x[0]])||0,ok=v>=G.min&&G.min>0,t=document.querySelector('#goCards [data-mt="'+x[0]+'"]'),b=document.querySelector('#goCards [data-gb="mk-'+x[0]+'"]');if(t){t.textContent=ok?"\u2713 Done":"Not yet";t.className="gdone"+(ok?" on":"");}if(b)b.innerHTML=gbar(G.min>0?Math.round(Math.min(v,G.min)/G.min*100):null);});
+    var n=document.querySelector('#goCards [data-mkd]');if(n)n.textContent=S.done+" of 3 platforms done";}
   function gv(d,f,c){var v=c?d[f]&&d[f][c]:d[f];return int(v);}
   function gpct(a,g){return g>0?Math.round(a/g*100):null;}
   function gcls(f){return f==null?"":f>=100?"g":f>=50?"y":f>0?"o":"";}
@@ -1270,13 +1284,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       '<div class="gsub"><div class="gch"><div><b style="font-size:13px">Base recruits</b></div><span class="gpc '+gcls(fr)+'" data-gp="rec">'+(fr==null?"—":fr+"%")+'</span></div><div class="gcr">'+gGoalBox(gr)+'<span class="gcvs">vs</span><div class="gca"><span class="gl2">Achieved</span>'+ginp("h","rec",int(d.h.rec),fut,lr)+'</div></div><div data-gb="rec">'+gbar(fr)+'</div></div>'+
       '<div class="gsub"><div class="gch"><div><b style="font-size:13px">Base points</b></div><span class="gpc '+gcls(fp)+'" data-gp="pts">'+(fp==null?"—":fp+"%")+'</span></div><div class="gcr">'+gGoalBox(gp,1)+'<span class="gcvs">vs</span><div class="gca" style="max-width:140px"><span class="gl2">Achieved</span>'+ginp("h","pts",int(d.h.pts),fut,lp)+'</div></div><div data-gb="pts">'+gbar(fp)+'</div></div>'+
       ghow(D.how)+(fut?'<div class="gfut">Achieved opens on the day.</div>':'')+'</div>';
+    h+=renderMk(g,d,fut);   // v47: 6th card
     $("goCards").innerHTML=h;
     $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u&&!fut?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
   function goProg(){var g=goalDay(view);if(!g)return;var d=day(view);
     function put(id,ach,goal){var f=gpct(ach,goal),p=document.querySelector('#goCards [data-gp="'+id+'"]'),b=document.querySelector('#goCards [data-gb="'+id+'"]'),t=document.querySelector('#goCards [data-gt="'+id+'"]');
       if(p){p.textContent=f==null?"—":f+"%";p.className="gpc "+gcls(f);}if(b)b.innerHTML=gbar(f);if(t)t.textContent="= "+ach;}
     GDEF.forEach(function(c){var G=g[c.id]||{},a=0;c.f.forEach(function(x){a+=gv(d,x[0],x[1])||0;});put(c.id,a,int(G.goal));});
-    var D=g.day||{};put("rec",achRec(d),int(D.recruits));put("pts",achPts(d),int(D.points));
+    var D=g.day||{};put("rec",achRec(d),int(D.recruits));put("pts",achPts(d),int(D.points));mkProg(g,d);
     [["rec",(int(d.r.pr)||0)+(int(d.r.br)||0)],["pts",(int(d.r.pc)||0)+(int(d.r.bp)||0)]].forEach(function(x){var i=document.querySelector('#goCards input[data-f="h"][data-c="'+x[0]+'"]');if(i)i.placeholder=x[1];});
     $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
 
@@ -1305,7 +1320,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function onInput(e){var t=e.target;if(t.dataset.nm||t.dataset.tx)return onText(t);if(!t.dataset.f)return;
     var v=int(t.value);if(t.value!==""&&v!==null&&String(v)!==t.value)t.value=v;   // whole numbers only
     if(view>today)return;   // v46: future days show the goal only
-    var d=day(view);if(t.dataset.f==="nc"||t.dataset.f==="si"||t.dataset.f==="ro"||t.dataset.f==="mu"){if(v===null)delete d[t.dataset.f];else d[t.dataset.f]=v;}else{var o=d[t.dataset.f];if(v===null)delete o[t.dataset.c];else o[t.dataset.c]=v;}
+    var d=day(view);if(t.dataset.f==="nc"||t.dataset.f==="si"||t.dataset.f==="ro"||t.dataset.f==="mu"){if(v===null)delete d[t.dataset.f];else d[t.dataset.f]=v;}else{var o=d[t.dataset.f];if(!o||typeof o!=="object")o=d[t.dataset.f]={};if(v===null)delete o[t.dataset.c];else o[t.dataset.c]=v;if(t.dataset.f==="mk"&&!Object.keys(o).length)delete d.mk;}
     d.u=Date.now();setJ("day:"+view,d);renderMeetRings();renderHeader();
     if(t.closest("#goCards")){goProg();renderRowsInputs();}else renderGoCards();}
   function setView(k){var mx=gMax();if(!k)k=today;if(k>mx)k=mx;view=k;nmOpen={};renderMeet();renderUpd("meet");}
