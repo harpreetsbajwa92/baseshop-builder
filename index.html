@@ -907,6 +907,37 @@ button{cursor:pointer}
 .att tr.amdh td{background:rgba(255,255,255,.03)!important;border-top:1px solid #3a444c!important}
 #licMdf .mdfb{margin:6px 2px 8px}
 .atvw button.on{background:#1d2328!important;border-color:#56626b!important;color:#9aa5ad!important}
+
+/* v46: Goal tab (goal vs achieved) + Updated/freshness line on every tab */
+.mdf.sm{padding:10px 12px 9px}.mdf.sm .mdft{font-size:clamp(26px,8vw,34px)}
+.upl{margin-top:6px;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;font-weight:700;color:#aab4bb;letter-spacing:.2px;text-transform:none;font-family:inherit}
+.upl .fr{font-size:10.5px;font-weight:800;border-radius:999px;padding:1px 8px;letter-spacing:.3px}
+.upl .fr.ok{background:rgba(22,236,6,.14);color:#16EC06}.upl .fr.old{background:rgba(245,166,35,.18);color:#F5A623}
+.upl .src{color:#7f8a92;font-size:11px;font-weight:600}
+.gcs{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:900px){.gcs{grid-template-columns:1fr 1fr;gap:0 12px}}
+.gc{padding:12px 14px}
+.gch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.gch b{font-family:var(--fc);font-size:15px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#e6ebee}
+.gch small{display:block;font-size:11.5px;color:#8c979f;font-weight:600;margin-top:1px;line-height:1.3}
+.gpc{font-family:var(--fn);font-size:12.5px;font-weight:800;border-radius:7px;padding:1px 8px;white-space:nowrap;background:#262e34;color:#9aa5ad}
+.gpc.g{background:rgba(22,236,6,.14);color:#16EC06}.gpc.y{background:rgba(255,222,0,.14);color:#FFDE00}.gpc.o{background:rgba(245,166,35,.16);color:#F5A623}
+.gcr{display:flex;align-items:flex-end;gap:8px;margin-top:8px;flex-wrap:wrap}
+.gcr .gl2{font-family:var(--fc);font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#7f8a92;display:block;margin-bottom:2px;text-align:center}
+.gcg{min-width:64px;text-align:center}.gcg b{display:block;height:36px;line-height:36px;border-radius:12px;background:rgba(245,196,81,.10);border:1px solid rgba(245,196,81,.35);font-family:var(--fn);font-size:19px;font-weight:800;color:var(--gold)}
+.gcg.none b{color:#7f8a92;background:#1b2226;border-color:#3a444c;font-size:13px}
+.gca{flex:1 1 70px;min-width:70px;max-width:120px}.gca .num{height:36px;font-size:18px}
+.gcvs{align-self:center;color:#7f8a92;font-size:12px;font-weight:700;padding-bottom:0;margin-top:14px}
+.gct{align-self:center;margin-top:14px;font-family:var(--fn);font-size:13px;font-weight:800;color:#cfd6db}
+.gsub{margin-top:8px}.gsub+.gsub{border-top:1px solid var(--line);padding-top:6px}
+.gbar{height:7px;border-radius:5px;background:#262e34;margin-top:9px;overflow:hidden}.gbar i{display:block;height:100%;border-radius:5px;background:#FF0026;transition:width .25s}
+.ghow{margin-top:9px;border-top:1px dashed #3a444c;padding-top:7px}
+.ghow>span{font-family:var(--fc);font-size:10.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#8c979f}
+.ghow ul{margin:3px 0 0;padding-left:17px}.ghow li{font-size:13px;line-height:1.38;color:#d4dadf;margin:2px 0}
+.gnone{text-align:center;color:#8c979f;font-size:13.5px;padding:14px 6px}
+.gsrc{font-size:11px;color:#7f8a92;text-align:center;margin:4px 6px 0}
+.gfut{font-size:11px;color:#8c979f;text-align:center;margin:2px 0 0}
+#p-meet.fut .mgrid{display:none}
 </style>
 </head>
 <body>
@@ -919,17 +950,22 @@ button{cursor:pointer}
 
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
+    <!-- v46: GOAL tab (was Main/Meetings; hash #meet kept, #goal and #main are aliases). Goal = bs-v1:goals (bot, read-only here); Achieved = this day's bs-v1:day record (app). -->
+    <div class="card mdf sm"><div class="mdft">Goal</div><div class="mdfs" id="goMeta">Goal vs achieved</div></div>
     <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
+    <div class="gcs" id="goCards"></div>
+    <div class="gsrc" id="goSrc"></div>
     <div class="mgrid">
       <div><div class="slbl"><span>Results vs goal<span class="bst">BASE SHOP</span></span><small id="logFor"></small></div>
       <div class="card"><div class="rg" id="resGrid"></div></div></div>
-      <div><div class="slbl"><span>Log meetings &amp; results<span class="bst">BASE SHOP</span></span></div>
+      <div><div class="slbl"><span>Detailed log<span class="bst">BASE SHOP</span></span><small>results, names, contacts</small></div>
       <div class="card" id="mRows"></div></div>
     </div>
   </section>
 
   <!-- TAB 2: CERTIFICATIONS (day by day, filled by the bot) -->
   <section class="page" id="p-cert">
+    <div class="card mdf sm"><div class="mdft">Certs</div><div class="mdfs">Oliver's LLQP · Base shop</div></div>
     <div class="dnav"><div class="pnav"><button class="pa" id="cPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="cLbl">TODAY</span><input type="date" id="cPick" aria-label="Pick a date"></div><button class="pa" id="cNext" aria-label="Next day">›</button></div><button class="tbtn" id="cToday" hidden>Today</button></div>
     <div class="cw"><div class="cwl">
     <div class="slbl"><span>Results vs goal<span class="bst">BASE SHOP</span></span><small>1/day · 7/wk · 30/mo</small></div>
@@ -1078,7 +1114,7 @@ button{cursor:pointer}
   <button data-t="att" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3.5" width="16" height="17.5" rx="2"/><path d="M9 3.5h6v3H9zM7.5 11l1.5 1.5 2.5-2.5M13.5 11.5h3M7.5 16l1.5 1.5 2.5-2.5M13.5 16.5h3"/></svg>Attendance</button>
   <button data-t="lb" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="trends" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
-  <button data-t="meet" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>Main</button>
+  <button data-t="meet" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Goal</button>
   <button data-t="gold" class="tbl" aria-label="Cold Prospects"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Cold Prospects</button>
   <button data-t="rec" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
   <button data-t="lic" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
@@ -1089,7 +1125,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-45";
+var APP_VERSION="2026.11.04-46";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1142,7 +1178,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function day(k){var d=getJ("day:"+k,null);if(!d||typeof d!=="object")d={};d.m=d.m||{};d.r=d.r||{};d.h=d.h||{};return d;}
   function totals(days){var m={},r={},h={rec:0,pts:0},nc=0;CATS.forEach(function(c){m[c.id]=0;r[c.id]=0;});
     days.forEach(function(k){var d=day(k);CATS.forEach(function(c){m[c.id]+=int(d.m[c.id])||0;r[c.id]+=int(d.r[c.id])||0;});h.rec+=int(d.h.rec)||0;h.pts+=int(d.h.pts)||0;nc+=int(d.nc)||0;});
-    return {m:m,r:r,h:h,nc:nc,rec:r.pr+r.br,pts:r.pc+r.bp};}   // results: recruits = pr+br results, base points = pc+bp results
+    var rec=0,pts=0;days.forEach(function(k){var d=day(k);rec+=achRec(d);pts+=achPts(d);});
+    return {m:m,r:r,h:h,nc:nc,rec:rec,pts:pts};}   // v46: per day, the Goal tab's typed h.rec / h.pts win; blank = pr+br / pc+bp results (old behaviour)
+  function achRec(d){var v=int(d.h&&d.h.rec);return v!==null?v:(int(d.r.pr)||0)+(int(d.r.br)||0);}
+  function achPts(d){var v=int(d.h&&d.h.pts);return v!==null?v:(int(d.r.pc)||0)+(int(d.r.bp)||0);}   // results: recruits = pr+br results, base points = pc+bp results
   function list(name){var a=getJ(name,[]);return Array.isArray(a)?a:[];}
 
   // ---------- rings (same drawing as the fitness app) ----------
@@ -1194,10 +1233,69 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("logFor").textContent=view===today?"today":pretty(view);
   }
   function renderDate(){
-    $("dLbl").textContent=view===today?"TODAY":view===shift(today,-1)?"YESTERDAY":pretty(view).toUpperCase();
-    $("dPick").value=view;$("dPick").max=today;$("dNext").disabled=view>=today;$("dToday").hidden=view===today;
+    $("dLbl").textContent=view===today?"TODAY":view===shift(today,-1)?"YESTERDAY":view===shift(today,1)?"TOMORROW":pretty(view).toUpperCase();
+    var mx=gMax();$("dPick").value=view;$("dPick").max=mx;$("dNext").disabled=view>=mx;$("dToday").hidden=view===today;
   }
-  function renderMeet(){renderDate();renderRowsInputs();renderMeetRings();}
+  function renderMeet(){renderDate();renderGoCards();renderRowsInputs();renderMeetRings();}
+  // ---------- v46: GOAL tab (goal vs achieved) ----------
+  // Goals: bs-v1:goals {"updated","days":{"YYYY-MM-DD":{reach,meetups,personal,base:{goal,how[]},day:{recruits,points,how[]},source,updated}}} (bot only).
+  // Achieved: this day's bs-v1:day record (app only): ro = reach-outs, mu = meetups, m.pr+m.pc = personal meetings, m.br+m.bp = base meetings, h.rec / h.pts = day's results.
+  function goalsAll(){var G=getJ("goals",null);return G&&typeof G==="object"&&G.days&&typeof G.days==="object"?G:null;}
+  function goalDay(k){var G=goalsAll();var g=G&&G.days[k];return g&&typeof g==="object"?g:null;}
+  function gMax(){var G=goalsAll(),m=today;if(G)Object.keys(G.days).forEach(function(k){if(/^\d{4}-\d\d-\d\d$/.test(k)&&k>m&&k<=shift(today,14))m=k;});return m;}
+  var GDEF=[
+    {id:"reach",n:"Reach-outs",sub:"One-to-one touches: a call, text, DM or voice note to one person",f:[["ro","","Reach-outs"]]},
+    {id:"meetups",n:"Meetups",sub:"Coffee or Zoom 1-on-1s booked with a date and time (set today, or held today)",f:[["mu","","Meetups"]]},
+    {id:"personal",n:"Personal meetings",sub:"Appointments you run yourself: Step 1 / BPM presentations (recruiting) + closing / client meetings",f:[["m","pr","Recruiting"],["m","pc","Closing"]]},
+    {id:"base",n:"Base meetings",sub:"Meetings with or for your base agents and MDs: field training, 3-ways, setup, base trainings",f:[["m","br","Recruiting"],["m","bp","Closing"]]}];
+  function gv(d,f,c){var v=c?d[f]&&d[f][c]:d[f];return int(v);}
+  function gpct(a,g){return g>0?Math.round(a/g*100):null;}
+  function gcls(f){return f==null?"":f>=100?"g":f>=50?"y":f>0?"o":"";}
+  function gbar(f){var w=f==null?0:Math.min(100,f);return '<div class="gbar"><i style="width:'+w+'%;background:'+recCol((f||0)/100)+'"></i></div>';}
+  function ghow(a){a=Array.isArray(a)?a.filter(function(x){return typeof x==="string"&&x.trim();}):[];return a.length?'<div class="ghow"><span>How to achieve</span><ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>':'';}
+  function ginp(f,c,v,dis,ph){return '<input class="num" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" data-f="'+f+'"'+(c?' data-c="'+c+'"':'')+' placeholder="'+(ph==null?"0":ph)+'" value="'+esc(v==null?"":v)+'"'+(dis?' disabled':'')+'>';}
+  function gGoalBox(n,k){return n==null?'<div class="gcg none"><span class="gl2">Goal</span><b>—</b></div>':'<div class="gcg"><span class="gl2">Goal</span><b>'+(k?kfmt(n):n)+'</b></div>';}
+  function renderGoCards(){
+    var g=goalDay(view),d=day(view),fut=view>today,h='';
+    $("p-meet").classList.toggle("fut",fut);
+    $("goMeta").textContent="Goal vs achieved · "+(view===today?"Today, ":view===shift(today,1)?"Tomorrow, ":view===shift(today,-1)?"Yesterday, ":"")+pretty(view);
+    if(!g){$("goCards").innerHTML='<div class="card" style="grid-column:1/-1"><div class="gnone">'+(SY.loaded||goalsAll()?"No goal set yet for "+pretty(view)+". Your bot sets it each night. You can still log achieved below.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("goSrc").textContent="";return;}
+    GDEF.forEach(function(c){var G=g[c.id]&&typeof g[c.id]==="object"?g[c.id]:{},goal=int(G.goal),ach=0;c.f.forEach(function(x){ach+=gv(d,x[0],x[1])||0;});var f=gpct(ach,goal);
+      h+='<div class="card gc" data-gc="'+c.id+'"><div class="gch"><div><b>'+c.n+'</b><small>'+esc(c.sub)+'</small></div><span class="gpc '+gcls(f)+'" data-gp="'+c.id+'">'+(f==null?"—":f+"%")+'</span></div><div class="gcr">'+gGoalBox(goal)+'<span class="gcvs">vs</span>';
+      if(c.f.length===1)h+='<div class="gca"><span class="gl2">Achieved</span>'+ginp(c.f[0][0],c.f[0][1],gv(d,c.f[0][0],c.f[0][1]),fut)+'</div>';
+      else{c.f.forEach(function(x){h+='<div class="gca"><span class="gl2">'+x[2]+'</span>'+ginp(x[0],x[1],gv(d,x[0],x[1]),fut)+'</div>';});h+='<span class="gct" data-gt="'+c.id+'">= '+ach+'</span>';}
+      h+='</div><div data-gb="'+c.id+'">'+gbar(f)+'</div>'+ghow(G.how)+'</div>';});
+    var D=g.day&&typeof g.day==="object"?g.day:{},gr=int(D.recruits),gp=int(D.points),ar=achRec(d),ap=achPts(d),fr=gpct(ar,gr),fp=gpct(ap,gp),lr=(int(d.r.pr)||0)+(int(d.r.br)||0),lp=(int(d.r.pc)||0)+(int(d.r.bp)||0);
+    h+='<div class="card gc" data-gc="day"><div class="gch"><div><b>Day\u2019s goal</b><small>Base shop results today: new recruits and base points (feeds the rings and the header goals)</small></div></div>'+
+      '<div class="gsub"><div class="gch"><div><b style="font-size:13px">Base recruits</b></div><span class="gpc '+gcls(fr)+'" data-gp="rec">'+(fr==null?"—":fr+"%")+'</span></div><div class="gcr">'+gGoalBox(gr)+'<span class="gcvs">vs</span><div class="gca"><span class="gl2">Achieved</span>'+ginp("h","rec",int(d.h.rec),fut,lr)+'</div></div><div data-gb="rec">'+gbar(fr)+'</div></div>'+
+      '<div class="gsub"><div class="gch"><div><b style="font-size:13px">Base points</b></div><span class="gpc '+gcls(fp)+'" data-gp="pts">'+(fp==null?"—":fp+"%")+'</span></div><div class="gcr">'+gGoalBox(gp,1)+'<span class="gcvs">vs</span><div class="gca" style="max-width:140px"><span class="gl2">Achieved</span>'+ginp("h","pts",int(d.h.pts),fut,lp)+'</div></div><div data-gb="pts">'+gbar(fp)+'</div></div>'+
+      ghow(D.how)+(fut?'<div class="gfut">Achieved opens on the day.</div>':'')+'</div>';
+    $("goCards").innerHTML=h;
+    $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u&&!fut?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
+  function goProg(){var g=goalDay(view);if(!g)return;var d=day(view);
+    function put(id,ach,goal){var f=gpct(ach,goal),p=document.querySelector('#goCards [data-gp="'+id+'"]'),b=document.querySelector('#goCards [data-gb="'+id+'"]'),t=document.querySelector('#goCards [data-gt="'+id+'"]');
+      if(p){p.textContent=f==null?"—":f+"%";p.className="gpc "+gcls(f);}if(b)b.innerHTML=gbar(f);if(t)t.textContent="= "+ach;}
+    GDEF.forEach(function(c){var G=g[c.id]||{},a=0;c.f.forEach(function(x){a+=gv(d,x[0],x[1])||0;});put(c.id,a,int(G.goal));});
+    var D=g.day||{};put("rec",achRec(d),int(D.recruits));put("pts",achPts(d),int(D.points));
+    [["rec",(int(d.r.pr)||0)+(int(d.r.br)||0)],["pts",(int(d.r.pc)||0)+(int(d.r.bp)||0)]].forEach(function(x){var i=document.querySelector('#goCards input[data-f="h"][data-c="'+x[0]+'"]');if(i)i.placeholder=x[1];});
+    $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
+
+  // ---------- v46: "Updated <Mon D, h:mm AM/PM> ET" + freshness chip + source on every tab's title card ----------
+  var UPD={meet:["goals","Bot plan: Calendar · MyWFG · DBI Hub · app"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots"]};
+  function etKey(ms){try{var p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms)),o={};p.forEach(function(x){o[x.type]=x.value;});return o.year+"-"+o.month+"-"+o.day;}catch(e){return "";}}
+  function updFmt(ms){try{return new Date(ms).toLocaleString("en-US",{timeZone:TZ,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" ET";}catch(e){return "";}}
+  function updOf(key,inner){var rt=syGet("rt",{})[PREFIX+key]||0,u=inner&&typeof inner==="object"?inner.updated:null;
+    if(typeof u==="string"&&u){if(/^\d{4}-\d\d-\d\d$/.test(u)){if(rt&&etKey(rt)===u)return {ms:rt,day:u};return {day:u};}var x=new Date(u);if(!isNaN(x))return {ms:+x,day:etKey(+x)};}
+    if(rt)return {ms:rt,day:etKey(rt)};return null;}
+  function renderUpd(t){var m=UPD[t],card=document.querySelector("#p-"+t+" .mdf");if(!card)return;var el=card.querySelector(".upl");
+    if(!m){if(el)el.remove();return;}if(!el){el=document.createElement("div");el.className="upl";card.appendChild(el);}
+    var inner=getJ(m[0],null);if(t==="meet"){var gd=goalDay(view);if(gd&&gd.updated)inner={updated:gd.updated};}
+    var u=updOf(m[0],inner);
+    if(!u){el.innerHTML='<span>'+(SY.loaded?"Not updated yet":"Loading…")+'</span><span class="src">'+esc(m[1])+'</span>';return;}
+    var n=dayDiff(u.day,today),chip=n<=0?'<span class="fr ok">Today</span>':'<span class="fr old">'+(n===1?"Yesterday":n+" days old")+'</span>';
+    var when=u.ms?updFmt(u.ms):pretty(u.day).replace(/^\w+, /,"");
+    el.innerHTML='<span>Updated '+esc(when)+'</span>'+chip+'<span class="src">'+esc(m[1])+'</span>';}
+
   var nmOpen={};
   function onText(t){var d=day(view),v=t.value;
     if(t.dataset.nm){var o=d.nm&&typeof d.nm==="object"?d.nm:{};if(v.trim())o[t.dataset.nm]=v;else delete o[t.dataset.nm];if(Object.keys(o).length)d.nm=o;else delete d.nm;}
@@ -1206,14 +1304,17 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var row=t.closest(".mrow"),c=row&&row.querySelector(".nmc");if(c){var n=v.split(",").filter(function(x){return x.trim();}).length;c.classList.toggle("on",!!v.trim());c.textContent=t.dataset.tx?(v.trim()?"✎ note":"+ note"):(n?"👤 "+n:"+ names");}}
   function onInput(e){var t=e.target;if(t.dataset.nm||t.dataset.tx)return onText(t);if(!t.dataset.f)return;
     var v=int(t.value);if(t.value!==""&&v!==null&&String(v)!==t.value)t.value=v;   // whole numbers only
-    var d=day(view);if(t.dataset.f==="nc"||t.dataset.f==="si"){if(v===null)delete d[t.dataset.f];else d[t.dataset.f]=v;}else{var o=d[t.dataset.f];if(v===null)delete o[t.dataset.c];else o[t.dataset.c]=v;}
-    d.u=Date.now();setJ("day:"+view,d);renderMeetRings();renderHeader();}
-  function setView(k){if(!k||k>today)k=today;view=k;nmOpen={};renderMeet();}
+    if(view>today)return;   // v46: future days show the goal only
+    var d=day(view);if(t.dataset.f==="nc"||t.dataset.f==="si"||t.dataset.f==="ro"||t.dataset.f==="mu"){if(v===null)delete d[t.dataset.f];else d[t.dataset.f]=v;}else{var o=d[t.dataset.f];if(v===null)delete o[t.dataset.c];else o[t.dataset.c]=v;}
+    d.u=Date.now();setJ("day:"+view,d);renderMeetRings();renderHeader();
+    if(t.closest("#goCards")){goProg();renderRowsInputs();}else renderGoCards();}
+  function setView(k){var mx=gMax();if(!k)k=today;if(k>mx)k=mx;view=k;nmOpen={};renderMeet();renderUpd("meet");}
   $("dPrev").addEventListener("click",function(){setView(shift(view,-1));});
   $("dNext").addEventListener("click",function(){setView(shift(view,1));});
   $("dToday").addEventListener("click",function(){setView(today);});
   $("dPick").addEventListener("change",function(){if(this.value)setView(this.value);});
   $("mRows").addEventListener("input",onInput);
+  $("goCards").addEventListener("input",onInput);
   $("mRows").addEventListener("click",function(e){var b=e.target.closest("[data-nmo]");if(!b)return;var id=b.dataset.nmo,was=!!nmOpen[id];nmOpen={};if(!was)nmOpen[id]=1;renderRowsInputs();
     var i=document.querySelector("#mRows .nmi");if(i){i.focus();try{i.setSelectionRange(i.value.length,i.value.length);}catch(x){}}});
 
@@ -1536,7 +1637,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderUp(){
     var U=getJ("upcoming",null),S=upLicSet();
     if(!U||typeof U!=="object"){$("upMeta").textContent="Base shop + Sunchandan's team";var w='<div class="card"><div class="wait">'+(SY.loaded?"No data yet. Your bot fills this from DBI Hub.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("upGov").innerHTML=w;$("upReg").innerHTML="";$("upHl").innerHTML="";$("upGn").textContent="";$("upRn").textContent="";$("upNote").textContent="";return;}
-    $("upMeta").textContent=(lqUpd(U)?lqUpd(U)+" ET":"")+" · Base + Sunchandan's team";
+    $("upMeta").textContent="Base + Sunchandan's team";
     function A(x){return Array.isArray(x)?x:[];}
     var gov=A(U.gov).filter(function(p){return p&&!upIsLic(p,S);}),reg=A(U.reg).filter(function(p){return p&&!upIsLic(p,S);});
     function team(a,t){return a.filter(function(p){return (p.team==="superbase"?"superbase":"base")===t;});}
@@ -1584,7 +1685,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderGold(){
     var G=getJ("gold",null);
     if(!G||typeof G!=="object"){$("goldMeta").textContent="LinkedIn + Instagram";var w='<div class="none" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the LinkedIn and Instagram bots.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("goldLi").innerHTML=w;$("goldIg").innerHTML="";$("goldLn").textContent="";$("goldIn").textContent="";$("goldNote").textContent="";return;}
-    $("goldMeta").textContent=(lqUpd(G)?lqUpd(G)+" ET · ":"")+"LinkedIn + Instagram";
+    $("goldMeta").textContent="LinkedIn + Instagram";
     var L=goldList(G.linkedin),I=goldList(G.instagram);
     $("goldLi").innerHTML=L.h;$("goldIg").innerHTML=I.h;$("goldLn").textContent=L.n;$("goldIn").textContent=I.n;
     $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation.";
@@ -1632,7 +1733,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var P=getJ("pointsrecruits",null);
     if(!P||typeof P!=="object"||!Array.isArray(P.rows)){$("prMeta").textContent="MyWFG · Net Points";$("prBar").innerHTML="";$("prNote").textContent="";$("prTbl").innerHTML=rpWait("No data yet. Filled from the MyWFG Points and Recruits report.");$("prOthers").innerHTML="";return;}
     var R=P.rows,G=P.groups||["Personal","SMD Base","Super Base","Super Team"];
-    $("prMeta").textContent=[(P.point_type||"Net Points"),P.as_of?"as of "+P.as_of:"",lqUpd(P)?lqUpd(P)+" ET":""].filter(Boolean).join(" · ");
+    $("prMeta").textContent=[(P.point_type||"Net Points"),P.as_of?"as of "+P.as_of:""].filter(Boolean).join(" · ");
     $("prBar").innerHTML=prBarH(R,"Your numbers · by month");
     $("prTbl").innerHTML=prTable(R,G,!!prOpen.me,"me");
     $("prNote").textContent="Newest month first. MyWFG's 12 Mo. Total = the 12 completed months Oct–Sep (the month to date starts the next window). Source: "+(P.source||"MyWFG")+".";
@@ -1649,7 +1750,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderAdm(){
     var A=getJ("admin",null);
     if(!A||typeof A!=="object"||!A.pf||!A.td){$("admMeta").textContent="MyWFG";["pfBar","tdBar","admNote"].forEach(function(x){$(x).innerHTML="";});$("pfTbl").innerHTML=rpWait("No data yet. Filled from MyWFG each morning.");$("tdTbl").innerHTML="";return;}
-    $("admMeta").textContent=["MyWFG",lqUpd(A)?lqUpd(A)+" ET":""].filter(Boolean).join(" · ");
+    $("admMeta").textContent="Platform fee · Training deadlines";
     // Platform fee: not recurring first, then recurring; inactive last; then name
     var pf=(A.pf.rows||[]).slice(),rk=function(r){return (String(r.active).toLowerCase()==="yes"?0:2)+(String(r.recurring).toLowerCase()==="recurring"?1:0);};
     pf.sort(function(a,b){return rk(a)-rk(b)||String(a.name).localeCompare(String(b.name));});
@@ -1681,7 +1782,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var L=MO[lbMonSel]||getJ("leaders",null);
     if(!L||typeof L!=="object"||!Array.isArray(L.sections)){$("lbMeta").textContent="Canada SMD Base bulletin";$("lbSum").textContent="";$("lbSecs").innerHTML='<div class="lbno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the MyWFG Leaders Bulletin.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("lbNotes").innerHTML="";return;}
     var v2=L.v===2,mo=lbMon(L.month),from=lbMon(L.r12_from),mon=mo.split(" ")[0]||"Month";
-    $("lbMeta").textContent=[mo?"Bulletin month: "+mo:"",from&&mo?"Rolling 12: "+from+"–"+mo:"",L.variant||"SMD Base",lqUpd(L)?lqUpd(L)+" ET":""].filter(Boolean).join(" · ");
+    $("lbMeta").textContent=[mo?"Bulletin month: "+mo:"",from&&mo?"Rolling 12: "+from+"–"+mo:"",L.variant||"SMD Base"].filter(Boolean).join(" · ");
     var secs=L.sections,nt=0,nn=0;secs.forEach(function(s){nt+=s.smd_total||0;nn+=s.smd_now||0;});
     $("lbSum").textContent=secs.length+" leaders · "+nt+" in teams · "+nn+" on this bulletin";
     var cols=[];["m","12"].forEach(function(p){LB2.forEach(function(c,j){cols.push([c[0]+"_"+p,c[1],j===0,c[0].charAt(0)==="p"]);});});
@@ -1718,7 +1819,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function renderRec(){
     var R=getJ("recruits",null);
     if(!R||typeof R!=="object"||!Array.isArray(R.base)||!Array.isArray(R.superbase)){$("rcMeta").textContent="Base and Super base";$("rcSecs").innerHTML='<div class="card"><div class="rcno" style="text-align:center">'+(SY.loaded?"No data yet. Filled from DBI Hub and MyWFG.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';$("rcNotes").innerHTML="";return;}
-    $("rcMeta").textContent=["Base "+R.base.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,"Super base "+R.superbase.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,lqUpd(R)?lqUpd(R)+" ET":""].filter(Boolean).join(" · ");
+    $("rcMeta").textContent=["Base "+R.base.filter(function(e){return !pHid("recruits",e.name,e.code);}).length,"Super base "+R.superbase.filter(function(e){return !pHid("recruits",e.name,e.code);}).length].filter(Boolean).join(" · ");
     var AR=getJ("attendance_roster",null),MO=attMo(AR),nT=0,nS=0;function rp(e,sec){var x=pFind(e.name,e.code);return mdPerson(AR,x&&x.id,e.name,e.code);}
     var h="",MVR=[];[["base","Base","My Baseshop"],["superbase","Super base","Sunchandan Singh's baseshop"]].forEach(function(S){var L=R[S[0]].filter(function(e){if(pHid("recruits",e.name,e.code)){MVR.push(e);return false;}return true;});
       nT+=L.length;L=L.filter(function(e){return mdfOk(AR,MO,rp(e,S[0]));});nS+=L.length;
@@ -1902,7 +2003,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("aHint").textContent=k<today?"Past session · its ticks and counts":k>today?"Planned · tick invites ahead":"Today's session";
     if(!R||typeof R!=="object"||!R.sections){$("attMeta").textContent="Base shop + Sunchandan's team";var w='<div class="wait">'+(SY.loaded?"No roster yet. Your bot builds it from DBI Hub + MyWFG every morning.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';
       $("attCounts").innerHTML=w;["attTrend","attCall","attSecs","attNote"].forEach(function(i){$(i).innerHTML="";});return;}
-    $("attMeta").textContent=(lqUpd(R)?"Roster "+lqUpd(R)+" ET · ":"")+"Base + Sunchandan's team";
+    $("attMeta").textContent="Roster · Base + Sunchandan's team";
     var key=AT.t+"|"+k+"|"+(R.updated||"");
     if(!AT.order||AT.order.key!==key||AT.order.n!==Object.keys(S.sessions).length)AT.order={key:key,n:Object.keys(S.sessions).length,r:attRank(R,S,AT.t,k)};
     var O=AT.order.r,inv={},att={};(s&&s.inv||[]).forEach(function(id){inv[id]=1;});(s&&s.att||[]).forEach(function(id){att[id]=1;});
@@ -2040,7 +2141,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("attSecs").addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(!b)return;var B=(AT.blocks||[]).filter(function(x){return x.bk===b.dataset.copy;})[0];if(!B)return;
     attCopy(attCopyText(B)).then(function(ok){b.textContent=ok?"✓ Copied":"Copy failed";b.classList.toggle("ok",!!ok);setTimeout(function(){b.textContent="📋 Copy names";b.classList.remove("ok");},2200);});});
   // shared calendar on the Main + Certs day pills (the native input stays as the value holder; past dates only, like before)
-  calPill(document.querySelector("#dPick").parentNode,function(){var mk=dayMarks();calOpen({mode:"day",value:view,max:today,title:"Meetings day",mark:function(k){return !!mk[k];},legend:"Day with entries",quick:[["Today",today],["Yesterday",shift(today,-1)]],pick:function(k){setView(k);}});});
+  calPill(document.querySelector("#dPick").parentNode,function(){var mk=dayMarks();var G=goalsAll();if(G)Object.keys(G.days).forEach(function(k){mk[k]=1;});calOpen({mode:"day",value:view,max:gMax(),title:"Goal day",mark:function(k){return !!mk[k];},legend:"Day with a goal or entries",quick:[["Today",today],["Yesterday",shift(today,-1)]].concat(gMax()>today?[["Tomorrow",shift(today,1)]]:[]),pick:function(k){setView(k);}});});
   calPill(document.querySelector("#cPick").parentNode,function(){var mk={};list("certs").forEach(function(e){if(e&&e.team!=="superbase"&&e.date)mk[e.date]=1;});calOpen({mode:"day",value:dv.c,max:today,title:"Certifications day",mark:function(k){return !!mk[k];},legend:"Day with a cert",quick:[["Today",today],["Yesterday",shift(today,-1)]],pick:function(k){dv.c=k>today?today:k;renderCert();}});});
   // Leaders month: same pill + month grid; drives the (hidden) #lbMon select and fires its change event
   function lbPill(){var s=$("lbMon"),ks=[].map.call(s.options,function(o){return o.value;}).filter(Boolean),i=ks.indexOf(s.value);
@@ -2053,10 +2154,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
     if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
   var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm,att:renderAtt};
-  function show(t){t=t||"";if(t==="cold")t="gold";   /* v35: #cold = alias of #gold (Cold Prospects) */
+  function show(t){t=t||"";if(t==="cold")t="gold";if(t==="goal"||t==="main")t="meet";   /* v46: #goal / #main = aliases of #meet (Goal tab) */   /* v35: #cold = alias of #gold (Cold Prospects) */
     if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm"||t==="att";renderHeader();TABS[t]();navReveal();}
-  $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+b.dataset.t);}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm"||t==="att";renderHeader();TABS[t]();renderUpd(t);navReveal();}
+  $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+(b.dataset.t==="meet"?"goal":b.dataset.t));}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
   document.addEventListener("visibilitychange",function(){if(!document.hidden)checkDay();});
@@ -2109,10 +2210,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(SY.busy){SY.again=true;return Promise.resolve();}
     SY.busy=true;var changed=false;
     function round(n,D){
-      var sh=syGet("sh",{}),mt=syGet("mt",{}),now=Date.now();
+      var sh=syGet("sh",{}),mt=syGet("mt",{}),now=Date.now(),rtm=syGet("rt",{});
       if((+D._rev||0)<syGet("rev",0)&&SY.stale<3){SY.stale++;var se=new Error("stale");se.stale=true;throw se;}
       SY.stale=0;
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)!==0)return;var r=D[k]||{};
+        if(!/^bs-v1:day:/.test(k)&&r.t)rtm[k]=+r.t;   // v46: store time per key, for the Updated line
         var loc=localStorage.getItem(k),rv=r.d?null:(typeof r.v==="string"?r.v:null),dirty=loc===null?sh[k]!==undefined:syHash(loc)!==sh[k];
         if(loc===rv){if(rv===null)delete sh[k];else sh[k]=syHash(rv);return;}
         var remoteSame=rv!==null&&sh[k]===syHash(rv);
@@ -2124,8 +2226,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         if(nv!==loc){try{if(nv===null)localStorage.removeItem(k);else localStorage.setItem(k,nv);changed=true;}catch(e){return;}}
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
-      sySet("sh",sh);sySet("mt",mt);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm"||tab==="att")show(tab);}
+      sySet("sh",sh);sySet("mt",mt);sySet("rt",rtm);
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm"||tab==="att")show(tab);else renderUpd(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
