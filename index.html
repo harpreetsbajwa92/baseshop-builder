@@ -748,6 +748,16 @@ button{cursor:pointer}
 .attg .bb{width:100%;border-radius:4px 4px 1px 1px;min-height:2px}.attg .bb.z{background:#3a444c}
 .attg .xl{font-size:10.5px;color:#8c979f;white-space:nowrap;margin-top:4px}
 .atrt{font-size:12px;color:#aab4bb;margin-top:8px}.atrt b{color:#fff;font-family:var(--fn)}
+/* v45: 4 bars per session (Base invited / showed up, Super base invited / showed up) */
+.atlg.a4{flex-wrap:wrap;gap:6px 12px}
+.atlg i.lsi,.attg .bb.si{background:#a9c9e2}.atlg i.lsa,.attg .bb.sa{background:#a6d79f}
+.attg.a4 .bb.i{background:linear-gradient(180deg,#4aa6ee,#1f6fc0)}.attg.a4 .bb.a{background:linear-gradient(180deg,#3fd02f,#129006)}.atlg.a4 i.li{background:#2f8fd8}.atlg.a4 i.la{background:#22b812}
+.attg.a4 .gp{flex:1 0 50px}
+.attg.a4 .pr{gap:5px}
+.attg .pp{display:flex;align-items:flex-end;gap:1px;height:100%;flex:1;max-width:30px}
+.attg.a4 .b1{max-width:14px}
+.attg.a4 .b1 span{font-size:10px;letter-spacing:-.3px}
+.atrs{margin-top:3px}.atrs b.tb{color:#8fd3ff;font-family:var(--fc);letter-spacing:.3px}.atrs b.ts{color:#c9dbe7;font-family:var(--fc);letter-spacing:.3px}.atrs small{color:#7f8a92}.atrs.n{font-size:11px;color:#7f8a92}
 .atss{text-align:center;font-size:11.5px;color:#8c979f;font-weight:600;min-height:15px}
 .atss.ok{color:#16EC06}.atss.wt{color:#F5A623}
 .atk{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:0;font-size:13px}
@@ -1079,7 +1089,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.03-44";
+var APP_VERSION="2026.11.03-45";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1973,12 +1983,18 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var tb='<div class="athd"><b>Trend · '+L.length+' session'+(L.length===1?'':'s')+'</b><span>'+ind(L)+'</span></div>'+(fl?'<div class="mdfn">Upline MD: <b>'+esc(fl)+'</b></div>':'');
     tb+='<div class="atrg" role="group" aria-label="Range">'+["4","8","12"].map(function(n){return '<button type="button" data-rg="'+n+'"'+((AT.rg||"8")===n?' class="on"':'')+'>Last '+n+'</button>';}).join("")+
       '<button type="button" data-rg="c"'+(AT.rg==="c"?' class="on"':'')+'>📅 '+(AT.rg==="c"&&AT.rf?esc(RG.lbl):'From – to')+'</button></div>';
-    if(L.length){var ti=0,ta=0,tia=0;L.forEach(function(x){var I={};(x.inv||[]).forEach(function(id){I[id]=1;});ti+=(x.inv||[]).length;ta+=(x.att||[]).length;(x.att||[]).forEach(function(id){if(I[id])tia++;});});
-      tb+='<div class="atlg"><span><i class="li"></i>Invited</span><span><i class="la"></i>Showed up</span></div><div class="attw"><div class="attg">'+L.map(function(x){var ni=(x.inv||[]).length,na=(x.att||[]).length;
-        return '<div class="gp'+(x.date===k?' cur':'')+'" data-gd="'+x.date+'" title="'+esc(pretty(x.date))+': '+ni+' invited, '+na+' showed up" role="button" aria-label="'+esc(pretty(x.date))+': '+ni+' invited, '+na+' showed up"><div class="pr">'+
-          '<div class="b1"><span>'+ni+'</span><div class="bb i'+(ni?'':' z')+'" style="height:'+Math.round(88*ni/mx)+'%"></div></div>'+
-          '<div class="b1"><span>'+na+'</span><div class="bb a'+(na?'':' z')+'" style="height:'+Math.round(88*na/mx)+'%"></div></div></div><div class="xl">'+esc(attShort(x.date))+'</div></div>';}).join("")+'</div></div>'+
-        '<div class="atrt">'+esc(RG.lbl)+': <b>'+ti+'</b> invited · <b style="color:#16EC06">'+ta+'</b> showed up · show-up rate <b>'+(ti?Math.round(100*tia/ti)+'%':'—')+'</b> · tap a session to open it</div>';}
+    if(L.length){
+      // v45: Base and Super base kept apart (4 bars per session). Showed up = everyone ticked attended in that team;
+      // show-up rate = invited people who showed up / invited (walk-ins without an invite tick are counted in Showed up but not in the rate).
+      var tot={base:{i:0,a:0,ia:0},superbase:{i:0,a:0,ia:0}},CS=L.map(function(x){var c=attStats(x,W);["base","superbase"].forEach(function(t){tot[t].i+=c[t].i;tot[t].a+=c[t].a;tot[t].ia+=c[t].ia;});return c;});
+      var mx4=Math.max.apply(null,[1].concat(CS.map(function(c){return Math.max(c.base.i,c.base.a,c.superbase.i,c.superbase.a);})));
+      function bar(n,cl){return '<div class="b1"><span>'+n+'</span><div class="bb '+cl+(n?'':' z')+'" style="height:'+Math.round(86*n/mx4)+'%"></div></div>';}
+      tb+='<div class="atlg a4"><span><i class="li"></i>Base invited</span><span><i class="la"></i>Base showed up</span><span><i class="lsi"></i>Super base invited</span><span><i class="lsa"></i>Super base showed up</span></div><div class="attw"><div class="attg a4">'+L.map(function(x,j){var c=CS[j],b=c.base,u=c.superbase,
+          t=pretty(x.date)+': Base '+b.i+' invited, '+b.a+' showed up · Super base '+u.i+' invited, '+u.a+' showed up';
+        return '<div class="gp'+(x.date===k?' cur':'')+'" data-gd="'+x.date+'" title="'+esc(t)+'" role="button" aria-label="'+esc(t)+'"><div class="pr">'+
+          '<div class="pp">'+bar(b.i,'i')+bar(b.a,'a')+'</div><div class="pp">'+bar(u.i,'si')+bar(u.a,'sa')+'</div></div><div class="xl">'+esc(attShort(x.date))+'</div></div>';}).join("")+'</div></div>';
+      function sline(nm,cl,o){var w=o.a-o.ia;return '<div class="atrs"><b class="'+cl+'">'+nm+'</b> <b>'+o.i+'</b> invited · <b style="color:#16EC06">'+o.a+'</b> showed up'+(w>0?' <small>('+w+' not ticked invited)</small>':'')+' · show-up rate <b>'+attRate(o)+'</b>'+(o.i?' <small>('+o.ia+'/'+o.i+')</small>':'')+'</div>';}
+      tb+='<div class="atrt">'+esc(RG.lbl)+':'+sline('Base','tb',tot.base)+sline('Super base','ts',tot.superbase)+'<div class="atrs n">Show-up rate = invited people who showed up ÷ invited · tap a session to open it</div></div>';}
     else tb+='<div class="atnone">No sessions with ticks in this range.</div>';
     tb+='<div class="atoth">'+ATT_TYPES.filter(function(x){return x.id!==AT.t;}).map(function(x){var l=trendOf(x.id,null).slice(-10),last=l.length?l[l.length-1]:null;
       return '<span class="on2">'+esc(x.label)+'</span><b>'+(last?(last.att||[]).length+' <small style="color:#7f8a92;font-weight:600">'+esc(attShort(last.date))+'</small>':'—')+'</b>'+(l.length>=2?ind(l).replace(/ vs avg [\d.]+/,''):'<span class="atind fl">▬</span>');}).join("")+'</div>';
