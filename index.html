@@ -10,7 +10,7 @@
 <meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Base Shop">
 <meta name="application-name" content="Base Shop">
 <meta name="format-detection" content="telephone=no">
@@ -1178,6 +1178,129 @@ body::before{background:var(--page)!important}
 .rt2.r6 td.lmdc .amdw select{min-width:118px}
 @media (min-width:900px){.rt2.r6 col.c6{width:168px}}
 
+
+/* ===== v49: mobile contrast, no overlap, no leftover dark blocks ===== */
+.wrap{padding:calc(env(safe-area-inset-top, 0px) + 18px) 14px calc(env(safe-area-inset-bottom, 0px) + 112px)!important}
+.brand{padding:4px 0 12px}
+#hdr,#hdr.card{margin-top:0}
+
+/* Goal / Certs rings: labels above the rings on a phone so they never hit the donuts */
+@media (max-width:640px){
+  .rg{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:8px;row-gap:10px}
+  .rg > div:first-child{display:none}
+  .rg .rn{grid-column:1/-1;max-width:none;text-align:left;padding:4px 2px 0;font-size:11px;letter-spacing:.08em;line-height:1.25;overflow:visible}
+  .rg .rh{font-size:11px}
+  .rc{justify-content:center}
+}
+
+/* Leaders: light rows, readable names and numbers */
+#p-lb .lb2 td,#p-lb .lbt td{color:#1d1d1f!important;background:#fff!important}
+#p-lb .lb2 td:first-child,#p-lb .lbt td:first-child,#p-lb .lb2 th.nm,#p-lb .lb2 th:first-child{background:#fff!important;color:#1d1d1f!important}
+#p-lb .lb2 td:first-child b,#p-lb .lbt td:first-child b{color:#1d1d1f!important;font-weight:650}
+#p-lb .lb2 td:first-child small,#p-lb .lbt td:first-child small{color:#6e6e73!important}
+#p-lb .lb2 td:first-child small.fl,#p-lb .lbt td:first-child small.fl{color:#c77700!important}
+#p-lb .lb2 td i{color:#6e6e73!important}
+#p-lb .lb2 .na,#p-lb .lbt .na{color:#6e6e73!important;font-weight:600}
+#p-lb .lb2 .np{color:#6e6e73!important}
+#p-lb .lb2 tr.ld td,#p-lb .lbt tr.ld td{
+  background:#fff8e8!important;
+  color:#1d1d1f!important;
+  font-weight:700;
+  border-top:1px solid #ead9a8!important;
+  box-shadow:inset 3px 0 0 #b8922e;
+}
+#p-lb .lb2 tr.ld td:first-child,#p-lb .lbt tr.ld td:first-child{background:#fff8e8!important}
+#p-lb .lb2 tr.ld td:first-child b,#p-lb .lbt tr.ld td:first-child b{color:#1d1d1f!important}
+#p-lb .lb2 tr.me td,#p-lb .lb2 tr.me td:first-child{background:#fff4d6!important}
+#p-lb .lb2 tr.gone td:first-child b{color:#6e6e73!important}
+#p-lb .lb2 th.gs,#p-lb .lb2 td.gs{border-left-color:#e5e5e7!important}
+#p-lb .lb2bar button{background:#fff!important;color:#1d1d1f!important;border:1px solid #e5e5e7!important;border-radius:980px}
+#p-lb .lb2 td:first-child,#p-lb .lb2 th.nm{min-width:148px!important;max-width:180px!important}
+
+/* Licences roster: scroll sideways, sticky readable name, no header collision */
+#p-lic .rtsc{overflow-x:auto;-webkit-overflow-scrolling:touch}
+#p-lic .rt2.r6{table-layout:auto;width:max-content;min-width:100%}
+#p-lic .rt2.r6 th,#p-lic .rt2.r6 td{overflow:visible;text-overflow:unset;white-space:nowrap}
+#p-lic .rt2.r6 th:first-child,#p-lic .rt2.r6 td:first-child{
+  position:sticky;left:0;z-index:2;background:#fff!important;
+  min-width:138px;max-width:168px;white-space:normal;overflow:hidden;
+  box-shadow:1px 0 0 #e5e5e7;line-height:1.25;font-size:13px!important;color:#1d1d1f!important
+}
+#p-lic .rt2.r6 thead th:first-child{z-index:3;background:#fff!important}
+#p-lic .rt2.r6 td:first-child .subcd{display:block;font-size:11px;font-weight:600;color:#6e6e73;margin-top:2px;letter-spacing:.02em}
+#p-lic .rt2.r6 td.lmdc{min-width:158px;max-width:200px;overflow:visible;white-space:normal}
+#p-lic .rt2.r6 td.lmdc .amdw select{
+  min-width:150px!important;max-width:190px;width:100%;
+  font-size:12px!important;padding:6px 8px!important;color:#1d1d1f!important;
+  text-overflow:ellipsis
+}
+#p-lic .rt2.r6 tfoot td:first-child,#p-lic .rt2.r6 tr.rtot td:first-child{background:#fbf7ec!important}
+@media (max-width:700px){
+  #p-lic .rt2.r6 th:nth-child(2),#p-lic .rt2.r6 td.cd2,#p-lic .rt2.r6 tfoot td:nth-child(2){display:none}
+  #p-lic .split,.lnm{grid-template-columns:1fr!important}
+}
+
+/* Contrast sweep: leftover light-on-dark text */
+.lqt2 td,.rct td,.rpt td,.att td,.upt td,.mdt td{color:#1d1d1f!important}
+.lqt2 td:first-child b,.rct td:first-child b,.rpt td:first-child b,.lqt2 .nm2{color:#1d1d1f!important}
+.rct td small,.lqt2 td small,.rpt td small{color:#6e6e73!important}
+#p-rec .rct td:first-child b{color:#1d1d1f!important}
+#p-gold .gr .gn b{color:#1d1d1f!important}
+.atnote,#p-lb .lbnotes,.rcnotes,.note{color:#6e6e73!important}
+.atnote b,#p-lb .lbnotes b,.rcnotes b{color:#1d1d1f!important}
+.att .anm b,.att td{color:#1d1d1f!important}
+.att tr.asub td{color:#1d1d1f!important}
+.att tr.io td.anm b{color:#6e6e73!important}
+#p-lb .lbsn{color:#6e6e73!important}
+
+/* Upcoming / certs / admin tables already scrolled via .tsc */
+.lqt2 th:first-child,.lqt2 td:first-child{min-width:128px}
+
+/* Attendance: kill leftover dark sticky bar and white-on-white numbers */
+#p-att .atbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(245,245,247,.96)!important;
+  -webkit-backdrop-filter:blur(16px);
+  backdrop-filter:blur(16px);
+  padding:10px 0 8px!important;
+  margin:4px 0 8px!important;
+  border-bottom:1px solid #e5e5e7;
+}
+#p-att .atlb{color:#6e6e73!important}
+#p-att #attType{
+  background:#fff!important;color:#1d1d1f!important;
+  border:1px solid #e5e5e7!important;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  border-radius:980px!important;
+}
+#p-att .atsel:after{color:#6e6e73!important}
+#p-att .atcal{
+  background:#fff!important;color:#1d1d1f!important;
+  border:1px solid #e5e5e7!important;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  border-radius:980px!important;
+}
+#p-att .atdn .pa{
+  background:#fff!important;color:#1d1d1f!important;
+  border:1px solid #e5e5e7!important;
+}
+#p-att .atdh,#p-att .atss{color:#6e6e73!important}
+#p-att .atrg button{background:#fff!important;color:#1d1d1f!important;border:1px solid #e5e5e7!important}
+#p-att .atrg button.on{background:#b8922e!important;color:#fff!important;border-color:#b8922e!important}
+#p-att .atlg,#p-att .atrt{color:#6e6e73!important}
+#p-att .atrt b,#p-att .atk>div{color:#1d1d1f!important}
+#p-att .atk>div.h,#p-att .atk>div.r{color:#6e6e73!important}
+#p-att .atk>div.h.b{color:#b8922e!important}
+#p-att .atk>div.h.s{color:#0071e3!important}
+#p-att .attg .b1 span{color:#1d1d1f!important}
+#p-att .attg .xl{color:#6e6e73!important}
+#p-att .attg .bb.z{background:#e5e5e7!important}
+#p-att #attQ{background:#fff;border:1px solid #e5e5e7;color:#1d1d1f;border-radius:980px;padding:10px 14px;width:100%}
+
+/* Licences header chips wrap instead of clipping Super base N */
+#p-lic .lghs,#p-lic .lghr{flex-wrap:wrap;white-space:normal}
+#p-lic .lghn b{font-size:36px}
+
 </style>
 </head>
 <body>
@@ -1366,7 +1489,7 @@ body::before{background:var(--page)!important}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-48";
+var APP_VERSION="2026.11.06-49";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1729,9 +1852,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       var tot=[0,0,0,0],has=[0,0,0,0];rows.forEach(function(r){RC.forEach(function(c,i){if(!nb(r[c[0]])){tot[i]+=+r[c[0]];has[i]=1;}});});
       function cell(v,m){return nb(v)?'<td class="na">—</td>':'<td>'+(m?km(v):Math.round(+v))+'</td>';}
       var cols='<colgroup><col class="c1"><col class="c2"><col class="c5"><col class="c5"><col class="c3"><col class="c4"><col class="c6"></colgroup>';
-      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><table class="rt2 r6">'+cols+'<thead><tr><th>Name</th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th><th>Upline MD</th></tr></thead></table>'+
-        '<div class="rb">'+(rows.length?'<table class="rt2 r6">'+cols+'<tbody>'+rows.map(function(r){var pp=lp(r);return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'<td class="lmdc">'+(pp.id?mdCell(AR,MO,pp,team):'<span class="na">—</span>')+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
-        '<table class="rt2 r6">'+cols+'<tbody><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'<td></td></tr></tbody></table></div>';}
+      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><div class="tsc rtsc"><table class="rt2 r6">'+cols+'<thead><tr><th>Name</th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th><th>Upline MD</th></tr></thead>'+
+        (rows.length?'<tbody>'+rows.map(function(r){var pp=lp(r);return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+(r.code?' · '+esc(r.code):'')+'">'+esc(r.name)+'<small class="subcd">'+(r.code?esc(r.code):'—')+'</small></td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'<td class="lmdc">'+(pp.id?mdCell(AR,MO,pp,team):'<span class="na">—</span>')+'</td></tr>';}).join("")+'</tbody>':'<tbody><tr><td colspan="7" class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</td></tr></tbody>')+
+        '<tfoot><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'<td></td></tr></tfoot></table></div></div>';}
     $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");$("licMdf").innerHTML=mdfSel(AR,nS,nT,MDF.v?"Filters the All licensed agents list below":"");$("licMdfN").innerHTML=MDF.v?'<div class="mdfn">Only people with Upline MD: <b>'+esc(mdfLbl(AR))+'</b> · '+nS+' of '+nT+'</div>':'';
     // v12: Licences tab goal header = 100 licensed team (base + super base roster count)
     var nb0=Array.isArray(L.base)?L.base.length:0,ns0=Array.isArray(L.superbase)?L.superbase.length:0,tot=nb0+ns0,G=100,gf=Math.min(1,tot/G);
