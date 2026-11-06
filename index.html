@@ -940,15 +940,53 @@ button{cursor:pointer}
 .gfut{font-size:11px;color:#8c979f;text-align:center;margin:2px 0 0}
 #p-meet.fut .mgrid{display:none}
 
-/* v51: Licences Upline MD as last column (kept from v48 behaviour, original dark styling) */
-.rt2.r6 col.c1{width:128px}
-.rt2.r6 col.c6{width:148px}
-.rt2.r6 th:first-child,.rt2.r6 td:first-child{min-width:120px}
-.rt2.r6 td.lmdc{text-align:left;white-space:nowrap;overflow:visible;min-width:140px}
-.rt2.r6 td.lmdc .amdw select{min-width:136px;max-width:180px}
-#p-lic .rb{overflow-x:auto!important;overflow-y:visible!important;-webkit-overflow-scrolling:touch}#p-lic .roster .pan{overflow-x:auto}
-#p-lic .rt2.r6{width:max-content;min-width:100%;table-layout:auto}
-@media (min-width:900px){.rt2.r6 col.c6{width:168px}}
+/* v52: Licences roster fits phone + desktop with no sideways scroll (dark theme unchanged) */
+#p-lic .roster{grid-template-columns:minmax(0,1fr)!important}
+#p-lic .rb{overflow:visible!important;max-height:none!important}
+#p-lic .roster .pan{overflow:visible;min-width:0}
+#p-lic .rt2.r6{
+  table-layout:fixed!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+#p-lic .rt2.r6 col.c1{width:24%!important}
+#p-lic .rt2.r6 col.c2{width:12%!important}
+#p-lic .rt2.r6 col.c5{width:8%!important}
+#p-lic .rt2.r6 col.c3{width:8%!important}
+#p-lic .rt2.r6 col.c4{width:11%!important}
+#p-lic .rt2.r6 col.c6{width:29%!important}
+#p-lic .rt2.r6 th,#p-lic .rt2.r6 td{
+  overflow:hidden;
+  min-width:0!important;
+  max-width:none!important;
+  padding:4px 2px!important;
+  font-size:11px!important;
+}
+#p-lic .rt2.r6 th{font-size:9.5px!important;letter-spacing:.25px;line-height:1.15;white-space:normal}
+#p-lic .rt2.r6 th:first-child,#p-lic .rt2.r6 td:first-child{
+  white-space:normal!important;
+  overflow:hidden;
+  text-overflow:clip;
+  line-height:1.2;
+  font-size:12px!important;
+}
+#p-lic .rt2.r6 td.cd2{font-size:10px!important;letter-spacing:-.25px;white-space:nowrap;overflow:hidden}
+#p-lic .rt2.r6 td:not(:first-child){white-space:nowrap}
+#p-lic .rt2.r6 td.lmdc{text-align:left;overflow:hidden;white-space:nowrap}
+#p-lic .rt2.r6 td.lmdc .amdw{display:block;position:relative;width:100%;min-width:0;max-width:100%}
+#p-lic .rt2.r6 td.lmdc .amdw select{
+  display:block;width:100%!important;min-width:0!important;max-width:100%!important;
+  font-size:11px!important;padding:2px 4px!important;box-sizing:border-box;
+}
+#p-lic .rt2.r6 td.lmdc .amdm{position:absolute;top:-6px;right:0}
+@media (min-width:900px){
+  #p-lic .rt2.r6 th{font-size:11px!important}
+  #p-lic .rt2.r6 td{font-size:13px!important;padding:6px 4px!important}
+  #p-lic .rt2.r6 th:first-child,#p-lic .rt2.r6 td:first-child{font-size:13.5px!important}
+  #p-lic .rt2.r6 td.cd2{font-size:12px!important}
+  #p-lic .rt2.r6 td.lmdc .amdw select{font-size:12.5px!important;padding:4px 6px!important}
+}
 
 </style>
 </head>
@@ -1137,7 +1175,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-51";
+var APP_VERSION="2026.11.06-52";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1493,16 +1531,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("rMeta").textContent=(mo?MONL[+mo.slice(5,7)-1].slice(0,3)+" "+mo.slice(0,4):"")+(L.updated?" · upd "+pretty(L.updated).replace(/^\w+, /,""):"");
     // v16: roster = MyWFG Downline Status (Life and/or Securities Registered); 4 numbers each: personal recruits month / rolling 12, cash flow month / rolling 12
     var mS=mo?MONL[+mo.slice(5,7)-1].slice(0,3):"Mo";
-    function km(v){v=+v;var a=Math.abs(v),t=a>=10000?(a/1000).toFixed(1).replace(/\.0$/,"")+"K":Math.round(a).toLocaleString("en-US");return (v<0?"-$":"$")+t;}
+    function km(v){v=+v;var a=Math.abs(v),t;if(a>=10000)t=Math.round(a/1000)+"K";else if(a>=1000)t=(a/1000).toFixed(1).replace(/\.0$/,"")+"K";else t=String(Math.round(a));return (v<0?"-$":"$")+t;}
     var RC=[["rec_month",0],["rec_12",0],["cf_month",1],["cf_12",1]];
     var AR=getJ("attendance_roster",null),MO=attMo(AR),nT=0,nS=0;function lp(r){var x=pFind(r.name,r.code);return mdPerson(AR,x&&x.id,r.name,r.code);}
     function pnl(team,cls,title){var all=(Array.isArray(L[team])?L[team]:[]);nT+=all.length;var rows=all.filter(function(r){return mdfOk(AR,MO,lp(r));});nS+=rows.length;rows=rows.slice().sort(function(a,b){var x=nb(a.cf_12)?-1e15:+a.cf_12,y=nb(b.cf_12)?-1e15:+b.cf_12;return y-x||String(a.name).localeCompare(String(b.name));});
       var tot=[0,0,0,0],has=[0,0,0,0];rows.forEach(function(r){RC.forEach(function(c,i){if(!nb(r[c[0]])){tot[i]+=+r[c[0]];has[i]=1;}});});
       function cell(v,m){return nb(v)?'<td class="na">—</td>':'<td>'+(m?km(v):Math.round(+v))+'</td>';}
       var cols='<colgroup><col class="c1"><col class="c2"><col class="c5"><col class="c5"><col class="c3"><col class="c4"><col class="c6"></colgroup>';
-      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div><table class="rt2 r6">'+cols+'<thead><tr><th>Name</th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th><th>Upline MD</th></tr></thead></table>'+
-        '<div class="rb">'+(rows.length?'<table class="rt2 r6">'+cols+'<tbody>'+rows.map(function(r){var pp=lp(r);return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'<td class="lmdc">'+(pp.id?mdCell(AR,MO,pp,team):'<span class="na">—</span>')+'</td></tr>';}).join("")+'</tbody></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>'+
-        '<table class="rt2 r6">'+cols+'<tbody><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'<td></td></tr></tbody></table></div>';}
+      return '<div class="pan '+cls+'"><div class="ph"><b>'+title+'</b><span class="pc">'+rows.length+'</span></div>'+(rows.length?'<table class="rt2 r6">'+cols+'<thead><tr><th>Name</th><th>Code</th><th>Rec<small>'+mS+'</small></th><th>Rec<small>12</small></th><th>CF<small>'+mS+'</small></th><th>CF<small>12 ▾</small></th><th>Upline MD</th></tr></thead><tbody>'+rows.map(function(r){var pp=lp(r);return '<tr><td title="'+esc(r.name)+(r.title?' ('+esc(r.title)+')':'')+'">'+esc(r.name)+'</td><td class="cd2">'+(r.code?esc(r.code):'—')+'</td>'+RC.map(function(c){return cell(r[c[0]],c[1]);}).join("")+'<td class="lmdc">'+(pp.id?mdCellLic(AR,MO,pp,team):'<span class="na">—</span>')+'</td></tr>';}).join("")+'</tbody><tfoot><tr class="rtot"><td>Total</td><td></td>'+RC.map(function(c,i){return has[i]?'<td>'+(c[1]?km(tot[i]):Math.round(tot[i]))+'</td>':'<td class="na">—</td>';}).join("")+'<td></td></tr></tfoot></table>':'<div class="wait">'+(L.month?'No one listed yet':SY.loaded?'Waiting for MyWFG data':SY.err?'Can\'t reach the store yet. Retrying…':'Loading…')+'</div>')+'</div>';}
     $("roster").innerHTML=pnl("base","base","Base shop")+pnl("superbase","sb","Super base");$("licMdf").innerHTML=mdfSel(AR,nS,nT,MDF.v?"Filters the All licensed agents list below":"");$("licMdfN").innerHTML=MDF.v?'<div class="mdfn">Only people with Upline MD: <b>'+esc(mdfLbl(AR))+'</b> · '+nS+' of '+nT+'</div>':'';
     // v12: Licences tab goal header = 100 licensed team (base + super base roster count)
     var nb0=Array.isArray(L.base)?L.base.length:0,ns0=Array.isArray(L.superbase)?L.superbase.length:0,tot=nb0+ns0,G=100,gf=Math.min(1,tot/G);
@@ -2000,6 +2036,12 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       return '<optgroup label="'+lbl+'">'+a.map(function(m){return '<option value="'+esc(m.c)+'"'+(m.c===v?' selected':'')+'>'+esc(m.l)+'</option>';}).join("")+'</optgroup>';}
     return '<div class="mdfb'+(v?' on':'')+'"><label>Upline MD</label><div class="atsel mdfs2"><select data-mdf="1" aria-label="Filter by Upline MD"><option value="">All</option><option value="__b"'+(v==="__b"?' selected':'')+'>Blank / not set</option>'+og("base","Base shop","1298FC")+og("superbase","Super base","27RJEC")+'</select></div>'+
       (v?'<small>'+shown+' of '+total+' · <button type="button" data-mdfx="1">clear</button></small>':'<small>'+total+' people</small>')+(note?'<em class="mdfh">'+note+'</em>':'')+'</div>';}
+  function mdShort(lbl){if(!lbl)return "";var s=String(lbl).replace(/\s*\([^)]*\)\s*/g," ").replace(/\s+/g," ").trim();var p=s.split(" ");if(!p[0])return s;if(p[0].length>=9||p.length<2)return p[0];return p[0]+" "+p[p.length-1].charAt(0);}
+  function mdCellLic(R,MO,p,sec){var e=attEff(R,MO,p),d=attMdData(p),opts=attMdOpts(R,sec,p),cur=e.ovr?e.id:"";
+    var shown=e.ovr?("↺ "+(d?mdShort(d.lbl):"blank")):(d?mdShort(d.lbl):"—");
+    var oh='<option value="">'+esc(shown)+'</option>'+opts.map(function(m){var sel=m.c===cur;return '<option value="'+esc(m.c)+'"'+(sel?' selected':'')+'>'+esc(sel?mdShort(m.l):m.l)+'</option>';}).join("");
+    if(cur&&!opts.some(function(m){return m.c===cur;}))oh+='<option value="'+esc(cur)+'" selected>'+esc(mdShort(e.lbl)||e.lbl)+'</option>';
+    return '<span class="amdw'+(e.ovr?' ovr':'')+(e.lbl?'':' k-none')+'"><select data-mdp="'+esc(p.id)+'" aria-label="Upline MD: '+esc(p.name)+'" title="'+esc(e.lbl||(d&&d.lbl)||(e.ovr?'Set by you (wins over the reports, same value on every tab)':(d?(p.md_src||'From the reports'):'Not known: pick one')))+'">'+oh+'</select>'+(e.ovr?'<i class="amdm" title="Set by you">✎</i>':'')+'</span>';}
   function mdCell(R,MO,p,sec){var e=attEff(R,MO,p),d=attMdData(p),opts=attMdOpts(R,sec,p),cur=e.ovr?e.id:"";
     var oh='<option value="">'+(e.ovr?'↺ '+esc(d?d.lbl:'blank'):esc(d?d.lbl:'—'))+'</option>'+opts.map(function(m){return '<option value="'+esc(m.c)+'"'+(m.c===cur?' selected':'')+'>'+esc(m.l)+'</option>';}).join("");
     if(cur&&!opts.some(function(m){return m.c===cur;}))oh+='<option value="'+esc(cur)+'" selected>'+esc(e.lbl)+'</option>';
