@@ -525,24 +525,51 @@ button{cursor:pointer}
 #upHl .lqhl{margin:2px 0 2px 18px}
 #p-up .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 12px}
 @media (min-width:900px){#p-up{max-width:760px;margin:0 auto}}
-/* ===== v28: Gold Prospects tab (bs-v1:gold, built by build_gold.py from the LinkedIn + Instagram bots' Good prospects lists; read-only; page scrolls) ===== */
+/* ===== v28: Gold Prospects (bs-v1:gold, LinkedIn + Instagram bots; read-only) ===== */
+/* v53: tab renamed Prospects; Cold Prospects (left) + Warm Prospects (right) */
 #p-gold .mdf{margin-bottom:2px}
-#p-gold .gsl{font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:12px 4px 6px;display:flex;align-items:center;gap:8px;color:#cfd6db}
+#p-gold .gsl{font-family:var(--fc);font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:12px 4px 6px;display:flex;align-items:center;gap:8px;color:#cfd6db;flex-wrap:wrap}
 #p-gold .gsl .dot{width:9px;height:9px;border-radius:50%;flex:none}
 #p-gold .gsl.li .dot{background:#3d9be9}#p-gold .gsl.ig .dot{background:linear-gradient(135deg,#feda75,#d62976 55%,#4f5bd5)}
 #p-gold .gsl .pc{font-family:var(--fn);font-size:12px;letter-spacing:0;color:#14181b;background:var(--gold);border-radius:9px;padding:1px 8px;font-weight:800}
 #p-gold .gl{padding:2px 12px}
-#p-gold .gr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.06)}
+#p-gold .gr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid #3a444c}
 #p-gold .gr:first-child{border-top:0}
 #p-gold .gr .gn{min-width:0;flex:1;text-align:left}
 #p-gold .gr .gn b{display:block;font-size:14.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #p-gold .gr .gn small{display:block;font-size:11.5px;color:#8c979f;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #p-gold .gk{flex:none;display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:800;border-radius:9px;padding:6px 11px;text-decoration:none;white-space:nowrap}
 #p-gold .gk.c{color:#14181b;background:linear-gradient(180deg,#FFE7A3,#F5C451 55%,#d79d1f)}
-#p-gold .gk.p{color:#cfd6db;background:#323b42;border:1px solid rgba(255,255,255,.08)}
-#p-gold .none{color:#7f8a92;font-size:13px;font-weight:600;padding:10px 0}
+#p-gold .gk.p{color:#cfd6db;background:#323b42;border:1px solid #4a555e}
+#p-gold .none{color:#9aa5ad;font-size:13px;font-weight:600;padding:10px 0}
+#p-gold .pgcols{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start}
+#p-gold .pgcol{min-width:0}
+#p-gold .pgcol>.gsl:first-child{margin-top:8px;color:#e6eaec;font-size:15px}
+#p-gold .wph{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 2px}
+#p-gold .wph .gsl{margin:8px 0 6px}
+#p-gold .wml{display:flex;align-items:center;gap:6px;font-family:var(--fc);font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#cfd6db}
+#p-gold #warmMon{appearance:none;-webkit-appearance:none;background:var(--gold);color:#14181b;border:1px solid #d9a021;border-radius:10px;font-family:var(--fn);font-size:14px;font-weight:800;padding:6px 28px 6px 10px;letter-spacing:0;background-image:linear-gradient(45deg,transparent 50%,#14181b 50%),linear-gradient(135deg,#14181b 50%,transparent 50%);background-position:calc(100% - 14px) 55%,calc(100% - 9px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#p-gold .wtcard{padding:0;overflow:hidden;border:1px solid #4a555e}
+#p-gold .wtsc{overflow-x:hidden;overflow-y:auto;max-height:min(70vh,720px);-webkit-overflow-scrolling:touch}
+#p-gold .wt{width:100%;border-collapse:collapse;table-layout:fixed}
+#p-gold .wt col.c-n{width:28px}#p-gold .wt col.c-nm{width:26%}#p-gold .wt col.c-st{width:118px}#p-gold .wt col.c-cm{width:auto}
+#p-gold .wt th,#p-gold .wt td{border:1px solid #4a555e;padding:6px 5px;vertical-align:top;color:#f2f4f5}
+#p-gold .wt th{background:#2b343b;font-family:var(--fc);font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:#e6eaec;position:sticky;top:0;z-index:1;text-align:left}
+#p-gold .wt td.wn{text-align:center;font-weight:800;color:#cfd6db;width:28px}
+#p-gold .wt td.wnm{font-weight:700;font-size:13.5px;color:#fff;overflow-wrap:anywhere;word-break:break-word}
+#p-gold .wsel,#p-gold .wcom{width:100%;max-width:100%;background:#151b1f;border:1px solid #5a656e;border-radius:8px;padding:6px 7px;color:#f2f4f5;font-size:13px;line-height:1.3}
+#p-gold .wsel{font-weight:700;border-left-width:4px}
+#p-gold .wsel.Booked{border-left-color:#F5C451}#p-gold .wsel.Done{border-left-color:#16EC06}#p-gold .wsel.Asked{border-left-color:#35aef5}
+#p-gold .wsel.Reschedule,#p-gold .wsel.Confirming{border-left-color:#F5A623}#p-gold .wsel.Building{border-left-color:#6cc3f5}
+#p-gold .wsel.Warming{border-left-color:#9aa5ad}#p-gold .wsel.Ghosted{border-left-color:#ff7a6b}
+#p-gold .wcom{min-height:46px;resize:vertical}
+#p-gold .wcom::placeholder{color:#8c979f}
+#p-gold #warmNote,#p-gold #goldNote{color:#9aa5ad;font-size:12.5px;padding:4px 2px 8px}
 @media (max-width:430px){.tabs button{font-size:10px;letter-spacing:-.25px}.tabs button .ic{width:22px;height:22px}}
-@media (min-width:900px){#p-gold{max-width:640px;margin:0 auto}}
+@media (min-width:900px){
+  #p-gold{max-width:none}
+  #p-gold .pgcols{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+}
 /* ===== v29: bottom bar scrolls sideways on a phone (room for 10 tabs) ===== */
 .tabs{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;justify-content:flex-start;overscroll-behavior-x:contain}
 .tabs::-webkit-scrollbar{display:none}
@@ -1037,14 +1064,27 @@ button{cursor:pointer}
     <div class="note" id="lqMoved" style="text-align:left"></div>
   </section>
 
-  <!-- TAB 1b (v28): GOLD PROSPECTS (bs-v1:gold, built by build_gold.py from the LinkedIn + Instagram bots). Read-only; scrolls like a normal page. -->
+  <!-- TAB 1b (v28/v53): PROSPECTS. Left = Cold Prospects (bs-v1:gold, read-only). Right = Warm Prospects (bs-v1:warm, editable). -->
   <section class="page" id="p-gold">
-    <div class="card mdf"><div class="mdft">Cold Prospects</div><div class="mdfs" id="goldMeta"></div></div>
-    <div class="gsl li"><span class="dot"></span>LinkedIn <span class="pc" id="goldLn"></span></div>
-    <div class="card gl" id="goldLi"></div>
-    <div class="gsl ig"><span class="dot"></span>Instagram <span class="pc" id="goldIn"></span></div>
-    <div class="card gl" id="goldIg"></div>
-    <p class="note" id="goldNote"></p>
+    <div class="card mdf"><div class="mdft">Prospects</div><div class="mdfs" id="goldMeta"></div></div>
+    <div class="pgcols">
+      <div class="pgcol" id="goldCold">
+        <div class="gsl">Cold Prospects</div>
+        <div class="gsl li"><span class="dot"></span>LinkedIn <span class="pc" id="goldLn"></span></div>
+        <div class="card gl" id="goldLi"></div>
+        <div class="gsl ig"><span class="dot"></span>Instagram <span class="pc" id="goldIn"></span></div>
+        <div class="card gl" id="goldIg"></div>
+        <p class="note" id="goldNote"></p>
+      </div>
+      <div class="pgcol" id="goldWarm">
+        <div class="wph">
+          <div class="gsl wm">Warm Prospects <span class="pc" id="warmBd"></span></div>
+          <label class="wml"><span>Month</span><select id="warmMon" aria-label="Reach-out month"></select></label>
+        </div>
+        <div class="card wtcard"><div class="wtsc" id="warmTbl"></div></div>
+        <p class="note" id="warmNote"></p>
+      </div>
+    </div>
   </section>
 
   <!-- TAB 2b (v24): UPCOMING LICENCES (bs-v1:upcoming, filled by the bot from DBI Hub; filtered against bs-v1:licensed at render time). Scrolls like a normal page. -->
@@ -1165,7 +1205,7 @@ button{cursor:pointer}
   <button data-t="lb" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="trends" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
   <button data-t="meet" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Goal</button>
-  <button data-t="gold" class="tbl" aria-label="Cold Prospects"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Cold Prospects</button>
+  <button data-t="gold" class="tbl" aria-label="Prospects"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Prospects</button>
   <button data-t="rec" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
   <button data-t="lic" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14 10h4M14 13.5h4"/></svg>Licences</button>
   <button data-t="md" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg>MDs</button>
@@ -1175,7 +1215,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-52";
+var APP_VERSION="2026.11.06-53";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1345,7 +1385,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
 
   // ---------- v46: "Updated <Mon D, h:mm AM/PM> ET" + freshness chip + source on every tab's title card ----------
-  var UPD={meet:["goals","Bot plan: Calendar · MyWFG · DBI Hub · app"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots"]};
+  var UPD={meet:["goals","Bot plan: Calendar · MyWFG · DBI Hub · app"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots · monthly reach-outs"]};
   function etKey(ms){try{var p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms)),o={};p.forEach(function(x){o[x.type]=x.value;});return o.year+"-"+o.month+"-"+o.day;}catch(e){return "";}}
   function updFmt(ms){try{return new Date(ms).toLocaleString("en-US",{timeZone:TZ,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" ET";}catch(e){return "";}}
   function updOf(key,inner){var rt=syGet("rt",{})[PREFIX+key]||0,u=inner&&typeof inner==="object"?inner.updated:null;
@@ -1744,14 +1784,57 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(!a.length)return {n:0,h:'<div class="none">No good prospects yet</div>'};
     return {n:a.length,h:a.map(function(x){var u=/^https:\/\//.test(x.url||"")?x.url:"",pr=x.url_kind==="profile",sub=[goldSince(x.since),x.note].filter(Boolean).join(" · ");
       return '<div class="gr"><div class="gn"><b>'+esc(x.name)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+(u?'<a class="gk '+(pr?'p':'c')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+(pr?'Profile':'Chat')+' ↗</a>':'')+'</div>';}).join("")};}
+  var WARM_ST=["Booked","Done","Asked","Reschedule","Confirming","Building","Warming","Ghosted"],WM_SEL="";
+  function warmIso(){try{var d=new Date(),p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23",timeZoneName:"longOffset"}).formatToParts(d),o={};p.forEach(function(x){o[x.type]=x.value;});
+    var off=(o.timeZoneName||"").replace(/^GMT/,"").replace(/^UTC/,"");if(/^[+-]\d{2}$/.test(off))off+=":00";if(!/^[+-]\d{2}:\d{2}$/.test(off))off="-05:00";
+    return o.year+"-"+o.month+"-"+o.day+"T"+o.hour+":"+o.minute+":"+o.second+off;}catch(e){return new Date().toISOString();}}
+  function warmGet(){var W=getJ("warm",null);return W&&typeof W==="object"?W:{v:1,months:{}};}
+  function warmYmList(W){var a=[];if(W&&W.months&&typeof W.months==="object")Object.keys(W.months).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))a.push(k);});return a.sort().reverse();}
+  function warmPeople(W,ym){var m=W&&W.months&&W.months[ym];return m&&Array.isArray(m.people)?m.people:[];}
+  function warmMerge(a,b){var A=typeof a==="string"?syParse(a):a,B=typeof b==="string"?syParse(b):b;
+    if(!A||typeof A!=="object")return typeof b==="string"?b:JSON.stringify(B||{});
+    if(!B||typeof B!=="object")return typeof a==="string"?a:JSON.stringify(A);
+    var out={v:Math.max(+A.v||1,+B.v||1),months:{}};out.updated=String(A.updated||"")>=String(B.updated||"")?A.updated:B.updated;
+    function add(src){var mo=src.months&&typeof src.months==="object"?src.months:{};
+      Object.keys(mo).forEach(function(ym){if(!out.months[ym])out.months[ym]={people:[]};
+        var dest=out.months[ym].people,ix={};dest.forEach(function(p,i){if(p&&p.name)ix[String(p.name).toLowerCase()]=i;});
+        (mo[ym]&&Array.isArray(mo[ym].people)?mo[ym].people:[]).forEach(function(p){if(!p||!p.name)return;var k=String(p.name).toLowerCase(),i=ix[k];
+          if(i==null){ix[k]=dest.length;dest.push(p);}else if((+p.updated||0)>=(+dest[i].updated||0))dest[i]=p;});});}
+    add(A);add(B);return JSON.stringify(out);}
+  function warmBadge(ps){var n=ps.filter(function(p){return p&&p.name;}).length,b=ps.filter(function(p){return p&&p.status==="Booked";}).length;if($("warmBd"))$("warmBd").textContent="Booked "+b+" / "+n;}
+  function renderWarm(){
+    var W=warmGet(),ks=warmYmList(W),nowYm=(function(){try{return new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit"}).format(new Date());}catch(e){return ks[0]||"";}})();
+    if(!WM_SEL||ks.indexOf(WM_SEL)<0)WM_SEL=ks.indexOf(nowYm)>=0?nowYm:(ks[0]||nowYm);
+    var so=ks.map(function(k){var m=/^(\d{4})-(\d{2})/.exec(k);return '<option value="'+k+'">'+esc(m?MON[+m[2]-1]+" "+m[1]:k)+'</option>';}).join("");
+    if(!so)so='<option value="'+esc(WM_SEL)+'">'+esc(WM_SEL)+'</option>';
+    if($("warmMon").innerHTML!==so)$("warmMon").innerHTML=so;$("warmMon").value=WM_SEL;
+    var ps=warmPeople(W,WM_SEL);warmBadge(ps);
+    if(!ps.length){$("warmTbl").innerHTML='<div class="none">'+(SY.loaded?"No reach-outs this month yet.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("warmNote").textContent="";return;}
+    var h='<table class="wt"><colgroup><col class="c-n"><col class="c-nm"><col class="c-st"><col class="c-cm"></colgroup><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Comments</th></tr></thead><tbody>';
+    ps.forEach(function(p,i){if(!p||!p.name)return;var st=WARM_ST.indexOf(p.status)>=0?p.status:"Warming";
+      h+='<tr><td class="wn">'+(i+1)+'</td><td class="wnm">'+esc(p.name)+'</td><td><select class="wsel '+st+'" data-wi="'+i+'" data-wf="status" aria-label="Status for '+esc(p.name)+'">';
+      WARM_ST.forEach(function(x){h+='<option value="'+x+'"'+(x===st?" selected":"")+'>'+x+'</option>';});
+      h+='</select></td><td><textarea class="wcom" data-wi="'+i+'" data-wf="comment" rows="2" placeholder="Add an update…">'+esc(p.comment||"")+'</textarea></td></tr>';});
+    $("warmTbl").innerHTML=h+"</tbody></table>";
+    $("warmNote").textContent="This month's reach-outs and bookings. Status and comments save automatically.";}
+  function warmPatch(t){var i=+t.dataset.wi,f=t.dataset.wf;if(!(i>=0)||!f)return;
+    var W=warmGet();if(!W.months)W.months={};if(!W.months[WM_SEL])W.months[WM_SEL]={people:[]};
+    var ps=W.months[WM_SEL].people;if(!ps[i])return;
+    if(f==="status"){if(WARM_ST.indexOf(t.value)<0)return;ps[i].status=t.value;t.className="wsel "+t.value;}
+    else ps[i].comment=t.value;
+    ps[i].updated=Date.now();W.v=W.v||1;W.updated=warmIso();setJ("warm",W);warmBadge(ps);}
   function renderGold(){
     var G=getJ("gold",null);
-    if(!G||typeof G!=="object"){$("goldMeta").textContent="LinkedIn + Instagram";var w='<div class="none" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the LinkedIn and Instagram bots.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("goldLi").innerHTML=w;$("goldIg").innerHTML="";$("goldLn").textContent="";$("goldIn").textContent="";$("goldNote").textContent="";return;}
-    $("goldMeta").textContent="LinkedIn + Instagram";
-    var L=goldList(G.linkedin),I=goldList(G.instagram);
-    $("goldLi").innerHTML=L.h;$("goldIg").innerHTML=I.h;$("goldLn").textContent=L.n;$("goldIn").textContent=I.n;
-    $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation.";
+    $("goldMeta").textContent="Cold list + monthly reach-outs";
+    if(!G||typeof G!=="object"){var w='<div class="none" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the LinkedIn and Instagram bots.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("goldLi").innerHTML=w;$("goldIg").innerHTML="";$("goldLn").textContent="";$("goldIn").textContent="";$("goldNote").textContent="";}
+    else{var L=goldList(G.linkedin),I=goldList(G.instagram);
+      $("goldLi").innerHTML=L.h;$("goldIg").innerHTML=I.h;$("goldLn").textContent=L.n;$("goldIn").textContent=I.n;
+      $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation.";}
+    renderWarm();
   }
+  $("warmMon").addEventListener("change",function(){WM_SEL=this.value;renderWarm();});
+  $("warmTbl").addEventListener("change",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf)warmPatch(t);});
+  $("warmTbl").addEventListener("input",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf==="comment")warmPatch(t);});
   // ---------- v29: Leaders Bulletin (bs-v1:leaders from build_lb.py; read-only) ----------
   var LBM=[["rec_m","Rec","m"],["rec_12","Rec","12"],["pts_m","Pts","m"],["pts_12","Pts","12"],["lic_m","Lic","m"],["lic_12","Lic","12"]];
   function lbN(v,f){if(v===null||v===undefined||v==="")return null;v=+v;if(isNaN(v))return null;if(f.indexOf("pts")!==0)return String(Math.round(v));var a=Math.abs(v);
@@ -2225,7 +2308,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
     if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
   var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm,att:renderAtt};
-  function show(t){t=t||"";if(t==="cold")t="gold";if(t==="goal"||t==="main")t="meet";   /* v46: #goal / #main = aliases of #meet (Goal tab) */   /* v35: #cold = alias of #gold (Cold Prospects) */
+  function show(t){t=t||"";if(t==="cold")t="gold";if(t==="goal"||t==="main")t="meet";   /* v46: #goal / #main = aliases of #meet (Goal tab) */   /* v35: #cold = alias of #gold (Prospects tab) */
     if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
     var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm"||t==="att";renderHeader();TABS[t]();renderUpd(t);navReveal();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+(b.dataset.t==="meet"?"goal":b.dataset.t));}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
@@ -2265,6 +2348,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function syMerge(fk,a,b,ta,tb){
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
+    if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v53: per-person merge by name, newest updated wins
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
     if(/^day:/.test(k)&&N&&O&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
@@ -2294,6 +2378,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
           var am=attMerge(loc,rv),ac=canon(syParse(am));nv=ac===canon(syParse(rv))?rv:ac===canon(syParse(loc))?loc:am;}
         if((k===PREFIX+"attendance_md_overrides"||k===PREFIX+"attendance_recruiter_overrides")&&loc!==null&&rv!==null){   // v41: ALWAYS merge MD picks the same way
           var om=ovMerge(loc,rv),oc=canon(syParse(om));nv=oc===canon(syParse(rv))?rv:oc===canon(syParse(loc))?loc:om;}
+        if(k===PREFIX+"warm"&&loc!==null&&rv!==null){   // v53: ALWAYS merge warm-prospect edits
+          var wm=warmMerge(loc,rv),wc=canon(syParse(wm));nv=wc===canon(syParse(rv))?rv:wc===canon(syParse(loc))?loc:wm;}
         if(nv!==loc){try{if(nv===null)localStorage.removeItem(k);else localStorage.setItem(k,nv);changed=true;}catch(e){return;}}
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
