@@ -676,6 +676,16 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 #p-meet .gme:last-child{border-bottom:0}
 #p-meet .gme b{display:block;overflow-wrap:anywhere}
 #p-meet .gme i{display:block;font-style:normal;color:#d5dce0;font-size:12px;margin-top:2px}
+#p-meet .gme{flex-wrap:wrap}
+#p-meet .gpts{font-weight:800;white-space:nowrap;color:#fff}
+#p-meet .gme .gsub,#p-meet .gaddf{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;margin-top:6px;width:100%}
+#p-meet .gme .gsub label,#p-meet .gaddf label{display:flex;flex-direction:column;gap:2px;font-size:11px;font-weight:700;color:#e8ecee}
+#p-meet .gme .gsub select,#p-meet .gme .gsub input[type="number"],#p-meet .gaddf select,#p-meet .gaddf input{background:#151b1f;border:1px solid #5a656e;color:#fff;border-radius:8px;padding:5px 7px;font-size:13px;min-width:0}
+#p-meet .gme .gtog{flex-direction:row;align-items:center;gap:6px;color:#fff;font-size:12px}
+#p-meet .gme .gdel,#p-meet .gaddok{background:#3a2224;border:1px solid #8a4a50;color:#fff;border-radius:8px;padding:6px 10px;font-weight:800;font-size:12px}
+#p-meet .gaddok{background:#2a3a2c;border-color:#5a7a5c}
+#p-meet .gme.fell b,#p-meet .gme.fell .gpts{text-decoration:line-through}
+#p-meet .gadd{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #3a444c}
 .gosh{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center}
 .gosh[hidden]{display:none!important}
 .goshbg{position:absolute;inset:0;background:rgba(0,0,0,.62);border:0}
@@ -1352,7 +1362,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.07-68";
+var APP_VERSION="2026.11.07-69";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1493,13 +1503,66 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var hv=have==null?0:+have,tg=tgt==null?0:+tgt,f=tg>0?Math.round(hv/tg*100):null;
     return '<div class="gmx"><span>'+label+'</span><b>'+goNum(hv)+' / '+goNum(tg)+'</b><small>'+esc(goGap(hv,tg,k?"points":"recruits"))+(f==null?"":" · "+f+"%")+'</small>'+gbar(f)+'</div>';
   }
-  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="inv"?"Investment":p==="inv_pac"?"Investment PAC":p==="recruit"?"Recruit":(p||"—");}
+  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="inv"?"Investment":p==="inv_pac"?"Investment PAC":p==="recruit"?"Recruit":p==="other"?"Other":(p||"—");}
   function goMoney(n){return "$"+(+n||0).toLocaleString("en-CA",{maximumFractionDigits:0});}
+  function goAmtOf(e){if(!e)return NaN;if(e.amount!=null&&e.amount!=="")return +e.amount;if(e.monthly_premium!=null)return +e.monthly_premium;if(e.premium!=null)return +e.premium;if(e.savings!=null)return +e.savings;return NaN;}
+  function goVisible(ents){return (Array.isArray(ents)?ents:[]).filter(function(e){return e&&!e.deleted;});}
+  function goCleanNote(s){s=String(s||"");s=s.replace(/https?:\/\/\S+|wa\.me\S+|chat\.whatsapp\.com\S+/ig,"");s=s.replace(/\b[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}\b/ig,"");s=s.replace(/(?:\+?1[\s.\-]?)?(?:\(?\d{3}\)?[\s.\-])?\d{3}[\s.\-]\d{4}/g,"");return s.trim().slice(0,80);}
+  function goCompute(e){
+    e=e||{};
+    var p=String(e.product||"").toLowerCase(),amt=goAmtOf(e);
+    if(!(amt>=0))amt=0;
+    if(e.deleted||e.fell_through){e.points=0;if(p==="recruit")e.recruits=0;e.points_rule=e.deleted?"deleted":"fell_through";return e;}
+    if(p==="term"||p==="iul"){e.points=+(amt*15).toFixed(2);e.monthly_premium=amt;e.points_rule="monthly_premium*15";}
+    else if(p==="ul"){e.points=+(amt*20).toFixed(2);e.monthly_premium=amt;e.points_rule="monthly_premium*20";}
+    else if(p==="inv"){e.points=+(amt*0.05).toFixed(2);e.savings=amt;e.points_rule="savings*0.05";}
+    else if(p==="inv_pac"){e.points=0;e.skipped=true;e.points_rule="monthly PAC skipped";}
+    else if(p==="recruit"){e.recruits=(int(e.recruits)!=null?int(e.recruits):1);if(e.points==null)e.points=0;e.points_rule="recruit";}
+    else {if(e.points==null||e.points==="")e.points=0;if(p==="other")e.product="other";}
+    if(p!=="inv_pac")delete e.skipped;
+    return e;
+  }
+  function subContentKey(e){
+    var amt=goAmtOf(e),amtS=(amt===amt&&isFinite(amt))?String(+amt):"";
+    function n(s){return String(s||"").trim().toLowerCase();}
+    return [n(e&&e.date),n(e&&e.poster),n(e&&e.product),amtS].join("|");
+  }
+  function subEnsure(e){if(!e.origin_key)e.origin_key=subContentKey(e);if(!e.id)e.id="e_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);return e;}
+  function subRecompute(m){
+    var rec=0,pts=0;
+    (m.entries||[]).forEach(function(e){
+      if(!e||e.deleted||e.fell_through||e.base!==true)return;
+      if(String(e.product||"").toLowerCase()==="recruit")rec+=(int(e.recruits)!=null?int(e.recruits):1);
+      else if(+e.recruits)rec+=int(e.recruits)||0;
+      pts+=(+e.points||0);
+    });
+    m.recruits=rec;pts=Math.round(pts*100)/100;m.points=pts===Math.round(pts)?Math.round(pts):pts;return m;
+  }
+  function goTotals(ents){var m={entries:ents||[]};subRecompute(m);return {rec:m.recruits,pts:m.points};}
+  function subPersist(ym,entries){
+    var S=subGet();if(!S.months)S.months={};ym=ym||GM||ymNow();
+    var m=S.months[ym]&&typeof S.months[ym]==="object"?Object.assign({},S.months[ym]):{recruits:0,points:0,entries:[]};
+    m.entries=entries;subRecompute(m);S.months[ym]=m;S.v=1;S.updated=(typeof agIso==="function"?agIso():new Date().toISOString());setJ("submitted",S);GO_ENTS=entries;return S;
+  }
+  function goMutate(ix,fn){
+    var S=subGet(),ym=GM||ymNow();if(!S.months)S.months={};
+    var m=S.months[ym]&&typeof S.months[ym]==="object"?S.months[ym]:{recruits:0,points:0,entries:[]};
+    if(!Array.isArray(m.entries))m.entries=[];
+    var e=m.entries[ix];if(!e)return null;fn(e);goCompute(e);subPersist(ym,m.entries);return e;
+  }
+  function goProdOpts(cur){
+    return [["term","Term"],["iul","IUL"],["ul","UL"],["inv","Investment"],["inv_pac","Investment PAC"],["recruit","Recruit"],["other","Other"]].map(function(x){return '<option value="'+x[0]+'"'+(String(cur||"").toLowerCase()===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
+  }
+  function goBaseOpts(cur){
+    var v=cur===true?"true":cur===false?"false":"null";
+    return [["true","Base"],["false","Not base"],["null","Needs check"]].map(function(x){return '<option value="'+x[0]+'"'+(v===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
+  }
+  function goPtsLbl(e){if(!e)return "—";if(e.fell_through||e.deleted)return "0 pts";if(e.skipped)return "skipped";return (e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");}
   function goMix(ents){
     ents=Array.isArray(ents)?ents:[];
     var b={iul:0,ul:0,term:0,inv:0};
     ents.forEach(function(e){
-      if(!e||e.base!==true||e.skipped)return;
+      if(!e||e.base!==true||e.skipped||e.deleted||e.fell_through)return;
       var p=String(e.product||"").toLowerCase();
       if(p==="inv_pac")return;
       var amt=+(e.monthly_premium!=null?e.monthly_premium:e.premium!=null?e.premium:e.savings!=null?e.savings:e.amount);
@@ -1529,18 +1592,31 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return goMix(fake);
   }
   var GO_ENTS=[];
+  function goSheetRow(e,i){
+    var who=e.agent||e.poster||"Unknown";
+    var extra=[e.date,e.note].filter(Boolean).join(" · ");
+    var amt=goAmtOf(e),amtS=(amt===amt&&isFinite(amt))?String(amt):"";
+    var h='<div class="gme'+(e.fell_through?" fell":"")+'" data-i="'+i+'">';
+    h+='<div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+(e.base==null?'<span class="need">needs check</span>':'')+'</div><div class="gpts">'+esc(goPtsLbl(e))+'</div>';
+    h+='<div class="gsub"><label>Product <select data-sf="product">'+goProdOpts(e.product)+'</select></label>';
+    h+='<label>Amount <input data-sf="amount" type="number" inputmode="decimal" step="0.01" min="0" value="'+esc(amtS)+'"></label>';
+    h+='<label>Base <select data-sf="base">'+goBaseOpts(e.base)+'</select></label>';
+    h+='<label class="gtog"><input type="checkbox" data-sf="fell_through"'+(e.fell_through?" checked":"")+'> Fell through</label>';
+    h+='<button type="button" class="gdel" data-sf="del">Delete</button></div></div>';
+    return h;
+  }
   function goEntriesList(ents){
     ents=Array.isArray(ents)?ents:[];
-    if(!ents.length)return '<div class="gmos">No result posts yet</div>';
-    var h="";
-    ents.forEach(function(e){
-      if(!e)return;
-      var who=e.agent||e.poster||"Unknown";
-      var extra=[prodLabel(e.product),e.date,e.note].filter(Boolean).join(" · ");
-      var pts=e.skipped?"skipped":(e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");
-      var chk=e.base==null?'<span class="need">needs check</span>':'';
-      h+='<div class="gme"><div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+chk+'</div><div>'+esc(pts)+'</div></div>';
-    });
+    var h='<div class="gadd"><button type="button" class="gpbtn" id="goAdd">+ Add result</button><div class="gaddf" id="goAddF" hidden>';
+    h+='<label>Date <input data-af="date" type="date" value="'+esc(typeof today==="string"?today:"")+'"></label>';
+    h+='<label>Product <select data-af="product">'+goProdOpts("iul")+'</select></label>';
+    h+='<label>Amount <input data-af="amount" type="number" inputmode="decimal" step="0.01" min="0"></label>';
+    h+='<label>Base <select data-af="base">'+goBaseOpts(true)+'</select></label>';
+    h+='<label>Note <input data-af="note" maxlength="80" placeholder="short note"></label>';
+    h+='<button type="button" class="gaddok" id="goAddOk">Save result</button></div></div>';
+    var vis=0;
+    ents.forEach(function(e,i){if(!e||e.deleted)return;vis++;h+=goSheetRow(e,i);});
+    if(!vis)h+='<div class="gmos">No result posts yet</div>';
     return h;
   }
   function goRing(label,have,tgt,unit,extra){
@@ -1554,9 +1630,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("goMPick").value=GM;$("goMPick").max=max;$("goMNext").disabled=GM>=max;
     if($("goMeta"))$("goMeta").textContent="Base shop · "+ymPretty(GM);
     var T=mgT(GM),S=subGet(),sm=subMonth(GM),P=prBaseMonth(GM);
-    var sRec=int(sm.recruits)||0,sPts=+(sm.points||0);
-    var pRec=P.missing?0:(+P.rec||0),pPts=P.missing?0:(+P.pts||0);
     GO_ENTS=sm.entries||[];
+    var tot=goTotals(GO_ENTS),sRec=tot.rec,sPts=tot.pts;
+    var pRec=P.missing?0:(+P.rec||0),pPts=P.missing?0:(+P.pts||0);
     var tUpd=T.u?("Updated "+updFmt(+T.u)):("Default "+T.recruits+" recruits · "+goNum(T.points)+" points");
     var sUpd=S.updated?("Updated "+(function(){var x=new Date(S.updated);return isNaN(+x)?String(S.updated):updFmt(+x);})()):"No posts loaded yet";
     var pWhen=P.updated?updFmt(+new Date(P.updated)):(P.as_of?pretty(P.as_of).replace(/^\w+, /,""):"");
@@ -1566,7 +1642,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     h+='<div class="gmoin"><label for="goTrec">Recruits</label><input class="num" id="goTrec" type="number" inputmode="numeric" min="0" step="1" value="'+esc(T.recruits)+'"></div>';
     h+='<div class="gmoin"><label for="goTpts">Points</label><input class="num" id="goTpts" type="number" inputmode="numeric" min="0" step="1" value="'+esc(T.points)+'"></div>';
     h+='</div></div>';
-    h+='<div class="card gmo"><div class="gmoh"><b>Submitted so far</b><span class="bst">BASE SHOP</span></div><div class="gmos">WhatsApp · '+esc(sUpd)+'</div><div class="gmor">'+goRing("Recruits",sRec,T.recruits,"recruits")+goRing("Points",sPts,T.points,"points",mix)+'</div>'+(GO_ENTS.length?'<button type="button" class="gpbtn" id="goPosts">'+GO_ENTS.length+' posts</button>':'')+'</div>';
+    h+='<div class="card gmo"><div class="gmoh"><b>Submitted so far</b><span class="bst">BASE SHOP</span></div><div class="gmos">WhatsApp · '+esc(sUpd)+'</div><div class="gmor">'+goRing("Recruits",sRec,T.recruits,"recruits")+goRing("Points",sPts,T.points,"points",mix)+'</div><button type="button" class="gpbtn" id="goPosts">'+(goVisible(GO_ENTS).length?goVisible(GO_ENTS).length+' posts':'Results')+'</button></div>';
     h+='<div class="card gmo"><div class="gmoh"><b>On system</b><span class="bst">BASE SHOP</span></div><div class="gmos">MyWFG · SMD Base · '+esc(pUpd)+'</div><div class="gmor">'+goRing("Recruits",pRec,T.recruits,"recruits")+goRing("Points",pPts,T.points,"points",sysMix)+'</div></div>';
     $("goMonth").innerHTML=h;
   }
@@ -1664,6 +1740,16 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("dPick").addEventListener("change",function(){if(this.value)setView(this.value);});
   function goSheetOpen(){if($("goSheetB"))$("goSheetB").innerHTML=goEntriesList(GO_ENTS);if($("goSheet"))$("goSheet").hidden=false;}
   function goSheetClose(){if($("goSheet"))$("goSheet").hidden=true;}
+  function goAfterEdit(){renderGoalMonth();if($("goSheet")&&!$("goSheet").hidden)goSheetOpen();}
+  function goAddResult(){
+    var box=$("goAddF");if(!box)return;
+    var g=function(n){var el=box.querySelector("[data-af=\""+n+"\"]");return el?el.value:"";};
+    var bv=g("base"),e={id:"m_"+Date.now().toString(36),date:g("date")||today,poster:"You",product:g("product")||"other",amount:+g("amount")||0,base:bv==="true"?true:bv==="false"?false:null,note:goCleanNote(g("note"))||undefined,user_edited:true,u:Date.now()};
+    e.origin_key=subContentKey(e);goCompute(e);
+    var S=subGet(),ym=GM||ymNow();if(!S.months)S.months={};
+    var m=S.months[ym]&&typeof S.months[ym]==="object"?S.months[ym]:{recruits:0,points:0,entries:[]};
+    if(!Array.isArray(m.entries))m.entries=[];m.entries.push(e);subPersist(ym,m.entries);goAfterEdit();
+  }
   $("goMPrev").addEventListener("click",function(){GM=shiftYm(GM||ymNow(),-1);renderGoalMonth();});
   $("goMNext").addEventListener("click",function(){var n=shiftYm(GM||ymNow(),1);if(n<=ymNow())GM=n;renderGoalMonth();});
   $("goMPick").addEventListener("change",function(){if(this.value){GM=this.value;if(GM>ymNow())GM=ymNow();renderGoalMonth();}});
@@ -1675,6 +1761,36 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("goMonth").addEventListener("click",function(e){if(e.target&&e.target.id==="goPosts")goSheetOpen();});
   $("goSheetX").addEventListener("click",goSheetClose);
   $("goSheetBg").addEventListener("click",goSheetClose);
+  $("goSheet").addEventListener("input",function(ev){
+    var t=ev.target;if(!t||t.dataset.sf!=="amount")return;
+    var row=t.closest(".gme");if(!row)return;
+    var e=goMutate(+row.dataset.i,function(ent){subEnsure(ent);ent.amount=+t.value||0;ent.user_edited=true;ent.u=Date.now();});
+    if(!e)return;
+    var p=row.querySelector(".gpts");if(p)p.textContent=goPtsLbl(e);
+    renderGoalMonth();
+  });
+  $("goSheet").addEventListener("change",function(ev){
+    var t=ev.target;if(!t||!t.dataset.sf||t.dataset.sf==="amount"||t.dataset.sf==="del")return;
+    var row=t.closest(".gme");if(!row)return;
+    goMutate(+row.dataset.i,function(ent){
+      subEnsure(ent);
+      if(t.dataset.sf==="product")ent.product=t.value;
+      else if(t.dataset.sf==="base")ent.base=t.value==="true"?true:t.value==="false"?false:null;
+      else if(t.dataset.sf==="fell_through")ent.fell_through=!!t.checked;
+      ent.user_edited=true;ent.u=Date.now();
+    });
+    goAfterEdit();
+  });
+  $("goSheet").addEventListener("click",function(ev){
+    var t=ev.target;if(!t)return;
+    if(t.id==="goAdd"){if($("goAddF"))$("goAddF").hidden=!$("goAddF").hidden;return;}
+    if(t.id==="goAddOk"){goAddResult();return;}
+    if(t.dataset.sf!=="del")return;
+    var row=t.closest(".gme");if(!row)return;
+    if(!confirm("Delete this result? It will not come back from the group refresh."))return;
+    goMutate(+row.dataset.i,function(ent){subEnsure(ent);ent.deleted=true;ent.user_edited=true;ent.u=Date.now();});
+    goAfterEdit();
+  });
   $("mRows").addEventListener("input",onInput);
   $("goCards").addEventListener("input",onInput);
   $("mRows").addEventListener("click",function(e){var b=e.target.closest("[data-nmo]");if(!b)return;var id=b.dataset.nmo,was=!!nmOpen[id];nmOpen={};if(!was)nmOpen[id]=1;renderRowsInputs();
@@ -3107,12 +3223,53 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function syWait(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function syLocalKeys(){var a=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf(PREFIX)===0)a.push(k);}return a;}
   // merge one key when BOTH sides changed: day records merge field by field (newer side wins per field); lists merge by id; else newer wins
+  function subKeys(e){
+    var ks=[];if(e&&e.id)ks.push("id|"+String(e.id).toLowerCase());
+    ks.push("orig|"+String((e&&e.origin_key)||subContentKey(e)).toLowerCase());
+    ks.push("ck|"+subContentKey(e));
+    return ks;
+  }
+  function subProtect(e){return !!(e&&(e.user_edited||e.fell_through||e.deleted));}
+  function subPick(x,y){
+    if((x&&x.deleted)||(y&&y.deleted)){
+      if(x&&x.deleted&&y&&y.deleted)return (+x.u||0)>=(+y.u||0)?x:y;
+      return (x&&x.deleted)?x:y;
+    }
+    if(subProtect(x)&&!subProtect(y))return x;
+    if(subProtect(y)&&!subProtect(x))return y;
+    return (+(y&&y.u)||0)>=(+(x&&x.u)||0)?y:x;
+  }
+  function subMergeMonth(a,b){
+    a=a&&typeof a==="object"?a:{entries:[]};b=b&&typeof b==="object"?b:{entries:[]};
+    var by={},order=[];
+    function consider(e){
+      if(!e||typeof e!=="object")return;
+      var hit=null;subKeys(e).forEach(function(k){if(by[k])hit=by[k];});
+      var keep=hit?subPick(hit,e):e;
+      if(hit&&keep!==hit){Object.keys(by).forEach(function(k){if(by[k]===hit)delete by[k];});var ix=order.indexOf(hit);if(ix>=0)order[ix]=keep;else order.push(keep);}
+      else if(!hit)order.push(keep);
+      subKeys(keep).forEach(function(k){by[k]=keep;});
+    }
+    (a.entries||[]).forEach(consider);(b.entries||[]).forEach(consider);
+    var m={entries:order};subRecompute(m);return m;
+  }
+  function subMerge(sa,sb){
+    var A=typeof sa==="string"?syParse(sa):sa,B=typeof sb==="string"?syParse(sb):sb;
+    if(!A||typeof A!=="object")return typeof sb==="string"?sb:JSON.stringify(sb);
+    if(!B||typeof B!=="object")return typeof sa==="string"?sa:JSON.stringify(sa);
+    var months={},keys={},ym;
+    [A.months||{},B.months||{}].forEach(function(M){for(ym in M)keys[ym]=1;});
+    for(ym in keys)months[ym]=subMergeMonth((A.months||{})[ym],(B.months||{})[ym]);
+    var updated=A.updated;if(B.updated&&(!updated||String(B.updated)>String(updated)))updated=B.updated;
+    return JSON.stringify({v:1,updated:updated,months:months});
+  }
   function syMerge(fk,a,b,ta,tb){
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
     if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v53: per-person merge by name, newest updated wins
     if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v59: built_ids authoritative for generated items; manuals merge on survivors
     if(fk===PREFIX+"meetlog"&&a!==null&&b!==null)return meetlogMerge(a,b);   // v54: append-only meeting notes
+    if(fk===PREFIX+"submitted"&&a!==null&&b!==null)return subMerge(a,b);   // v69: user edits / tombstones win over group refresh
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
     if(/^day:/.test(k)&&N&&O&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
@@ -3148,6 +3305,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
           var agm=agMerge(loc,rv),agc=canon(syParse(agm));nv=agc===canon(syParse(rv))?rv:agc===canon(syParse(loc))?loc:agm;}
         if(k===PREFIX+"meetlog"&&loc!==null&&rv!==null){
           var mlm=meetlogMerge(loc,rv),mlc=canon(syParse(mlm));nv=mlc===canon(syParse(rv))?rv:mlc===canon(syParse(loc))?loc:mlm;}
+        if(k===PREFIX+"submitted"&&loc!==null&&rv!==null){
+          var sbm=subMerge(loc,rv),sbc=canon(syParse(sbm));nv=sbc===canon(syParse(rv))?rv:sbc===canon(syParse(loc))?loc:sbm;}
         if(nv!==loc){try{if(nv===null)localStorage.removeItem(k);else localStorage.setItem(k,nv);changed=true;}catch(e){return;}}
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
