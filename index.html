@@ -603,6 +603,10 @@ button{cursor:pointer}
 #p-agenda .agother-t b{display:block;color:#fff;font-size:13px;font-weight:800;overflow-wrap:anywhere}
 #p-agenda .agother-t small{display:block;color:#cfd6db;font-size:12px;margin-top:1px}
 #p-agenda .agpromote{flex:0 0 auto;height:28px;padding:3px 10px;font-size:12.5px;font-weight:800;margin:0}
+#p-agenda .agresbtn{flex:none;height:28px;padding:3px 8px;border:1px solid #5a656e;border-radius:8px;background:#2b343b;color:#f2f4f5;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+#p-agenda .agresbox{display:none;flex:1 1 100%;min-width:0;align-items:center;flex-wrap:wrap;gap:8px}
+#p-agenda .agresbox.on{display:flex}
+#p-agenda .agresbox input[type=datetime-local]{flex:1 1 160px;min-width:0;max-width:100%;height:28px;padding:3px 8px}
 #p-agenda .agctl label{display:flex;align-items:center;gap:4px;margin:0;font-size:12.5px;font-weight:700;color:#f2f4f5;cursor:pointer;flex:none;white-space:nowrap}
 #p-agenda .agctl input[type=checkbox]{width:16px;height:16px;accent-color:#35aef5}
 #p-agenda .agcom{flex:1;min-width:0;height:28px;min-height:28px;resize:none;overflow:hidden;line-height:1.3}
@@ -1945,6 +1949,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     }
     Object.keys(da).forEach(function(k){addDay(k,da[k]);});
     Object.keys(db).forEach(function(k){addDay(k,db[k]);});
+    out.reschedules=agMergeRecs(A.reschedules,B.reschedules);
     return JSON.stringify(out);
   }
   function meetlogMerge(a,b){
@@ -2034,6 +2039,55 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(Array.isArray(day.promoted_appts))day.promoted_appts=day.promoted_appts.filter(function(pr){return pr&&pr.id!==rec.id&&pr.item_id!==rec.id&&!(rec.cal_id&&pr.cal_id===rec.cal_id);});
     agSave(A);
     agMeetPush({id:"m_dismissed_"+Date.now()+"_"+agSlug(title||id),date:AG.d,kind:rec.kind||"personal",name:rec.title,comment:rec.comment||"",ts:Date.now(),u:Date.now(),src:"dismissed",src_id:rec.id,cal_id:rec.cal_id||"",section:rec.section||""});
+    renderAgenda();
+  }
+  function agLocalFromStart(start){
+    var s=String(start||"");
+    var m=/^(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2})/.exec(s);
+    if(m)return m[1]+"T"+m[2];
+    return "";
+  }
+  function agFmtLocal(val){
+    var m=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(val||"");
+    if(!m)return "";
+    var h=+m[4], ap=h>=12?"p.m.":"a.m.", h12=h%12||12;
+    return h12+":"+m[5]+" "+ap;
+  }
+  function agReschedule(id,val){
+    var m=/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(String(val||"").trim());
+    if(!m)return;
+    var toDate=m[1], toIso=m[1]+"T"+m[2];
+    var A=agGet();if(!A.days||!A.days[AG.d])return;
+    var day=A.days[AG.d],hit=null;
+    (day.items||[]).forEach(function(x){if(x&&x.id===id)hit=x;});
+    if(!hit)return;
+    var kind=agNormKind(agApptKind(hit));
+    var rec={id:"rs_"+Date.now()+"_"+agSlug(hit.id||hit.title||"appt"),item_id:hit.id,cal_id:((hit.extra||{}).cal_id||""),title:hit.title||"",from:AG.d,to:toDate,to_iso:toIso,to_start:toIso,to_date:toDate,appt_kind:kind,comment:hit.comment||"",u:Date.now()};
+    if(!Array.isArray(A.reschedules))A.reschedules=[];
+    A.reschedules.push(rec);
+    var extra=Object.assign({},hit.extra||{},{start:toIso,rescheduled:true,from:AG.d,appt:kind});
+    if(toDate===AG.d){
+      hit.detail=agFmtLocal(toIso)||hit.detail;
+      hit.extra=extra;
+      hit.appt_kind=kind;
+      hit.carry=false;
+      hit.updated=Date.now();
+    }else{
+      agDismissRecord(day,{id:hit.id,item_id:hit.id,cal_id:rec.cal_id,title:hit.title||"",section:hit.section||"appts",kind:kind,comment:hit.comment||"",detail:hit.detail||"",u:Date.now()});
+      day.items=(day.items||[]).filter(function(x){return !x||x.id!==id;});
+      if(Array.isArray(day.built_ids))day.built_ids=day.built_ids.filter(function(x){return x!==id;});
+      if(!A.days[toDate])A.days[toDate]={date:toDate,items:[],built_ids:[],headline:day.headline||"EMD · $250K by June 30, 2027"};
+      var dest=A.days[toDate];
+      if(!Array.isArray(dest.items))dest.items=[];
+      if(!Array.isArray(dest.built_ids))dest.built_ids=[];
+      var moved=Object.assign({},hit,{detail:agFmtLocal(toIso)||hit.detail,extra:extra,appt_kind:kind,comment:hit.comment||"",carry:false,done:false,updated:Date.now()});
+      var exists=null;dest.items.forEach(function(x){if(x&&x.id===hit.id)exists=x;});
+      if(exists){exists.detail=moved.detail;exists.extra=extra;exists.appt_kind=kind;exists.comment=moved.comment;exists.updated=moved.updated;}
+      else dest.items.push(moved);
+      if(dest.built_ids.indexOf(hit.id)<0)dest.built_ids.push(hit.id);
+    }
+    agSave(A);
+    agMeetPush({id:"m_resched_"+Date.now()+"_"+agSlug(hit.title||id),date:AG.d,kind:kind,name:hit.title||"",comment:hit.comment||"",ts:Date.now(),u:Date.now(),src:"rescheduled",src_id:hit.id,cal_id:rec.cal_id,from:AG.d,to:toIso});
     renderAgenda();
   }
   function agPromote(calId){
@@ -2213,8 +2267,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     h+='<div class="agctl">';
     if(showKind)h+=agKindSelect(it.id,agApptKind(it),"appt_kind");
     h+='<label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
-    h+='<label><input type="checkbox" data-agf="carry" data-agid="'+esc(it.id)+'"'+(it.carry?" checked":"")+'> Push tomorrow</label>';
-    h+='<textarea class="agcom" data-agf="comment" data-agid="'+esc(it.id)+'" rows="1" placeholder="Comment">'+esc(it.comment||"")+'</textarea></div></div>';
+    if(showKind){
+      h+='<button type="button" class="agresbtn" data-agresched="'+esc(it.id)+'">Reschedule</button>';
+    }else{
+      h+='<label><input type="checkbox" data-agf="carry" data-agid="'+esc(it.id)+'"'+(it.carry?" checked":"")+'> Push tomorrow</label>';
+    }
+    h+='<textarea class="agcom" data-agf="comment" data-agid="'+esc(it.id)+'" rows="1" placeholder="Comment">'+esc(it.comment||"")+'</textarea>';
+    if(showKind)h+='<div class="agresbox" data-agresbox="'+esc(it.id)+'"><input class="agin" type="datetime-local" data-agresin="'+esc(it.id)+'" value="'+esc(agLocalFromStart((it.extra||{}).start)|| (AG.d+"T09:00"))+'" aria-label="New date and time"><button type="button" class="btn" data-agressave="'+esc(it.id)+'">Save</button></div>';
+    h+='</div></div>';
     return h;
   }
   function agSecHtml(key,title,items){
@@ -2796,6 +2856,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("agBody").addEventListener("click",function(e){
     var del=e.target.closest("[data-agdel]");if(del){e.preventDefault();agDismiss(del.dataset.agdel);return;}
     var prm=e.target.closest("[data-agpromote]");if(prm){e.preventDefault();agPromote(prm.dataset.agpromote);return;}
+    var rsb=e.target.closest("[data-agresched]");if(rsb){e.preventDefault();var box=document.querySelector('[data-agresbox="'+rsb.dataset.agresched.replace(/\\/g,"\\\\").replace(/"/g,'\\"')+'"]');if(box){box.classList.toggle("on");var inp=box.querySelector("input[type=datetime-local]");if(box.classList.contains("on")&&inp){try{if(inp.showPicker)inp.showPicker();}catch(x){}inp.focus();}}return;}
+    var rss=e.target.closest("[data-agressave]");if(rss){e.preventDefault();var inp2=document.querySelector('[data-agresin="'+rss.dataset.agressave.replace(/\\/g,"\\\\").replace(/"/g,'\\"')+'"]');agReschedule(rss.dataset.agressave,inp2&&inp2.value);return;}
     var t=e.target.closest("[data-agadd],[data-agsave]");if(!t)return;
     if(t.dataset.agadd){var box=$("agF-"+t.dataset.agadd);if(box)box.classList.toggle("on");return;}
     if(t.dataset.agsave){var k=t.dataset.agsave;if(k==="base")agAddLic(($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);else{var kind=k==="appts"?(($("agK-appts")||{}).value||"personal"):k;agAddMeet(kind,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agK-appts"))$("agK-appts").value="personal";}if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
