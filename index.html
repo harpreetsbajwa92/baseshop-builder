@@ -566,45 +566,48 @@ button{cursor:pointer}
 #p-gold .wcom::placeholder{color:#8c979f}
 #p-gold #warmNote,#p-gold #goldNote{color:#9aa5ad;font-size:12.5px;padding:4px 2px 8px}
 
-/* ===== v54: Daily Agenda (bs-v1:agenda + bs-v1:meetlog) ===== */
-#p-agenda{max-width:100%}
+/* ===== v57: Daily Agenda compact sections (bs-v1:agenda + bs-v1:meetlog) ===== */
+#p-agenda{max-width:100%;overflow-x:hidden}
 #p-agenda .agban{border:1px solid #4a555e;margin-top:10px;overflow:hidden}
 #p-agenda .agban b{display:block;font-family:var(--fc);font-size:18px;letter-spacing:1px;text-transform:uppercase;color:#fff}
 #p-agenda .agban p{margin-top:4px;color:#cfd6db;font-size:13.5px;line-height:1.45;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
-#p-agenda .agsec{margin:14px 0 8px}
-#p-agenda .agsec h3{font-family:var(--fc);font-size:15px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#e6eaec;margin:0 2px 8px}
-#p-agenda .agit{border:1px solid #4a555e;border-radius:14px;padding:12px;margin:0 0 8px;background:var(--card)}
+#p-agenda .aggrid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start}
+#p-agenda .agstack{display:flex;flex-direction:column;gap:10px;min-width:0}
+#p-agenda .agsec{margin:0;border:1px solid #4a555e;border-radius:10px;background:var(--card);overflow:hidden}
+#p-agenda .agsec h3{font-family:var(--fc);font-size:12.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0;padding:6px 10px;display:flex;align-items:center;gap:8px;background:#1c242a;border-bottom:1px solid #4a555e}
+#p-agenda .agsec h3 .agst{min-width:0;overflow-wrap:anywhere}
+#p-agenda .agsec h3 .agcnt{margin-left:auto;flex:none;color:#cfd6db;font-size:12px;font-weight:800;letter-spacing:0}
+#p-agenda .agit{border:0;border-bottom:1px solid #3a444c;border-radius:0;padding:7px 10px;margin:0;background:transparent}
+#p-agenda .agit:last-child{border-bottom:0}
 #p-agenda .agit.done .agt{text-decoration:line-through;color:#cfd6db}
-#p-agenda .agt{font-size:15px;font-weight:800;color:#fff;line-height:1.3;overflow-wrap:anywhere}
-#p-agenda .agd{margin-top:5px;font-size:13px;color:#cfd6db;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere}
-#p-agenda .agrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:10px}
-#p-agenda .agrow label,#p-agenda .agc label,#p-agenda .agtog label{display:block;font-family:var(--fc);font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#cfd6db;margin-bottom:3px}
-#p-agenda .agtv{min-height:42px;display:flex;align-items:center;border:1px solid #5a656e;border-radius:10px;background:#151b1f;padding:8px 10px;font-family:var(--fn);font-size:18px;font-weight:800;color:#fff}
-#p-agenda .agin,#p-agenda .agta{width:100%;max-width:100%;background:#151b1f;border:1px solid #5a656e;border-radius:10px;padding:8px 10px;color:#f2f4f5;font-size:15px}
+#p-agenda .agt{font-size:13.5px;font-weight:800;color:#fff;line-height:1.3;overflow-wrap:anywhere}
+#p-agenda .agd{margin-top:1px;font-size:12.5px;color:#cfd6db;line-height:1.3;white-space:normal;overflow-wrap:anywhere}
+#p-agenda .agin,#p-agenda .agta,#p-agenda .agcom{width:100%;max-width:100%;background:#151b1f;border:1px solid #5a656e;border-radius:8px;padding:5px 8px;color:#f2f4f5;font-size:13.5px}
 #p-agenda .agta{min-height:52px;resize:vertical}
-#p-agenda .agin:focus,#p-agenda .agta:focus{outline:none;border-color:#35aef5}
-#p-agenda .agc{margin-top:8px}
-#p-agenda .agtog{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px}
-#p-agenda .agtog label{display:flex;align-items:center;gap:6px;margin:0;text-transform:none;letter-spacing:0;font-family:inherit;font-size:13.5px;font-weight:700;color:#f2f4f5;cursor:pointer}
-#p-agenda .agtog input{width:18px;height:18px;accent-color:#35aef5}
-#p-agenda .agap{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-#p-agenda .agcol{border:1px solid #4a555e;border-radius:14px;padding:10px;min-width:0}
-#p-agenda .agcol h4{font-family:var(--fc);font-size:14px;letter-spacing:1px;text-transform:uppercase;color:#e6eaec;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
-#p-agenda .agplus{flex:none;width:36px;height:36px;border:1px solid #5a656e;border-radius:10px;background:#2b343b;color:#fff;font-size:22px;font-weight:800;line-height:1}
-#p-agenda .agform{display:none;margin:0 0 8px;border:1px solid #5a656e;border-radius:10px;padding:8px}
+#p-agenda .agin:focus,#p-agenda .agta:focus,#p-agenda .agcom:focus{outline:none;border-color:#35aef5}
+#p-agenda .agnum{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:5px}
+#p-agenda .agnum span{font-size:12px;font-weight:700;color:#cfd6db}
+#p-agenda .agnum b{color:#fff;font-size:13.5px}
+#p-agenda .agnum .agin{width:76px;flex:none;padding:4px 6px;font-family:var(--fn);font-size:15px;font-weight:800}
+#p-agenda .agctl{display:flex;align-items:center;gap:8px;margin-top:5px;min-width:0}
+#p-agenda .agctl label{display:flex;align-items:center;gap:4px;margin:0;font-size:12.5px;font-weight:700;color:#f2f4f5;cursor:pointer;flex:none;white-space:nowrap}
+#p-agenda .agctl input[type=checkbox]{width:16px;height:16px;accent-color:#35aef5}
+#p-agenda .agcom{flex:1;min-width:0;height:28px;min-height:28px;resize:none;overflow:hidden;line-height:1.3}
+#p-agenda .agcom:focus{height:64px;min-height:64px;resize:vertical;overflow:auto}
+#p-agenda .agplus{flex:none;width:28px;height:28px;border:1px solid #5a656e;border-radius:8px;background:#2b343b;color:#fff;font-size:20px;font-weight:800;line-height:1}
+#p-agenda .agform{display:none;margin:8px;border:1px solid #5a656e;border-radius:8px;padding:8px}
 #p-agenda .agform.on{display:block}
 #p-agenda .agform .btn{margin-top:8px}
-#p-agenda .aglog{border-top:1px solid #3a444c;padding:8px 0}
-#p-agenda .aglog:first-child{border-top:0;padding-top:0}
-#p-agenda .aglog b{display:block;color:#fff}
-#p-agenda .aglog p{margin-top:3px;color:#cfd6db;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
-#p-agenda .agnone{color:#cfd6db;font-size:13.5px;padding:6px 0}
+#p-agenda .agform .agfl{margin-top:6px;display:block;font-family:var(--fc);font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#cfd6db}
+#p-agenda .aglog{border-top:1px solid #3a444c;padding:7px 10px}
+#p-agenda .aglog b{display:block;color:#fff;font-size:13px}
+#p-agenda .aglog p{margin-top:2px;color:#cfd6db;font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+#p-agenda .agnone{color:#cfd6db;font-size:13px;padding:8px 10px}
 #p-agenda .agnote{color:#cfd6db;font-size:12.5px;padding:4px 2px 10px}
 @media (min-width:700px){
-  .wrap:has(#p-agenda.on){max-width:1100px}
-  #p-agenda{max-width:1100px;margin:0 auto}
-  #p-agenda .agap{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  #p-agenda .ag2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
+  .wrap:has(#p-agenda.on){max-width:1180px}
+  #p-agenda{max-width:1180px;margin:0 auto}
+  #p-agenda .aggrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
 }
 @media (max-width:430px){.tabs button{font-size:10px;letter-spacing:-.25px}.tabs button .ic{width:22px;height:22px}}
 @media (min-width:900px){
@@ -1067,10 +1070,10 @@ button{cursor:pointer}
   </div>
 
 
-  <!-- TAB 0 (v54): DAILY AGENDA. First tab. Data: bs-v1:agenda (generated + his target/achieved/comments) and bs-v1:meetlog. -->
+  <!-- TAB 0 (v57): DAILY AGENDA. First tab. Data: bs-v1:agenda (generated + his comments/done/push) and bs-v1:meetlog. -->
   <section class="page" id="p-agenda">
-    <div class="card mdf"><div class="mdft">Daily Agenda</div><div class="mdfs" id="agMeta">Today's goals vs achieved</div></div>
-    <div class="card agban"><b>Main goal: EMD · $250K</b><p>By June 30, 2027. Type what you achieved and leave a comment. Anything unfinished with a comment, or marked Carry to tomorrow, comes back the next day.</p></div>
+    <div class="card mdf"><div class="mdft">Daily Agenda</div><div class="mdfs" id="agMeta">Today's actions</div></div>
+    <div class="card agban"><b>Main goal: EMD · $250K</b><p>By June 30, 2027. Each row is one action — Done, Push tomorrow, and a comment. Unfinished items you mark or comment on come back the next day.</p></div>
     <div class="dnav"><div class="pnav"><button class="pa" id="agPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="agLbl">TODAY</span><input type="date" id="agPick" aria-label="Pick an agenda date"></div><button class="pa" id="agNext" aria-label="Next day">›</button></div><button class="tbtn" id="agToday" hidden>Today</button></div>
     <div id="agBody"></div>
     <p class="agnote" id="agNote"></p>
@@ -1267,7 +1270,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-56";
+var APP_VERSION="2026.11.06-57";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1907,36 +1910,70 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){if(e&&e.date===AG.d&&e.kind===kind)a.push(e);});
     return a;
   }
+  function agNumeric(it){
+    if(!it)return false;
+    if(it.extra&&it.extra.numeric)return true;
+    return /^(rec_day|close_day|rec_month|close_month|gap|conv|mkt|reviews)$/.test(it.id||"");
+  }
+  function agSecOf(it){
+    var s=it.section||"",id=it.id||"",ex=(it.extra||{}).type||"",ap=(it.extra||{}).appt||"";
+    if({llqp:1,certs:1,training:1,birthdays:1,reviews:1,marketing:1,base:1,wa:1,ig:1,li:1,personal:1,team:1,score:1}[s])return s;
+    if(ap==="personal"||id.indexOf("appt:personal")===0||id==="pers_appts")return "personal";
+    if(ap==="team"||id.indexOf("appt:team")===0||id==="team_appts")return "team";
+    if(id.indexOf("flag:llqp")===0||id.indexOf("flag:examsoon")===0||ex==="llqp"||ex==="exam")return "llqp";
+    if(id.indexOf("flag:up")===0||ex==="upcoming")return "certs";
+    if(id.indexOf("flag:td")===0||id.indexOf("flag:pf")===0||ex==="training"||ex==="eno"||ex==="platform_fee")return "training";
+    if(id==="bday"||id.indexOf("bday:")===0)return "birthdays";
+    if(id==="reviews"||id.indexOf("review:")===0)return "reviews";
+    if(id==="mkt")return "marketing";
+    if(id==="basezero"||id.indexOf("basezero:")===0)return "base";
+    if(id==="wa"||id.indexOf("wa:")===0)return "wa";
+    if(id==="ig"||id.indexOf("ig:")===0)return "ig";
+    if(id==="li"||id.indexOf("li:")===0)return "li";
+    if(/^(rec_day|close_day|rec_month|close_month|gap|conv)$/.test(id)||s==="score")return "score";
+    if(s==="urgent")return "training";
+    if(s==="grow")return "marketing";
+    if(s==="prospect")return "wa";
+    if(s==="appts")return "personal";
+    return s||"training";
+  }
+  var AG_LEFT=["llqp","certs","training","birthdays","reviews","marketing"];
+  var AG_RIGHT=["base","wa","ig","li","personal","team","score"];
+  var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",wa:"WhatsApp prospects",ig:"Instagram",li:"LinkedIn",personal:"Personal appointments",team:"Team appointments",score:"Scoreboard"};
+  var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,personal:1,team:1,score:1};
   function agItemHtml(it){
     if(!it||!it.id)return "";
     var tgt=it.target,ach=it.achieved,cur=it.extra&&it.extra.gen_current;
     if(it.id==="conv"&&(ach==null||ach==="")&&cur!=null)ach=cur;
-    var done=!!it.done;
+    var done=!!it.done,num=agNumeric(it);
     var h='<div class="agit'+(done?" done":"")+'" data-agid="'+esc(it.id)+'">';
     h+='<div class="agt">'+esc(it.title||"")+'</div>';
     if(it.detail)h+='<div class="agd">'+esc(it.detail)+'</div>';
-    h+='<div class="agrow"><div><label>Target</label><div class="agtv">'+esc(agFmt(tgt))+'</div></div>';
-    h+='<div><label>Achieved</label><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—"></div></div>';
-    h+='<div class="agc"><label>Comment</label><textarea class="agta" data-agf="comment" data-agid="'+esc(it.id)+'" rows="2" placeholder="How did it go? What should move to tomorrow?">'+esc(it.comment||"")+'</textarea></div>';
-    h+='<div class="agtog"><label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
-    h+='<label><input type="checkbox" data-agf="carry" data-agid="'+esc(it.id)+'"'+(it.carry?" checked":"")+'> Carry to tomorrow</label></div></div>';
+    if(num){
+      h+='<div class="agnum"><span>Target <b>'+esc(agFmt(tgt))+'</b></span>';
+      h+='<span>Achieved</span><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—"></div>';
+    }
+    h+='<div class="agctl"><label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
+    h+='<label><input type="checkbox" data-agf="carry" data-agid="'+esc(it.id)+'"'+(it.carry?" checked":"")+'> Push tomorrow</label>';
+    h+='<textarea class="agcom" data-agf="comment" data-agid="'+esc(it.id)+'" rows="1" placeholder="Comment">'+esc(it.comment||"")+'</textarea></div></div>';
     return h;
   }
-  function agCol(kind,title,items){
-    var h='<div class="agcol"><h4>'+esc(title)+' <button type="button" class="agplus" data-agadd="'+kind+'" aria-label="Add '+esc(title)+' note">+</button></h4>';
-    h+='<div class="agform" id="agF-'+kind+'"><label>Name</label><input class="agin" id="agN-'+kind+'" placeholder="Who did you meet?"><label style="margin-top:6px;display:block;font-family:var(--fc);font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#cfd6db">How it went</label><textarea class="agta" id="agC-'+kind+'" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="'+kind+'">Save note</button></div>';
-    var ev=items.filter(function(it){return it.kind==="appt"&&it.extra&&it.extra.appt===kind;});
-    if(!ev.length)h+='<div class="agnone">No calendar events in this column.</div>';
-    ev.forEach(function(it){h+=agItemHtml(it);});
-    var logs=agLogs(kind);
-    if(logs.length){h+='<div class="slbl" style="margin-top:10px"><span>How the meeting went</span></div>';
-      logs.forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b><p>'+esc(e.comment||"")+'</p></div>';});}
-    h+='</div>';
-    return h;
+  function agSecHtml(key,title,items){
+    var plus=(key==="personal"||key==="team")?key:"";
+    var h='<section class="agsec"><h3><span class="agst">'+esc(title)+'</span><span class="agcnt">'+items.length+'</span>';
+    if(plus)h+='<button type="button" class="agplus" data-agadd="'+plus+'" aria-label="Add '+esc(title)+' note">+</button>';
+    h+='</h3>';
+    if(plus){
+      h+='<div class="agform" id="agF-'+plus+'"><label>Name</label><input class="agin" id="agN-'+plus+'" placeholder="Who did you meet?"><label class="agfl">How it went</label><textarea class="agta" id="agC-'+plus+'" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="'+plus+'">Save note</button></div>';
+    }
+    if(!items.length)h+='<div class="agnone">Nothing in this section.</div>';
+    items.forEach(function(it){h+=agItemHtml(it);});
+    if(plus){agLogs(plus).forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b><p>'+esc(e.comment||"")+'</p></div>';});}
+    return h+'</section>';
   }
   function renderAgenda(){
     if(!AG.d||(!(agGet().days||{})[AG.d]&&!AG.locked))AG.d=agDefault();
-    var A=agGet(),day=A.days&&A.days[AG.d],fut=AG.d>today;
+    var A=agGet(),day=A.days&&A.days[AG.d];
     $("agLbl").textContent=AG.d===today?"TODAY":AG.d===shift(today,-1)?"YESTERDAY":AG.d===shift(today,1)?"TOMORROW":(function(){var p=AG.d.split("-");return DOW[new Date(+p[0],+p[1]-1,+p[2]).getDay()].toUpperCase()+" "+MON[+p[1]-1].toUpperCase()+" "+(+p[2]);})();
     $("agPick").value=AG.d;$("agToday").hidden=AG.d===today;
     $("agMeta").textContent=day&&day.headline?day.headline:"EMD · $250K by June 30, 2027";
@@ -1945,26 +1982,19 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       $("agNote").textContent="";
       return;
     }
-    var groups={urgent:[],grow:[],base:[],prospect:[],appts:[],score:[],other:[]};
-    day.items.forEach(function(it){if(!it)return;var s=it.section||"other";if(!groups[s])groups[s]=[];groups[s].push(it);});
-    var labels={urgent:"Urgent",grow:"Grow production",base:"Base productivity",prospect:"Prospecting",appts:"Appointments",score:"Scoreboard"};
-    var h="";
-    ["urgent","grow","base","prospect"].forEach(function(sec){
-      var list=groups[sec]||[];if(!list.length)return;
-      h+='<div class="agsec"><h3>'+labels[sec]+'</h3>';
-      list.forEach(function(it){h+=agItemHtml(it);});
-      h+='</div>';
-    });
-    h+='<div class="agsec"><h3>Appointments</h3>';
-    (groups.appts||[]).filter(function(it){return it.kind!=="appt";}).forEach(function(it){h+=agItemHtml(it);});
-    h+='<div class="agap">'+agCol("personal","Personal appointments",groups.appts||[])+agCol("team","Team appointments",groups.appts||[])+'</div></div>';
-    if((groups.score||[]).length){
-      h+='<div class="agsec"><h3>Scoreboard</h3><div class="ag2">';
-      groups.score.forEach(function(it){h+=agItemHtml(it);});
-      h+='</div></div>';
+    var groups={};
+    day.items.forEach(function(it){if(!it)return;var s=agSecOf(it);if(!groups[s])groups[s]=[];groups[s].push(it);});
+    function col(keys){
+      var h='<div class="agstack">';
+      keys.forEach(function(k){
+        var list=groups[k]||[];
+        if(!list.length&&!AG_ALWAYS[k])return;
+        h+=agSecHtml(k,AG_LAB[k]||k,list);
+      });
+      return h+'</div>';
     }
-    $("agBody").innerHTML=h;
-    $("agNote").textContent=(day.source?"Built from "+day.source+". ":"")+"Your numbers, comments, Done and Carry save automatically. Meeting notes are kept permanently.";
+    $("agBody").innerHTML='<div class="aggrid">'+col(AG_LEFT)+col(AG_RIGHT)+'</div>';
+    $("agNote").textContent=(day.source?"Built from "+day.source+". ":"")+"Done, Push tomorrow and comments save automatically. Meeting notes are kept permanently.";
   }
   function agSet(k){if(!k)k=today;AG.d=k;AG.locked=true;renderAgenda();renderUpd("agenda");}
 
@@ -2550,7 +2580,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
     if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v53: per-person merge by name, newest updated wins
-    if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v54: per-item manuals, newest updated wins
+    if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v57: per-item manuals, newest updated wins
     if(fk===PREFIX+"meetlog"&&a!==null&&b!==null)return meetlogMerge(a,b);   // v54: append-only meeting notes
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
