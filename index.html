@@ -1362,7 +1362,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.07-69";
+var APP_VERSION="2026.11.07-70";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1503,7 +1503,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var hv=have==null?0:+have,tg=tgt==null?0:+tgt,f=tg>0?Math.round(hv/tg*100):null;
     return '<div class="gmx"><span>'+label+'</span><b>'+goNum(hv)+' / '+goNum(tg)+'</b><small>'+esc(goGap(hv,tg,k?"points":"recruits"))+(f==null?"":" · "+f+"%")+'</small>'+gbar(f)+'</div>';
   }
-  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="inv"?"Investment":p==="inv_pac"?"Investment PAC":p==="recruit"?"Recruit":p==="other"?"Other":(p||"—");}
+  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="di"?"DI":p==="inv"?"Investment":p==="inv_pac"?"Investment PAC":p==="recruit"?"Recruit":p==="other"?"Other":(p||"—");}
   function goMoney(n){return "$"+(+n||0).toLocaleString("en-CA",{maximumFractionDigits:0});}
   function goAmtOf(e){if(!e)return NaN;if(e.amount!=null&&e.amount!=="")return +e.amount;if(e.monthly_premium!=null)return +e.monthly_premium;if(e.premium!=null)return +e.premium;if(e.savings!=null)return +e.savings;return NaN;}
   function goVisible(ents){return (Array.isArray(ents)?ents:[]).filter(function(e){return e&&!e.deleted;});}
@@ -1513,7 +1513,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var p=String(e.product||"").toLowerCase(),amt=goAmtOf(e);
     if(!(amt>=0))amt=0;
     if(e.deleted||e.fell_through){e.points=0;if(p==="recruit")e.recruits=0;e.points_rule=e.deleted?"deleted":"fell_through";return e;}
-    if(p==="term"||p==="iul"){e.points=+(amt*15).toFixed(2);e.monthly_premium=amt;e.points_rule="monthly_premium*15";}
+    if(p==="term"||p==="iul"||p==="di"){e.points=+(amt*15).toFixed(2);e.monthly_premium=amt;e.points_rule="monthly_premium*15";}
     else if(p==="ul"){e.points=+(amt*20).toFixed(2);e.monthly_premium=amt;e.points_rule="monthly_premium*20";}
     else if(p==="inv"){e.points=+(amt*0.05).toFixed(2);e.savings=amt;e.points_rule="savings*0.05";}
     else if(p==="inv_pac"){e.points=0;e.skipped=true;e.points_rule="monthly PAC skipped";}
@@ -1551,7 +1551,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var e=m.entries[ix];if(!e)return null;fn(e);goCompute(e);subPersist(ym,m.entries);return e;
   }
   function goProdOpts(cur){
-    return [["term","Term"],["iul","IUL"],["ul","UL"],["inv","Investment"],["inv_pac","Investment PAC"],["recruit","Recruit"],["other","Other"]].map(function(x){return '<option value="'+x[0]+'"'+(String(cur||"").toLowerCase()===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
+    return [["term","Term"],["iul","IUL"],["ul","UL"],["di","DI"],["inv","Investment"],["inv_pac","Investment PAC"],["recruit","Recruit"],["other","Other"]].map(function(x){return '<option value="'+x[0]+'"'+(String(cur||"").toLowerCase()===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
   }
   function goBaseOpts(cur){
     var v=cur===true?"true":cur===false?"false":"null";
@@ -1560,20 +1560,21 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function goPtsLbl(e){if(!e)return "—";if(e.fell_through||e.deleted)return "0 pts";if(e.skipped)return "skipped";return (e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");}
   function goMix(ents){
     ents=Array.isArray(ents)?ents:[];
-    var b={iul:0,ul:0,term:0,inv:0};
+    var b={iul:0,ul:0,term:0,di:0,inv:0};
     ents.forEach(function(e){
       if(!e||e.base!==true||e.skipped||e.deleted||e.fell_through)return;
       var p=String(e.product||"").toLowerCase();
       if(p==="inv_pac")return;
       var amt=+(e.monthly_premium!=null?e.monthly_premium:e.premium!=null?e.premium:e.savings!=null?e.savings:e.amount);
       if(!(amt>0))return;
-      if(p==="iul"||p==="ul"||p==="term")b[p]+=amt;
+      if(p==="iul"||p==="ul"||p==="term"||p==="di")b[p]+=amt;
       else if(p==="inv")b.inv+=+(e.savings!=null?e.savings:e.amount);
     });
     var parts=[];
     if(b.iul)parts.push("IUL "+goMoney(b.iul)+"/mo");
     if(b.ul)parts.push("UL "+goMoney(b.ul)+"/mo");
     if(b.term)parts.push("Term "+goMoney(b.term)+"/mo");
+    if(b.di)parts.push("DI "+goMoney(b.di)+"/mo");
     if(b.inv)parts.push("Inv "+goMoney(b.inv));
     return parts.join(" · ");
   }
@@ -1584,7 +1585,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(Array.isArray(src))return goMix(src.map(function(x){var o=Object.assign({},x);if(o.base==null)o.base=true;return o;}));
     if(typeof src!=="object")return "";
     var fake=[];
-    ["iul","ul","term","inv"].forEach(function(k){
+    ["iul","ul","term","di","inv"].forEach(function(k){
       var v=src[k];
       if(v&&typeof v==="object")fake.push({product:k,amount:v.amount||v.premium||v.savings||v.monthly_premium,base:true});
       else if(+v>0)fake.push({product:k,amount:+v,base:true});
