@@ -633,6 +633,29 @@ button{cursor:pointer}
   #p-gold{max-width:none}
   #p-gold .pgcols{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 }
+/* ===== v64: monthly Goal tab (base shop only) ===== */
+#p-meet{max-width:720px}
+#p-meet .gmo{border:1px solid #4a555e;border-radius:12px;padding:14px 14px 12px;margin:0 0 12px;background:var(--card);min-width:0}
+#p-meet .gmoh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#p-meet .gmoh b{font-family:var(--fc);font-size:15px;letter-spacing:.8px;text-transform:uppercase;color:#fff}
+#p-meet .gmos{margin-top:5px;color:#cfd6db;font-size:12.5px;line-height:1.4;overflow-wrap:anywhere}
+#p-meet .gmor{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:12px}
+@media (min-width:560px){#p-meet .gmor{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+#p-meet .gmx span{display:block;color:#cfd6db;font-size:12px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
+#p-meet .gmx b{display:block;color:#fff;font-size:22px;font-weight:800;margin-top:3px;overflow-wrap:anywhere;word-break:break-word}
+#p-meet .gmx small{display:block;color:#cfd6db;font-size:13px;margin-top:3px}
+#p-meet .gmoin{display:flex;flex-direction:column;gap:4px;min-width:0}
+#p-meet .gmoin label{color:#cfd6db;font-size:12px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
+#p-meet .gmoin .num{width:100%;max-width:100%;background:#151b1f;border:1px solid #5a656e;border-radius:8px;padding:8px 10px;color:#fff;font-size:20px;font-weight:800}
+#p-meet .gment{margin-top:12px;border-top:1px solid #3a444c;padding-top:8px}
+#p-meet .gment summary{cursor:pointer;color:#f2f4f5;font-size:13px;font-weight:800;list-style:none}
+#p-meet .gment summary::-webkit-details-marker{display:none}
+#p-meet .gme{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid #3a444c;color:#f2f4f5;font-size:13px;min-width:0}
+#p-meet .gme:last-child{border-bottom:0}
+#p-meet .gme b{display:block;overflow-wrap:anywhere}
+#p-meet .gme i{display:block;font-style:normal;color:#cfd6db;font-size:12px;margin-top:2px}
+#p-meet .need{display:inline-block;margin-top:3px;color:#1d1503;background:#F5C451;border-radius:6px;padding:1px 6px;font-size:11px;font-weight:800}
+#p-meet #goMPick{position:absolute;opacity:0;inset:0;width:100%;height:100%;pointer-events:auto}
 /* ===== v29: bottom bar scrolls sideways on a phone (room for 10 tabs) ===== */
 .tabs{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;justify-content:flex-start;overscroll-behavior-x:contain}
 .tabs::-webkit-scrollbar{display:none}
@@ -1100,8 +1123,11 @@ button{cursor:pointer}
 
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
-    <!-- v46: GOAL tab (was Main/Meetings; hash #meet kept, #goal and #main are aliases). Goal = bs-v1:goals (bot, read-only here); Achieved = this day's bs-v1:day record (app). -->
-    <div class="card mdf sm"><div class="mdft">Goal</div><div class="mdfs" id="goMeta">Goal vs achieved</div></div>
+    <!-- v64: monthly Goal tab. Old daily goal cards + detailed log stay in the DOM (hidden) so stored keys and listeners are untouched. -->
+    <div class="card mdf sm"><div class="mdft">Goal</div><div class="mdfs" id="goMeta">Base shop · this month</div></div>
+    <div class="dnav"><div class="pnav"><button class="pa" id="goMPrev" aria-label="Previous month">‹</button><div class="pl cal" role="button" tabindex="0"><span id="goMLbl">MONTH</span><input type="month" id="goMPick" aria-label="Pick a month"></div><button class="pa" id="goMNext" aria-label="Next month">›</button></div><button class="tbtn" id="goMThis" hidden>This month</button></div>
+    <div id="goMonth"></div>
+    <div hidden>
     <div class="dnav"><div class="pnav"><button class="pa" id="dPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="dLbl">TODAY</span><input type="date" id="dPick" aria-label="Pick a date"></div><button class="pa" id="dNext" aria-label="Next day">›</button></div><button class="tbtn" id="dToday" hidden>Today</button></div>
     <div class="gcs" id="goCards"></div>
     <div class="gsrc" id="goSrc"></div>
@@ -1110,6 +1136,7 @@ button{cursor:pointer}
       <div class="card"><div class="rg" id="resGrid"></div></div></div>
       <div><div class="slbl"><span>Detailed log<span class="bst">BASE SHOP</span></span><small>results, names, contacts</small></div>
       <div class="card" id="mRows"></div></div>
+    </div>
     </div>
   </section>
 
@@ -1289,7 +1316,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.07-63";
+var APP_VERSION="2026.11.07-64";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1400,7 +1427,70 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("dLbl").textContent=view===today?"TODAY":view===shift(today,-1)?"YESTERDAY":view===shift(today,1)?"TOMORROW":pretty(view).toUpperCase();
     var mx=gMax();$("dPick").value=view;$("dPick").max=mx;$("dNext").disabled=view>=mx;$("dToday").hidden=view===today;
   }
-  function renderMeet(){renderDate();renderGoCards();renderRowsInputs();renderMeetRings();}
+  var GM="";
+  function ymNow(){return today.slice(0,7);}
+  function shiftYm(ym,n){var p=String(ym||ymNow()).split("-"),d=new Date(+p[0],(+p[1]||1)-1+(n||0),1);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
+  function ymPretty(ym){var p=String(ym||"").split("-");return (MON[(+p[1]||1)-1]||"")+" "+p[0];}
+  function mgGet(){var M=getJ("monthgoals",null);return M&&typeof M==="object"?M:{v:1,months:{}};}
+  function mgT(ym){var m=((mgGet().months)||{})[ym]||{},r=int(m.recruits),p=int(m.points);return {recruits:r!=null?r:HL.rec.m,points:p!=null?p:HL.pts.m,u:m.u,custom:r!=null||p!=null};}
+  function mgSave(ym,rec,pts){var M=mgGet();if(!M.months)M.months={};M.months[ym]={recruits:rec,points:pts,u:Date.now()};M.v=1;M.updated=agIso?agIso():new Date().toISOString();setJ("monthgoals",M);}
+  function subGet(){var S=getJ("submitted",null);return S&&typeof S==="object"?S:{v:1,months:{}};}
+  function subMonth(ym){var S=subGet(),m=(S.months||{})[ym];return m&&typeof m==="object"?m:{recruits:0,points:0,entries:[]};}
+  function prBaseMonth(ym){
+    var P=getJ("pointsrecruits",null),empty={rec:null,pts:null,missing:true};
+    if(!P||typeof P!=="object"||!Array.isArray(P.rows))return empty;
+    var G=P.groups||["Personal","SMD Base","Super Base","Super Team"],i=G.indexOf("SMD Base");if(i<0)i=1;
+    var row=null;P.rows.forEach(function(r){if(r&&!r.total&&r.ym===ym)row=r;});
+    if(!row)return {rec:null,pts:null,missing:true,updated:P.updated,as_of:P.as_of,pulled:P.pulled,source:P.source};
+    return {rec:(row.rec||[])[i],pts:(row.pts||[])[i],to_date:row.to_date,updated:P.updated,as_of:P.as_of,pulled:P.pulled,source:P.source,missing:false};
+  }
+  function goGap(have,tgt,unit){
+    if(tgt==null||tgt<=0)return "No target";
+    var d=Math.round((have||0)-tgt);
+    if(d===0)return "Goal met";
+    if(d>0)return d.toLocaleString("en-CA")+" "+unit+" over";
+    return Math.abs(d).toLocaleString("en-CA")+" "+unit+" short";
+  }
+  function goStat(label,have,tgt,k){
+    var hv=have==null?0:+have,tg=tgt==null?0:+tgt,f=tg>0?Math.round(hv/tg*100):null;
+    return '<div class="gmx"><span>'+label+'</span><b>'+(k?kfmt(hv):hv.toLocaleString("en-CA"))+' / '+(k?kfmt(tg):tg.toLocaleString("en-CA"))+'</b><small>'+esc(goGap(hv,tg,k?"points":"recruits"))+(f==null?"":" · "+f+"%")+'</small>'+gbar(f)+'</div>';
+  }
+  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="inv"?"Investment":p==="recruit"?"Recruit":(p||"—");}
+  function goEntriesHtml(ents){
+    ents=Array.isArray(ents)?ents:[];
+    if(!ents.length)return '<details class="gment"><summary>No result posts yet</summary></details>';
+    var h='<details class="gment"><summary>Result posts ('+ents.length+')</summary>';
+    ents.forEach(function(e){
+      if(!e)return;
+      var who=e.agent||e.poster||e.client||"Unknown";
+      var extra=[e.client&&e.client!==who?e.client:"",prodLabel(e.product),e.date].filter(Boolean).join(" · ");
+      var pts=e.skipped?"skipped":(e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");
+      h+='<div class="gme"><div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+(e.base==null?'<span class="need">needs check</span>':'')+'</div><div>'+esc(pts)+'</div></div>';
+    });
+    return h+'</details>';
+  }
+  function renderGoalMonth(){
+    if(!GM)GM=ymNow();
+    var max=ymNow();
+    $("goMLbl").textContent=ymPretty(GM).toUpperCase();
+    $("goMPick").value=GM;$("goMPick").max=max;$("goMNext").disabled=GM>=max;$("goMThis").hidden=GM===max;
+    $("goMeta").textContent="Base shop · "+ymPretty(GM);
+    var T=mgT(GM),S=subGet(),sm=subMonth(GM),P=prBaseMonth(GM);
+    var sRec=int(sm.recruits)||0,sPts=+(sm.points||0);
+    var pRec=P.missing?0:(+P.rec||0),pPts=P.missing?0:(+P.pts||0);
+    var tUpd=T.u?("Updated "+updFmt(+T.u)):("Default "+T.recruits+" recruits · "+kfmt(T.points)+" points");
+    var sUpd=S.updated?("Updated "+(function(){var x=new Date(S.updated);return isNaN(+x)?String(S.updated):updFmt(+x);})()):"No posts loaded yet";
+    var pWhen=P.updated?updFmt(+new Date(P.updated)): (P.as_of?pretty(P.as_of).replace(/^\w+, /,""):"");
+    var pUpd=(pWhen?("Updated "+pWhen):"MyWFG not loaded")+(P.to_date?" · to date "+P.to_date.slice(5).replace("-","/"):"")+(P.as_of&&!P.updated?" · as of "+P.as_of:"");
+    var h='<div class="card gmo"><div class="gmoh"><b>Monthly goal</b><span class="bst">BASE SHOP</span></div><div class="gmos">'+esc(tUpd)+'. 15 recruits and 100,000 points unless you change them.</div><div class="gmor">';
+    h+='<div class="gmoin"><label for="goTrec">Recruits</label><input class="num" id="goTrec" type="number" inputmode="numeric" min="0" step="1" value="'+esc(T.recruits)+'"></div>';
+    h+='<div class="gmoin"><label for="goTpts">Points</label><input class="num" id="goTpts" type="number" inputmode="numeric" min="0" step="1" value="'+esc(T.points)+'"></div>';
+    h+='</div></div>';
+    h+='<div class="card gmo"><div class="gmoh"><b>Submitted so far</b><span class="bst">BASE SHOP</span></div><div class="gmos">WhatsApp · Licensed Group : $1Million Company 🦅 · '+esc(sUpd)+'</div><div class="gmor">'+goStat("Recruits",sRec,T.recruits)+goStat("Points",sPts,T.points,1)+'</div>'+goEntriesHtml(sm.entries)+'</div>';
+    h+='<div class="card gmo"><div class="gmoh"><b>On system</b><span class="bst">BASE SHOP</span></div><div class="gmos">MyWFG · SMD Base (not Super Base or Sunny\u2019s team) · '+esc(pUpd)+'</div><div class="gmor">'+goStat("Recruits",pRec,T.recruits)+goStat("Points",pPts,T.points,1)+'</div></div>';
+    $("goMonth").innerHTML=h;
+  }
+  function renderMeet(){renderGoalMonth();}
   // ---------- v46: GOAL tab (goal vs achieved) ----------
   // Goals: bs-v1:goals {"updated","days":{"YYYY-MM-DD":{reach,meetups,personal,base:{goal,how[]},day:{recruits,points,how[]},source,updated}}} (bot only).
   // v47: + marketing:{goal:{min,max},how[]} (missing on a goal day = default 4–5, no bullets). Achieved mk:{li,ig,wa} = posts/statuses Harpreet posted himself (app only tracks it).
@@ -1459,7 +1549,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
 
   // ---------- v46: "Updated <Mon D, h:mm AM/PM> ET" + freshness chip + source on every tab's title card ----------
-  var UPD={agenda:["agenda","Daily build: store · calendar · DBI · prospect files"],meet:["goals","Bot plan: Calendar · MyWFG · DBI Hub · app"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots · monthly reach-outs"]};
+  var UPD={agenda:["agenda","Daily build: store · calendar · DBI · prospect files"],meet:["pointsrecruits","MyWFG · base shop month"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots · monthly reach-outs"]};
   function etKey(ms){try{var p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms)),o={};p.forEach(function(x){o[x.type]=x.value;});return o.year+"-"+o.month+"-"+o.day;}catch(e){return "";}}
   function updFmt(ms){try{return new Date(ms).toLocaleString("en-US",{timeZone:TZ,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" ET";}catch(e){return "";}}
   function updOf(key,inner){var rt=syGet("rt",{})[PREFIX+key]||0,u=inner&&typeof inner==="object"?inner.updated:null;
@@ -1491,6 +1581,15 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("dNext").addEventListener("click",function(){setView(shift(view,1));});
   $("dToday").addEventListener("click",function(){setView(today);});
   $("dPick").addEventListener("change",function(){if(this.value)setView(this.value);});
+  $("goMPrev").addEventListener("click",function(){GM=shiftYm(GM||ymNow(),-1);renderGoalMonth();});
+  $("goMNext").addEventListener("click",function(){var n=shiftYm(GM||ymNow(),1);if(n<=ymNow())GM=n;renderGoalMonth();});
+  $("goMThis").addEventListener("click",function(){GM=ymNow();renderGoalMonth();});
+  $("goMPick").addEventListener("change",function(){if(this.value){GM=this.value;if(GM>ymNow())GM=ymNow();renderGoalMonth();}});
+  $("goMonth").addEventListener("change",function(e){
+    var rec=int(($("goTrec")||{}).value),pts=int(($("goTpts")||{}).value);
+    if(rec==null)rec=HL.rec.m;if(pts==null)pts=HL.pts.m;
+    mgSave(GM||ymNow(),rec,pts);renderGoalMonth();
+  });
   $("mRows").addEventListener("input",onInput);
   $("goCards").addEventListener("input",onInput);
   $("mRows").addEventListener("click",function(e){var b=e.target.closest("[data-nmo]");if(!b)return;var id=b.dataset.nmo,was=!!nmOpen[id];nmOpen={};if(!was)nmOpen[id]=1;renderRowsInputs();
