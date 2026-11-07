@@ -590,7 +590,19 @@ button{cursor:pointer}
 #p-agenda .agnum b{color:#fff;font-size:13.5px}
 #p-agenda .agnum .agin{width:76px;flex:none;padding:4px 6px;font-family:var(--fn);font-size:15px;font-weight:800}
 #p-agenda .agctl{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:5px;min-width:0}
-#p-agenda .agkind{width:auto;min-width:118px;flex:0 0 auto;height:28px;padding:3px 8px;font-size:12.5px;font-weight:700;color:#f2f4f5}
+#p-agenda .agkind{width:auto;min-width:148px;flex:0 0 auto;height:28px;padding:3px 8px;font-size:12.5px;font-weight:700;color:#f2f4f5}
+#p-agenda .agthead{display:flex;align-items:flex-start;gap:8px;min-width:0}
+#p-agenda .agthead .agt{flex:1;min-width:0}
+#p-agenda .agdel{flex:0 0 auto;width:28px;height:28px;padding:0;border:1px solid #5a656e;border-radius:8px;background:#2b343b;color:#fff;font-size:18px;font-weight:800;line-height:1;cursor:pointer}
+#p-agenda .agother{margin:0;border-top:1px solid #3a444c}
+#p-agenda .agother summary{list-style:none;cursor:pointer;padding:7px 10px;font-size:12.5px;font-weight:800;color:#f2f4f5;display:flex;align-items:center;gap:8px}
+#p-agenda .agother summary::-webkit-details-marker{display:none}
+#p-agenda .agother summary .agcnt{margin-left:auto;color:#cfd6db;font-size:12px}
+#p-agenda .agother-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:0 10px 8px;min-width:0}
+#p-agenda .agother-t{flex:1 1 140px;min-width:0}
+#p-agenda .agother-t b{display:block;color:#fff;font-size:13px;font-weight:800;overflow-wrap:anywhere}
+#p-agenda .agother-t small{display:block;color:#cfd6db;font-size:12px;margin-top:1px}
+#p-agenda .agpromote{flex:0 0 auto;height:28px;padding:3px 10px;font-size:12.5px;font-weight:800;margin:0}
 #p-agenda .agctl label{display:flex;align-items:center;gap:4px;margin:0;font-size:12.5px;font-weight:700;color:#f2f4f5;cursor:pointer;flex:none;white-space:nowrap}
 #p-agenda .agctl input[type=checkbox]{width:16px;height:16px;accent-color:#35aef5}
 #p-agenda .agcom{flex:1;min-width:0;height:28px;min-height:28px;resize:none;overflow:hidden;line-height:1.3}
@@ -1871,6 +1883,29 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(Array.isArray(day.built_ids)&&day.built_ids.length)return day.built_ids.filter(Boolean);
     return null;
   }
+  function agMergeRecs(a,b){
+    var out=[],seen={};
+    function add(src){(src||[]).forEach(function(rec){
+      if(!rec||typeof rec!=="object")return;
+      var keys=agRecKeys(rec);var k=keys.slice().sort().join("|")||JSON.stringify(rec);
+      if(seen[k])return;seen[k]=1;out.push(rec);
+    });}
+    add(a);add(b);return out;
+  }
+  function agRecKeys(rec){
+    var keys=[],extra=(rec&&rec.extra&&typeof rec.extra==="object")?rec.extra:{};
+    function push(v){if(!v)return;v=String(v).trim().toLowerCase();if(!v)return;keys.push(v);keys.push(agSlug(v));}
+    if(!rec)return keys;
+    push(rec.id);push(rec.item_id);push(rec.cal_id);push(rec.eid);push(extra.cal_id);push(extra.eid);
+    var tt=String(rec.title||"").replace(/\s+/g," ").trim().toLowerCase();
+    if(tt)keys.push("title:"+tt);
+    return keys;
+  }
+  function agListed(rows,it){
+    var a=agRecKeys(it);if(!a.length)return false;
+    var aset={};a.forEach(function(k){aset[k]=1;});
+    return (rows||[]).some(function(rec){return agRecKeys(rec).some(function(k){return aset[k];});});
+  }
   function agMergeDay(cur,src){
     var cb=+cur.built||0,sb=+src.built||0;
     var newer=sb>=cb?src:cur,older=sb>=cb?cur:src;
@@ -1878,16 +1913,24 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var auth=newer,other=older,ids=nb;
     if(!nb&&ob){auth=older;other=newer;ids=ob;}
     if(!ids)ids=(auth.items||[]).filter(agGenerated).map(function(it){return it.id;});
+    var dismissed=agMergeRecs(older.dismissed_appts,newer.dismissed_appts);
+    var promoted=agMergeRecs(older.promoted_appts,newer.promoted_appts);
     var allow={};ids.forEach(function(id){allow[id]=1;});
     var merged={},x;
-    for(x in older)if(x!=="items"&&x!=="built_ids")merged[x]=older[x];
-    for(x in newer)if(x!=="items"&&x!=="built_ids")merged[x]=newer[x];
+    for(x in older)if(x!=="items"&&x!=="built_ids"&&x!=="dismissed_appts"&&x!=="promoted_appts")merged[x]=older[x];
+    for(x in newer)if(x!=="items"&&x!=="built_ids"&&x!=="dismissed_appts"&&x!=="promoted_appts")merged[x]=newer[x];
+    merged.dismissed_appts=dismissed;merged.promoted_appts=promoted;
     var imap={};
     (other.items||[]).forEach(function(it){if(it&&it.id)imap[it.id]=it;});
     (auth.items||[]).forEach(function(it){if(!it||!it.id)return;imap[it.id]=imap[it.id]?agMergeItem(imap[it.id],it):it;});
     var items=[];
-    Object.keys(imap).forEach(function(id){var it=imap[id];if(allow[id]||!agGenerated(it))items.push(it);});
-    merged.items=items;merged.built_ids=ids.slice();
+    Object.keys(imap).forEach(function(id){
+      var it=imap[id];
+      if(agListed(dismissed,it))return;
+      if(allow[id]||!agGenerated(it)||agListed(promoted,it))items.push(it);
+    });
+    merged.items=items;
+    merged.built_ids=ids.filter(function(id){var it=imap[id];return it?!agListed(dismissed,it):true;});
     return merged;
   }
   function agMerge(a,b){
@@ -1926,20 +1969,83 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     else if(f==="comment")it.comment=val;
     else if(f==="done")it.done=!!val;
     else if(f==="carry")it.carry=!!val;
-    else if(f==="appt_kind")it.appt_kind=val==="team"?"team":val==="agent"?"agent":"personal";
+    else if(f==="appt_kind")it.appt_kind=agNormKind(val);
     it.updated=Date.now();agSave(A);
+    return it;
+  }
+  function agSlug(s){return String(s||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,48)||"x";}
+  function agNormKind(val){
+    val=String(val||"").toLowerCase().replace(/_/g," ").replace(/\s+/g," ").trim();
+    if(val==="team")return "team";
+    if(val==="planning"||val==="agent")return "planning";
+    if(val==="annual review"||val==="review")return "annual_review";
+    return "personal";
+  }
+  function agMeetPush(entry){
+    var L=agLogGet();if(!Array.isArray(L.entries))L.entries=[];
+    L.v=1;L.updated=agIso();L.entries.push(entry);setJ("meetlog",L);
+  }
+  function agLogApptEdit(it){
+    if(!it)return;
+    var kind=agNormKind(agApptKind(it)),comment=it.comment||"",name=it.title||"";
+    var L=agLogGet(),last=null;
+    (L.entries||[]).forEach(function(e){if(e&&e.src==="appt_edit"&&e.src_id===it.id&&e.date===AG.d)last=e;});
+    if(last&&last.kind===kind&&(last.comment||"")===comment&&(last.name||"")===name)return;
+    agMeetPush({id:"m_"+Date.now()+"_"+agSlug(name||it.id),date:AG.d,kind:kind,name:name,comment:comment,ts:Date.now(),u:Date.now(),src:"appt_edit",src_id:it.id,cal_id:((it.extra||{}).cal_id||"")});
+  }
+  var agLogTimers={};
+  function agLogApptSoon(id){
+    clearTimeout(agLogTimers[id]);
+    agLogTimers[id]=setTimeout(function(){var A=agGet(),day=(A.days||{})[AG.d],hit=null;
+      ((day&&day.items)||[]).forEach(function(x){if(x&&x.id===id)hit=x;});
+      if(hit)agLogApptEdit(hit);},1200);
   }
   function agAddMeet(kind,name,comment){
     name=(name||"").replace(/\s+/g," ").trim();if(!name)return;
-    var L=agLogGet();if(!Array.isArray(L.entries))L.entries=[];
-    L.v=1;L.updated=agIso();
-    L.entries.push({id:"m_"+Date.now()+"_"+slugName(name),date:AG.d,kind:kind==="team"?"team":kind==="agent"?"agent":"personal",name:name,comment:comment||"",u:Date.now()});
-    setJ("meetlog",L);
+    agMeetPush({id:"m_"+Date.now()+"_"+slugName(name),date:AG.d,kind:agNormKind(kind),name:name,comment:comment||"",ts:Date.now(),u:Date.now(),src:"note"});
   }
   function agPatchMeet(id,kind){
     var L=agLogGet();if(!Array.isArray(L.entries))return;
-    L.entries.forEach(function(e){if(e&&e.id===id){e.kind=kind==="team"?"team":kind==="agent"?"agent":"personal";e.u=Date.now();}});
+    L.entries.forEach(function(e){if(e&&e.id===id){e.kind=agNormKind(kind);e.u=Date.now();e.ts=Date.now();}});
     L.updated=agIso();setJ("meetlog",L);
+  }
+  function agDismiss(id){
+    var A=agGet();if(!A.days||!A.days[AG.d])return;
+    var day=A.days[AG.d],hit=null;
+    (day.items||[]).forEach(function(x){if(x&&x.id===id)hit=x;});
+    if(!hit)return;
+    if(!window.confirm("Remove \u201c"+(hit.title||"this appointment")+"\u201d from today's list? It will not come back when the agenda rebuilds."))return;
+    var rec={id:hit.id,item_id:hit.id,cal_id:((hit.extra||{}).cal_id||""),title:hit.title||"",kind:agNormKind(agApptKind(hit)),comment:hit.comment||"",detail:hit.detail||"",u:Date.now()};
+    if(!Array.isArray(day.dismissed_appts))day.dismissed_appts=[];
+    day.dismissed_appts.push(rec);
+    day.items=(day.items||[]).filter(function(x){return !x||x.id!==id;});
+    if(Array.isArray(day.built_ids))day.built_ids=day.built_ids.filter(function(x){return x!==id;});
+    if(Array.isArray(day.promoted_appts))day.promoted_appts=day.promoted_appts.filter(function(pr){return pr&&pr.id!==id&&pr.item_id!==id&&!(rec.cal_id&&pr.cal_id===rec.cal_id);});
+    agSave(A);
+    agMeetPush({id:"m_dismissed_"+Date.now()+"_"+agSlug(hit.title||id),date:AG.d,kind:rec.kind,name:rec.title,comment:rec.comment,ts:Date.now(),u:Date.now(),src:"dismissed",src_id:id,cal_id:rec.cal_id});
+    renderAgenda();
+  }
+  function agPromote(calId){
+    var A=agGet();if(!A.days||!A.days[AG.d])return;
+    var day=A.days[AG.d],ev=null,cid=String(calId||"");
+    (day.other_cal||[]).forEach(function(x){if(x&&(String(x.id)===cid||String(x.cal_id)===cid||String(x.item_id)===cid))ev=x;});
+    if(!ev)return;
+    var sel=document.querySelector("[data-agpromotekind=\""+cid.replace(/\\/g,"\\\\").replace(/"/g,'\\"')+"\"]");
+    var kind=agNormKind(sel&&sel.value);
+    var itemId=ev.item_id||("appt:"+agSlug(ev.cal_id||ev.id||ev.title));
+    var created={id:itemId,section:"appts",title:ev.title||"Appointment",detail:ev.when||"On the calendar today",target:null,kind:"appt",extra:{appt:kind,cal_id:ev.cal_id||ev.id||"",start:ev.start,end:ev.end,where:ev.where||"",promoted:true},appt_kind:kind,comment:"",done:false,carry:false,updated:Date.now(),gen_t:Date.now()};
+    if(!Array.isArray(day.items))day.items=[];
+    var exists=null;day.items.forEach(function(x){if(x&&x.id===itemId)exists=x;});
+    if(exists){exists.appt_kind=kind;exists.updated=Date.now();if(exists.extra)exists.extra.appt=kind;}
+    else day.items.push(created);
+    if(!Array.isArray(day.built_ids))day.built_ids=[];
+    if(day.built_ids.indexOf(itemId)<0)day.built_ids.push(itemId);
+    if(!Array.isArray(day.promoted_appts))day.promoted_appts=[];
+    day.promoted_appts.push({id:itemId,item_id:itemId,cal_id:ev.cal_id||ev.id||"",title:ev.title||"",kind:kind,u:Date.now()});
+    day.other_cal=(day.other_cal||[]).filter(function(x){return x&&String(x.id)!==cid&&String(x.cal_id)!==cid&&String(x.item_id)!==cid;});
+    agSave(A);
+    agMeetPush({id:"m_promoted_"+Date.now()+"_"+agSlug(ev.title||itemId),date:AG.d,kind:kind,name:ev.title||"",comment:"",ts:Date.now(),u:Date.now(),src:"promoted",src_id:itemId,cal_id:ev.cal_id||ev.id||""});
+    renderAgenda();
   }
   function slugName(s){return String(s||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,32)||"x";}
   var AG_LIC_FIX_CODE={"32BSZC":"superbase","369BDC":"superbase","2988TC":"base"};
@@ -1987,24 +2093,34 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     agSave(A);
   }
   function agLogs(kind){
-    var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){if(e&&e.date===AG.d&&(!kind||kind==="appts"||e.kind===kind))a.push(e);});
+    var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){
+      if(!e||e.date!==AG.d)return;
+      if(e.src&&e.src!=="note")return;
+      if(!kind||kind==="appts"||e.kind===kind)a.push(e);
+    });
     return a;
   }
   function agApptKind(it){
     if(!it)return "personal";
-    if(it.appt_kind==="team"||it.appt_kind==="personal"||it.appt_kind==="agent")return it.appt_kind;
+    if(it.appt_kind)return agNormKind(it.appt_kind);
     var ap=(it.extra||{}).appt;
-    if(ap==="team"||ap==="personal"||ap==="agent")return ap;
+    if(ap)return agNormKind(ap);
     var id=String(it.id||"");
     if(id.indexOf("appt:team")===0)return "team";
-    if(id.indexOf("appt:agent")===0)return "agent";
+    if(id.indexOf("appt:planning")===0||id.indexOf("appt:agent")===0)return "planning";
+    if(id.indexOf("appt:annual_review")===0||id.indexOf("appt:review")===0)return "annual_review";
     return "personal";
   }
-  function agKindSelect(id,kind,field){
-    return '<select class="agin agkind" data-agf="'+field+'" data-agid="'+esc(id)+'" aria-label="Personal, Team or Agent">'
-      +'<option value="personal"'+(kind==="personal"?" selected":"")+'>Personal</option>'
+  function agKindOptions(kind){
+    kind=agNormKind(kind);
+    return '<option value="personal"'+(kind==="personal"?" selected":"")+'>Personal</option>'
       +'<option value="team"'+(kind==="team"?" selected":"")+'>Team</option>'
-      +'<option value="agent"'+(kind==="agent"?" selected":"")+'>Agent</option></select>';
+      +'<option value="planning"'+(kind==="planning"?" selected":"")+'>Planning</option>'
+      +'<option value="annual_review"'+(kind==="annual_review"?" selected":"")+'>Annual review</option>';
+  }
+  function agKindSelect(id,kind,field){
+    return '<select class="agin agkind" data-agf="'+field+'" data-agid="'+esc(id)+'" aria-label="Appointment type">'
+      +agKindOptions(kind)+'</select>';
   }
   function agNumeric(it){
     if(!it)return false;
@@ -2016,7 +2132,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if({llqp:1,certs:1,training:1,birthdays:1,reviews:1,marketing:1,base:1,prospect:1,appts:1}[s])return s;
     if(s==="wa"||s==="ig"||s==="li")return "prospect";
     if(s==="personal"||s==="team")return "appts";
-    if(ap==="personal"||ap==="team"||ap==="agent"||id.indexOf("appt:")===0||id==="pers_appts"||id==="team_appts"||id==="todays_appts")return "appts";
+    if(ap==="personal"||ap==="team"||ap==="agent"||ap==="planning"||ap==="annual_review"||id.indexOf("appt:")===0||id==="pers_appts"||id==="team_appts"||id==="todays_appts")return "appts";
     if(id.indexOf("flag:llqp")===0||id.indexOf("flag:examsoon")===0||ex==="llqp"||ex==="exam")return "llqp";
     if(id.indexOf("flag:up")===0||ex==="upcoming")return "certs";
     if(id.indexOf("flag:td")===0||id.indexOf("flag:pf")===0||ex==="training"||ex==="eno"||ex==="platform_fee")return "training";
@@ -2034,6 +2150,32 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   var AG_RIGHT=["base","prospect","appts"];
   var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",prospect:"Prospects needing attention",appts:"Today's appointments",wa:"Prospects needing attention",ig:"Prospects needing attention",li:"Prospects needing attention",personal:"Today's appointments",team:"Today's appointments",score:"Scoreboard"};
   var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,prospect:1,appts:1};
+  function agOtherVisible(day){
+    var rows=(day&&day.other_cal)||[],out=[];
+    rows.forEach(function(ev){
+      if(!ev)return;
+      if(agListed(day&&day.dismissed_appts,ev))return;
+      if(agListed(day&&day.promoted_appts,ev))return;
+      var taken=false;
+      ((day&&day.items)||[]).forEach(function(it){if(it&&agListed([ev],it))taken=true;});
+      if(!taken)out.push(ev);
+    });
+    return out;
+  }
+  function agOtherHtml(){
+    var day=((agGet().days||{})[AG.d])||{};
+    var rows=agOtherVisible(day);
+    if(!rows.length)return "";
+    var h='<details class="agother"><summary>Other calendar items (tap to add as meeting)<span class="agcnt">'+rows.length+'</span></summary>';
+    rows.forEach(function(ev){
+      var cid=String(ev.id||ev.cal_id||ev.item_id||"");
+      h+='<div class="agother-row"><div class="agother-t"><b>'+esc(ev.title||"")+'</b>';
+      if(ev.when)h+='<small>'+esc(ev.when)+'</small>';
+      h+='</div><select class="agin agkind" data-agpromotekind="'+esc(cid)+'" aria-label="Meeting type">'+agKindOptions("personal")+'</select>';
+      h+='<button type="button" class="btn agpromote" data-agpromote="'+esc(cid)+'">Add</button></div>';
+    });
+    return h+'</details>';
+  }
   function agItemHtml(it){
     if(!it||!it.id)return "";
     var tgt=it.target,ach=it.achieved,cur=it.extra&&it.extra.gen_current;
@@ -2046,7 +2188,17 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       h+='<div class="agnum"><span>Target <b>'+esc(agFmt(tgt))+'</b></span>';
       h+='<span>Achieved</span><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—"></div>';
     }
-    var showKind=it.kind==="appt"||(it.extra&&(it.extra.appt==="personal"||it.extra.appt==="team"))||String(it.id||"").indexOf("appt:")===0;
+    var showKind=it.kind==="appt"||!!(it.extra&&it.extra.appt)||String(it.id||"").indexOf("appt:")===0;
+    var canDel=showKind&&it.id!=="todays_appts"&&it.id!=="pers_appts"&&it.id!=="team_appts";
+    h='<div class="agit'+(done?" done":"")+'" data-agid="'+esc(it.id)+'">';
+    h+='<div class="agthead"><div class="agt">'+esc(it.title||"")+'</div>';
+    if(canDel)h+='<button type="button" class="agdel" data-agdel="'+esc(it.id)+'" aria-label="Remove appointment" title="Remove">&times;</button>';
+    h+='</div>';
+    if(it.detail)h+='<div class="agd">'+esc(it.detail)+'</div>';
+    if(num){
+      h+='<div class="agnum"><span>Target <b>'+esc(agFmt(tgt))+'</b></span>';
+      h+='<span>Achieved</span><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—">'+'</div>';
+    }
     h+='<div class="agctl">';
     if(showKind)h+=agKindSelect(it.id,agApptKind(it),"appt_kind");
     h+='<label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
@@ -2060,7 +2212,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(plus)h+='<button type="button" class="agplus" data-agadd="'+plus+'" aria-label="Add appointment note">+</button>';
     h+='</h3>';
     if(plus){
-      h+='<div class="agform" id="agF-appts"><label>Name</label><input class="agin" id="agN-appts" placeholder="Who did you meet?"><label class="agfl">Personal / Team / Agent</label><select class="agin agkind" id="agK-appts"><option value="personal">Personal</option><option value="team">Team</option><option value="agent">Agent</option></select><label class="agfl">Comment</label><textarea class="agta" id="agC-appts" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="appts">Save note</button></div>';
+      h+='<div class="agform" id="agF-appts"><label>Name</label><input class="agin" id="agN-appts" placeholder="Who did you meet?"><label class="agfl">Type</label><select class="agin agkind" id="agK-appts"><option value="personal">Personal</option><option value="team">Team</option><option value="planning">Planning</option><option value="annual_review">Annual review</option></select><label class="agfl">Comment</label><textarea class="agta" id="agC-appts" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="appts">Save note</button></div>';
     }
     if(key==="base"){
       var work=[],extra=[];
@@ -2074,7 +2226,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     }
     if(!items.length)h+='<div class="agnone">Nothing in this section.</div>';
     items.forEach(function(it){h+=agItemHtml(it);});
-    if(plus){agLogs("appts").forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b>'+agKindSelect(e.id,e.kind==="team"?"team":e.kind==="agent"?"agent":"personal","meetkind")+'<p>'+esc(e.comment||"")+'</p></div>';});}
+    if(plus){agLogs("appts").forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b>'+agKindSelect(e.id,agNormKind(e.kind),"meetkind")+'<p>'+esc(e.comment||"")+'</p></div>';});}
+    if(plus)h+=agOtherHtml();
     return h+'</section>';
   }
   function renderAgenda(){
@@ -2095,6 +2248,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       var s=agSecOf(it);
       if(s==="llqp"||s==="training"||s==="certs"||s==="score")return;
       if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
+      if(agListed(day.dismissed_appts,it))return;
       if(!groups[s])groups[s]=[];groups[s].push(it);
     });
     function col(keys){
@@ -2627,15 +2781,19 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("agToday").addEventListener("click",function(){agSet(today);});
   $("agPick").addEventListener("change",function(){if(this.value)agSet(this.value);});
   $("agBody").addEventListener("input",function(e){var t=e.target,f=t&&t.dataset&&t.dataset.agf,id=t&&t.dataset&&t.dataset.agid;if(!f||!id)return;
-    if(f==="comment"||f==="achieved")agPatch(id,f,t.value);});
-  $("agBody").addEventListener("click",function(e){var t=e.target.closest("[data-agadd],[data-agsave]");if(!t)return;
+    if(f==="comment"||f==="achieved"){agPatch(id,f,t.value);if(f==="comment")agLogApptSoon(id);}});
+  $("agBody").addEventListener("click",function(e){
+    var del=e.target.closest("[data-agdel]");if(del){e.preventDefault();agDismiss(del.dataset.agdel);return;}
+    var prm=e.target.closest("[data-agpromote]");if(prm){e.preventDefault();agPromote(prm.dataset.agpromote);return;}
+    var t=e.target.closest("[data-agadd],[data-agsave]");if(!t)return;
     if(t.dataset.agadd){var box=$("agF-"+t.dataset.agadd);if(box)box.classList.toggle("on");return;}
     if(t.dataset.agsave){var k=t.dataset.agsave;if(k==="base")agAddLic(($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);else{var kind=k==="appts"?(($("agK-appts")||{}).value||"personal"):k;agAddMeet(kind,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agK-appts"))$("agK-appts").value="personal";}if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
   $("agBody").addEventListener("change",function(e){var t=e.target,f=t&&t.dataset&&t.dataset.agf,id=t&&t.dataset&&t.dataset.agid;
     if(!f||!id)return;
     if(f==="done"||f==="carry"){agPatch(id,f,t.checked);var card=t.closest(".agit");if(card&&f==="done")card.classList.toggle("done",t.checked);}
     if(f==="achieved")agPatch(id,f,t.value);
-    if(f==="appt_kind")agPatch(id,f,t.value);
+    if(f==="appt_kind"){agPatch(id,f,t.value);agLogApptEdit((function(){var A=agGet(),day=(A.days||{})[AG.d],hit=null;((day&&day.items)||[]).forEach(function(x){if(x&&x.id===id)hit=x;});return hit;})());}
+    if(f==="comment"){agPatch(id,f,t.value);agLogApptEdit((function(){var A=agGet(),day=(A.days||{})[AG.d],hit=null;((day&&day.items)||[]).forEach(function(x){if(x&&x.id===id)hit=x;});return hit;})());}
     if(f==="meetkind")agPatchMeet(id,t.value);});
   calPill(document.querySelector("#agPick").parentNode,function(){var mk={};agDays(agGet()).forEach(function(k){mk[k]=1;});
     calOpen({mode:"day",value:AG.d||agDefault(),title:"Agenda day",mark:function(k){return !!mk[k];},legend:"Day with an agenda",quick:[["Today",today],["Yesterday",shift(today,-1)],["Tomorrow",shift(today,1)]],pick:agSet});});
