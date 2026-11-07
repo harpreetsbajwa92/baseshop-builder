@@ -589,7 +589,8 @@ button{cursor:pointer}
 #p-agenda .agnum span{font-size:12px;font-weight:700;color:#cfd6db}
 #p-agenda .agnum b{color:#fff;font-size:13.5px}
 #p-agenda .agnum .agin{width:76px;flex:none;padding:4px 6px;font-family:var(--fn);font-size:15px;font-weight:800}
-#p-agenda .agctl{display:flex;align-items:center;gap:8px;margin-top:5px;min-width:0}
+#p-agenda .agctl{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:5px;min-width:0}
+#p-agenda .agkind{width:auto;min-width:110px;flex:0 0 auto;height:28px;padding:3px 8px;font-size:12.5px;font-weight:700;color:#f2f4f5}
 #p-agenda .agctl label{display:flex;align-items:center;gap:4px;margin:0;font-size:12.5px;font-weight:700;color:#f2f4f5;cursor:pointer;flex:none;white-space:nowrap}
 #p-agenda .agctl input[type=checkbox]{width:16px;height:16px;accent-color:#35aef5}
 #p-agenda .agcom{flex:1;min-width:0;height:28px;min-height:28px;resize:none;overflow:hidden;line-height:1.3}
@@ -1272,7 +1273,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-61";
+var APP_VERSION="2026.11.06-62";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1853,7 +1854,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var ga=+A.gen_t||0,gb=+B.gen_t||0,G=gb>=ga?B:A,O=gb>=ga?A:B;
     for(k in O)out[k]=O[k];for(k in G)out[k]=G[k];
     var ua=+A.updated||0,ub=+B.updated||0,U=ub>=ua?B:A;
-    ["achieved","comment","done","carry","updated"].forEach(function(f){if(f in U)out[f]=U[f];});
+    ["achieved","comment","done","carry","updated","appt_kind"].forEach(function(f){if(f in U)out[f]=U[f];});
     return out;
   }
   function agGenerated(it){
@@ -1861,7 +1862,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var id=String(it.id);
     if(/^user:/.test(id)||/^m_/.test(id))return false;
     if(it.gen_t)return true;
-    if(/^(flag:|bday(?:$|:)|review(?:s$|:)|mkt$|basezero(?:$|:)|wa(?:$|:)|ig(?:$|:)|li(?:$|:)|rec_day$|close_day$|rec_month$|close_month$|gap$|conv$|pers_appts$|team_appts$|appt:|carry:)/.test(id))return true;
+    if(/^(flag:|bday(?:$|:)|review(?:s$|:)|reviewnone$|mkt$|basezero(?:$|:)|wa(?:$|:)|ig(?:$|:)|li(?:$|:)|prospect(?:$|:)|rec_day$|close_day$|rec_month$|close_month$|gap$|conv$|pers_appts$|team_appts$|todays_appts$|appt:|carry:)/.test(id))return true;
     if(/^(llqp|certs|training|birthdays|reviews|marketing|base|wa|ig|li|personal|team|score|urgent|grow|prospect|appts)$/.test(it.section||""))return true;
     return it.kind==="goal"||it.kind==="flag"||it.kind==="appt";
   }
@@ -1925,6 +1926,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     else if(f==="comment")it.comment=val;
     else if(f==="done")it.done=!!val;
     else if(f==="carry")it.carry=!!val;
+    else if(f==="appt_kind")it.appt_kind=val==="team"?"team":"personal";
     it.updated=Date.now();agSave(A);
   }
   function agAddMeet(kind,name,comment){
@@ -1933,6 +1935,11 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     L.v=1;L.updated=agIso();
     L.entries.push({id:"m_"+Date.now()+"_"+slugName(name),date:AG.d,kind:kind==="team"?"team":"personal",name:name,comment:comment||"",u:Date.now()});
     setJ("meetlog",L);
+  }
+  function agPatchMeet(id,kind){
+    var L=agLogGet();if(!Array.isArray(L.entries))return;
+    L.entries.forEach(function(e){if(e&&e.id===id){e.kind=kind==="team"?"team":"personal";e.u=Date.now();}});
+    L.updated=agIso();setJ("meetlog",L);
   }
   function slugName(s){return String(s||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,32)||"x";}
   var AG_LIC_FIX_CODE={"32BSZC":"superbase","369BDC":"superbase","2988TC":"base"};
@@ -1980,40 +1987,51 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     agSave(A);
   }
   function agLogs(kind){
-    var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){if(e&&e.date===AG.d&&e.kind===kind)a.push(e);});
+    var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){if(e&&e.date===AG.d&&(!kind||kind==="appts"||e.kind===kind))a.push(e);});
     return a;
+  }
+  function agApptKind(it){
+    if(!it)return "personal";
+    if(it.appt_kind==="team"||it.appt_kind==="personal")return it.appt_kind;
+    var ap=(it.extra||{}).appt;
+    if(ap==="team"||ap==="personal")return ap;
+    var id=String(it.id||"");
+    if(id.indexOf("appt:team")===0)return "team";
+    return "personal";
+  }
+  function agKindSelect(id,kind,field){
+    return '<select class="agin agkind" data-agf="'+field+'" data-agid="'+esc(id)+'" aria-label="Personal or Team">'
+      +'<option value="personal"'+(kind==="personal"?" selected":"")+'>Personal</option>'
+      +'<option value="team"'+(kind==="team"?" selected":"")+'>Team</option></select>';
   }
   function agNumeric(it){
     if(!it)return false;
     if(it.extra&&it.extra.numeric)return true;
-    return /^(rec_day|close_day|rec_month|close_month|gap|conv|mkt|reviews)$/.test(it.id||"");
+    return /^(rec_day|close_day|rec_month|close_month|gap|conv|mkt)$/.test(it.id||"");
   }
   function agSecOf(it){
     var s=it.section||"",id=it.id||"",ex=(it.extra||{}).type||"",ap=(it.extra||{}).appt||"";
-    if({llqp:1,certs:1,training:1,birthdays:1,reviews:1,marketing:1,base:1,wa:1,ig:1,li:1,personal:1,team:1,score:1}[s])return s;
-    if(ap==="personal"||id.indexOf("appt:personal")===0||id==="pers_appts")return "personal";
-    if(ap==="team"||id.indexOf("appt:team")===0||id==="team_appts")return "team";
+    if({llqp:1,certs:1,training:1,birthdays:1,reviews:1,marketing:1,base:1,prospect:1,appts:1}[s])return s;
+    if(s==="wa"||s==="ig"||s==="li")return "prospect";
+    if(s==="personal"||s==="team")return "appts";
+    if(ap==="personal"||ap==="team"||id.indexOf("appt:")===0||id==="pers_appts"||id==="team_appts"||id==="todays_appts")return "appts";
     if(id.indexOf("flag:llqp")===0||id.indexOf("flag:examsoon")===0||ex==="llqp"||ex==="exam")return "llqp";
     if(id.indexOf("flag:up")===0||ex==="upcoming")return "certs";
     if(id.indexOf("flag:td")===0||id.indexOf("flag:pf")===0||ex==="training"||ex==="eno"||ex==="platform_fee")return "training";
     if(id==="bday"||id.indexOf("bday:")===0)return "birthdays";
-    if(id==="reviews"||id.indexOf("review:")===0)return "reviews";
+    if(id==="reviews"||id==="reviewnone"||id.indexOf("review:")===0)return "reviews";
     if(id==="mkt")return "marketing";
     if(id==="basezero"||id.indexOf("basezero:")===0||id==="basework"||id.indexOf("user:lic:")===0||ex==="userlic"||ex==="basework")return "base";
-    if(id==="wa"||id.indexOf("wa:")===0)return "wa";
-    if(id==="ig"||id.indexOf("ig:")===0)return "ig";
-    if(id==="li"||id.indexOf("li:")===0)return "li";
+    if(id==="wa"||id.indexOf("wa:")===0||id==="ig"||id.indexOf("ig:")===0||id==="li"||id.indexOf("li:")===0||id==="prospect"||id.indexOf("prospect:")===0)return "prospect";
     if(/^(rec_day|close_day|rec_month|close_month|gap|conv)$/.test(id)||s==="score")return "score";
     if(s==="urgent")return "training";
     if(s==="grow")return "marketing";
-    if(s==="prospect")return "wa";
-    if(s==="appts")return "personal";
     return s||"training";
   }
   var AG_LEFT=["certs","birthdays","reviews","marketing"];
-  var AG_RIGHT=["base","wa","ig","li","personal","team","score"];
-  var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",wa:"WhatsApp prospects",ig:"Instagram",li:"LinkedIn",personal:"Personal appointments",team:"Team appointments",score:"Scoreboard"};
-  var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,personal:1,team:1,score:1};
+  var AG_RIGHT=["base","prospect","appts"];
+  var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",prospect:"Prospects needing attention",appts:"Today's appointments",wa:"Prospects needing attention",ig:"Prospects needing attention",li:"Prospects needing attention",personal:"Today's appointments",team:"Today's appointments",score:"Scoreboard"};
+  var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,prospect:1,appts:1};
   function agItemHtml(it){
     if(!it||!it.id)return "";
     var tgt=it.target,ach=it.achieved,cur=it.extra&&it.extra.gen_current;
@@ -2026,18 +2044,21 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       h+='<div class="agnum"><span>Target <b>'+esc(agFmt(tgt))+'</b></span>';
       h+='<span>Achieved</span><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—"></div>';
     }
-    h+='<div class="agctl"><label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
+    var showKind=it.kind==="appt"||(it.extra&&(it.extra.appt==="personal"||it.extra.appt==="team"))||String(it.id||"").indexOf("appt:")===0;
+    h+='<div class="agctl">';
+    if(showKind)h+=agKindSelect(it.id,agApptKind(it),"appt_kind");
+    h+='<label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
     h+='<label><input type="checkbox" data-agf="carry" data-agid="'+esc(it.id)+'"'+(it.carry?" checked":"")+'> Push tomorrow</label>';
     h+='<textarea class="agcom" data-agf="comment" data-agid="'+esc(it.id)+'" rows="1" placeholder="Comment">'+esc(it.comment||"")+'</textarea></div></div>';
     return h;
   }
   function agSecHtml(key,title,items){
-    var plus=(key==="personal"||key==="team")?key:"";
+    var plus=(key==="appts"||key==="personal"||key==="team")?"appts":"";
     var h='<section class="agsec"><h3><span class="agst">'+esc(title)+'</span><span class="agcnt">'+items.length+'</span>';
-    if(plus)h+='<button type="button" class="agplus" data-agadd="'+plus+'" aria-label="Add '+esc(title)+' note">+</button>';
+    if(plus)h+='<button type="button" class="agplus" data-agadd="'+plus+'" aria-label="Add appointment note">+</button>';
     h+='</h3>';
     if(plus){
-      h+='<div class="agform" id="agF-'+plus+'"><label>Name</label><input class="agin" id="agN-'+plus+'" placeholder="Who did you meet?"><label class="agfl">How it went</label><textarea class="agta" id="agC-'+plus+'" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="'+plus+'">Save note</button></div>';
+      h+='<div class="agform" id="agF-appts"><label>Name</label><input class="agin" id="agN-appts" placeholder="Who did you meet?"><label class="agfl">Personal / Team</label><select class="agin agkind" id="agK-appts"><option value="personal">Personal</option><option value="team">Team</option></select><label class="agfl">Comment</label><textarea class="agta" id="agC-appts" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="appts">Save note</button></div>';
     }
     if(key==="base"){
       var work=[],extra=[];
@@ -2051,7 +2072,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     }
     if(!items.length)h+='<div class="agnone">Nothing in this section.</div>';
     items.forEach(function(it){h+=agItemHtml(it);});
-    if(plus){agLogs(plus).forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b><p>'+esc(e.comment||"")+'</p></div>';});}
+    if(plus){agLogs("appts").forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b>'+agKindSelect(e.id,e.kind==="team"?"team":"personal","meetkind")+'<p>'+esc(e.comment||"")+'</p></div>';});}
     return h+'</section>';
   }
   function renderAgenda(){
@@ -2070,7 +2091,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     day.items.forEach(function(it){
       if(!it)return;
       var s=agSecOf(it);
-      if(s==="llqp"||s==="training"||s==="certs")return;
+      if(s==="llqp"||s==="training"||s==="certs"||s==="score")return;
       if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
       if(!groups[s])groups[s]=[];groups[s].push(it);
     });
@@ -2607,11 +2628,13 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(f==="comment"||f==="achieved")agPatch(id,f,t.value);});
   $("agBody").addEventListener("click",function(e){var t=e.target.closest("[data-agadd],[data-agsave]");if(!t)return;
     if(t.dataset.agadd){var box=$("agF-"+t.dataset.agadd);if(box)box.classList.toggle("on");return;}
-    if(t.dataset.agsave){var k=t.dataset.agsave;if(k==="base")agAddLic(($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);else agAddMeet(k,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
+    if(t.dataset.agsave){var k=t.dataset.agsave;if(k==="base")agAddLic(($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);else{var kind=k==="appts"?(($("agK-appts")||{}).value||"personal"):k;agAddMeet(kind,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agK-appts"))$("agK-appts").value="personal";}if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
   $("agBody").addEventListener("change",function(e){var t=e.target,f=t&&t.dataset&&t.dataset.agf,id=t&&t.dataset&&t.dataset.agid;
     if(!f||!id)return;
     if(f==="done"||f==="carry"){agPatch(id,f,t.checked);var card=t.closest(".agit");if(card&&f==="done")card.classList.toggle("done",t.checked);}
-    if(f==="achieved")agPatch(id,f,t.value);});
+    if(f==="achieved")agPatch(id,f,t.value);
+    if(f==="appt_kind")agPatch(id,f,t.value);
+    if(f==="meetkind")agPatchMeet(id,t.value);});
   calPill(document.querySelector("#agPick").parentNode,function(){var mk={};agDays(agGet()).forEach(function(k){mk[k]=1;});
     calOpen({mode:"day",value:AG.d||agDefault(),title:"Agenda day",mark:function(k){return !!mk[k];},legend:"Day with an agenda",quick:[["Today",today],["Yesterday",shift(today,-1)],["Tomorrow",shift(today,1)]],pick:agSet});});
 
