@@ -568,9 +568,9 @@ button{cursor:pointer}
 
 /* ===== v54: Daily Agenda (bs-v1:agenda + bs-v1:meetlog) ===== */
 #p-agenda{max-width:100%}
-#p-agenda .agban{border:1px solid #4a555e;margin-top:10px}
+#p-agenda .agban{border:1px solid #4a555e;margin-top:10px;overflow:hidden}
 #p-agenda .agban b{display:block;font-family:var(--fc);font-size:18px;letter-spacing:1px;text-transform:uppercase;color:#fff}
-#p-agenda .agban p{margin-top:4px;color:#cfd6db;font-size:13.5px;line-height:1.4}
+#p-agenda .agban p{margin-top:4px;color:#cfd6db;font-size:13.5px;line-height:1.45;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 #p-agenda .agsec{margin:14px 0 8px}
 #p-agenda .agsec h3{font-family:var(--fc);font-size:15px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#e6eaec;margin:0 2px 8px}
 #p-agenda .agit{border:1px solid #4a555e;border-radius:14px;padding:12px;margin:0 0 8px;background:var(--card)}
@@ -601,6 +601,7 @@ button{cursor:pointer}
 #p-agenda .agnone{color:#cfd6db;font-size:13.5px;padding:6px 0}
 #p-agenda .agnote{color:#cfd6db;font-size:12.5px;padding:4px 2px 10px}
 @media (min-width:700px){
+  .wrap:has(#p-agenda.on){max-width:1100px}
   #p-agenda{max-width:1100px;margin:0 auto}
   #p-agenda .agap{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   #p-agenda .ag2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
@@ -1069,7 +1070,7 @@ button{cursor:pointer}
   <!-- TAB 0 (v54): DAILY AGENDA. First tab. Data: bs-v1:agenda (generated + his target/achieved/comments) and bs-v1:meetlog. -->
   <section class="page" id="p-agenda">
     <div class="card mdf"><div class="mdft">Daily Agenda</div><div class="mdfs" id="agMeta">Today's goals vs achieved</div></div>
-    <div class="card agban"><b>Main goal: EMD · $250K</b><p>By June 30, 2027. Every box below is a goal for the day — type what you achieved and leave a comment. Unfinished work with a comment, or anything you mark “Carry to tomorrow”, comes back on the next agenda.</p></div>
+    <div class="card agban"><b>Main goal: EMD · $250K</b><p>By June 30, 2027. Type what you achieved and leave a comment. Anything unfinished with a comment, or marked Carry to tomorrow, comes back the next day.</p></div>
     <div class="dnav"><div class="pnav"><button class="pa" id="agPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="agLbl">TODAY</span><input type="date" id="agPick" aria-label="Pick an agenda date"></div><button class="pa" id="agNext" aria-label="Next day">›</button></div><button class="tbtn" id="agToday" hidden>Today</button></div>
     <div id="agBody"></div>
     <p class="agnote" id="agNote"></p>
@@ -1266,7 +1267,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-55";
+var APP_VERSION="2026.11.06-56";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
