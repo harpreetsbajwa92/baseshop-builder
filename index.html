@@ -565,6 +565,46 @@ button{cursor:pointer}
 #p-gold .wcom{min-height:46px;resize:vertical}
 #p-gold .wcom::placeholder{color:#8c979f}
 #p-gold #warmNote,#p-gold #goldNote{color:#9aa5ad;font-size:12.5px;padding:4px 2px 8px}
+
+/* ===== v54: Daily Agenda (bs-v1:agenda + bs-v1:meetlog) ===== */
+#p-agenda{max-width:100%}
+#p-agenda .agban{border:1px solid #4a555e;margin-top:10px}
+#p-agenda .agban b{display:block;font-family:var(--fc);font-size:18px;letter-spacing:1px;text-transform:uppercase;color:#fff}
+#p-agenda .agban p{margin-top:4px;color:#cfd6db;font-size:13.5px;line-height:1.4}
+#p-agenda .agsec{margin:14px 0 8px}
+#p-agenda .agsec h3{font-family:var(--fc);font-size:15px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#e6eaec;margin:0 2px 8px}
+#p-agenda .agit{border:1px solid #4a555e;border-radius:14px;padding:12px;margin:0 0 8px;background:var(--card)}
+#p-agenda .agit.done .agt{text-decoration:line-through;color:#cfd6db}
+#p-agenda .agt{font-size:15px;font-weight:800;color:#fff;line-height:1.3;overflow-wrap:anywhere}
+#p-agenda .agd{margin-top:5px;font-size:13px;color:#cfd6db;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere}
+#p-agenda .agrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:10px}
+#p-agenda .agrow label,#p-agenda .agc label,#p-agenda .agtog label{display:block;font-family:var(--fc);font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#cfd6db;margin-bottom:3px}
+#p-agenda .agtv{min-height:42px;display:flex;align-items:center;border:1px solid #5a656e;border-radius:10px;background:#151b1f;padding:8px 10px;font-family:var(--fn);font-size:18px;font-weight:800;color:#fff}
+#p-agenda .agin,#p-agenda .agta{width:100%;max-width:100%;background:#151b1f;border:1px solid #5a656e;border-radius:10px;padding:8px 10px;color:#f2f4f5;font-size:15px}
+#p-agenda .agta{min-height:52px;resize:vertical}
+#p-agenda .agin:focus,#p-agenda .agta:focus{outline:none;border-color:#35aef5}
+#p-agenda .agc{margin-top:8px}
+#p-agenda .agtog{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px}
+#p-agenda .agtog label{display:flex;align-items:center;gap:6px;margin:0;text-transform:none;letter-spacing:0;font-family:inherit;font-size:13.5px;font-weight:700;color:#f2f4f5;cursor:pointer}
+#p-agenda .agtog input{width:18px;height:18px;accent-color:#35aef5}
+#p-agenda .agap{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+#p-agenda .agcol{border:1px solid #4a555e;border-radius:14px;padding:10px;min-width:0}
+#p-agenda .agcol h4{font-family:var(--fc);font-size:14px;letter-spacing:1px;text-transform:uppercase;color:#e6eaec;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+#p-agenda .agplus{flex:none;width:36px;height:36px;border:1px solid #5a656e;border-radius:10px;background:#2b343b;color:#fff;font-size:22px;font-weight:800;line-height:1}
+#p-agenda .agform{display:none;margin:0 0 8px;border:1px solid #5a656e;border-radius:10px;padding:8px}
+#p-agenda .agform.on{display:block}
+#p-agenda .agform .btn{margin-top:8px}
+#p-agenda .aglog{border-top:1px solid #3a444c;padding:8px 0}
+#p-agenda .aglog:first-child{border-top:0;padding-top:0}
+#p-agenda .aglog b{display:block;color:#fff}
+#p-agenda .aglog p{margin-top:3px;color:#cfd6db;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+#p-agenda .agnone{color:#cfd6db;font-size:13.5px;padding:6px 0}
+#p-agenda .agnote{color:#cfd6db;font-size:12.5px;padding:4px 2px 10px}
+@media (min-width:700px){
+  #p-agenda{max-width:1100px;margin:0 auto}
+  #p-agenda .agap{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  #p-agenda .ag2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
+}
 @media (max-width:430px){.tabs button{font-size:10px;letter-spacing:-.25px}.tabs button .ic{width:22px;height:22px}}
 @media (min-width:900px){
   #p-gold{max-width:none}
@@ -1025,6 +1065,16 @@ button{cursor:pointer}
     <div class="gls"><div class="gl" id="monthGoal"></div><div class="gl" id="weekGoal"></div><div class="gl" id="dayGoal"></div></div>
   </div>
 
+
+  <!-- TAB 0 (v54): DAILY AGENDA. First tab. Data: bs-v1:agenda (generated + his target/achieved/comments) and bs-v1:meetlog. -->
+  <section class="page" id="p-agenda">
+    <div class="card mdf"><div class="mdft">Daily Agenda</div><div class="mdfs" id="agMeta">Today's goals vs achieved</div></div>
+    <div class="card agban"><b>Main goal: EMD · $250K</b><p>By June 30, 2027. Every box below is a goal for the day — type what you achieved and leave a comment. Unfinished work with a comment, or anything you mark “Carry to tomorrow”, comes back on the next agenda.</p></div>
+    <div class="dnav"><div class="pnav"><button class="pa" id="agPrev" aria-label="Previous day">‹</button><div class="pl cal" role="button" tabindex="0"><span id="agLbl">TODAY</span><input type="date" id="agPick" aria-label="Pick an agenda date"></div><button class="pa" id="agNext" aria-label="Next day">›</button></div><button class="tbtn" id="agToday" hidden>Today</button></div>
+    <div id="agBody"></div>
+    <p class="agnote" id="agNote"></p>
+  </section>
+
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
     <!-- v46: GOAL tab (was Main/Meetings; hash #meet kept, #goal and #main are aliases). Goal = bs-v1:goals (bot, read-only here); Achieved = this day's bs-v1:day record (app). -->
@@ -1204,6 +1254,7 @@ button{cursor:pointer}
   <button data-t="att" class="tgr"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3.5" width="16" height="17.5" rx="2"/><path d="M9 3.5h6v3H9zM7.5 11l1.5 1.5 2.5-2.5M13.5 11.5h3M7.5 16l1.5 1.5 2.5-2.5M13.5 16.5h3"/></svg>Attendance</button>
   <button data-t="lb" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/></svg>Leaders</button>
   <button data-t="trends" class="tgo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 5-7 4 5M3 21h18"/></svg>Pts &amp; Rec</button>
+  <button data-t="agenda" class="tbl" aria-label="Daily Agenda"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3.5" width="16" height="17.5" rx="2"/><path d="M8 3.5v3M16 3.5v3M4 9.5h16M8 13h8M8 16.5h5"/></svg>Agenda</button>
   <button data-t="meet" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>Goal</button>
   <button data-t="gold" class="tbl" aria-label="Prospects"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/></svg>Prospects</button>
   <button data-t="rec" class="tbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v7M14.5 16.5h7"/></svg>Recruits</button>
@@ -1215,7 +1266,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-53";
+var APP_VERSION="2026.11.06-54";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1385,7 +1436,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("goSrc").textContent=(g.source?"Goal set from: "+g.source:"")+(d.u?(g.source?" · ":"")+"Achieved saved "+updFmt(+d.u):"");}
 
   // ---------- v46: "Updated <Mon D, h:mm AM/PM> ET" + freshness chip + source on every tab's title card ----------
-  var UPD={meet:["goals","Bot plan: Calendar · MyWFG · DBI Hub · app"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots · monthly reach-outs"]};
+  var UPD={agenda:["agenda","Daily build: store · calendar · DBI · prospect files"],meet:["goals","Bot plan: Calendar · MyWFG · DBI Hub · app"],cert:["llqpreport","Oliver's"],up:["upcoming","DBI Hub"],att:["attendance_roster","DBI Hub + MyWFG"],rec:["recruits","DBI Hub + MyWFG"],lic:["licensed","MyWFG"],md:["mdstats","MyWFG"],lb:["leaders","MyWFG"],trends:["pointsrecruits","MyWFG"],adm:["admin","MyWFG"],gold:["gold","LinkedIn + Instagram bots · monthly reach-outs"]};
   function etKey(ms){try{var p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(ms)),o={};p.forEach(function(x){o[x.type]=x.value;});return o.year+"-"+o.month+"-"+o.day;}catch(e){return "";}}
   function updFmt(ms){try{return new Date(ms).toLocaleString("en-US",{timeZone:TZ,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" ET";}catch(e){return "";}}
   function updOf(key,inner){var rt=syGet("rt",{})[PREFIX+key]||0,u=inner&&typeof inner==="object"?inner.updated:null;
@@ -1784,6 +1835,138 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(!a.length)return {n:0,h:'<div class="none">No good prospects yet</div>'};
     return {n:a.length,h:a.map(function(x){var u=/^https:\/\//.test(x.url||"")?x.url:"",pr=x.url_kind==="profile",sub=[goldSince(x.since),x.note].filter(Boolean).join(" · ");
       return '<div class="gr"><div class="gn"><b>'+esc(x.name)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+(u?'<a class="gk '+(pr?'p':'c')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+(pr?'Profile':'Chat')+' ↗</a>':'')+'</div>';}).join("")};}
+
+  var AG={d:""};
+  function agIso(){return warmIso();}
+  function agGet(){var A=getJ("agenda",null);return A&&typeof A==="object"?A:{v:1,days:{}};}
+  function agLogGet(){var L=getJ("meetlog",null);return L&&typeof L==="object"?L:{v:1,entries:[]};}
+  function agDays(A){var a=[];if(A&&A.days&&typeof A.days==="object")Object.keys(A.days).forEach(function(k){if(/^\d{4}-\d{2}-\d{2}$/.test(k))a.push(k);});return a.sort();}
+  function agDefault(){var ks=agDays(agGet());if(ks.indexOf(today)>=0)return today;var fut=ks.filter(function(k){return k>=today;});if(fut.length)return fut[0];return ks.length?ks[ks.length-1]:today;}
+  function agMergeItem(a,b){
+    var A=a||{},B=b||{},out={},k;
+    var ga=+A.gen_t||0,gb=+B.gen_t||0,G=gb>=ga?B:A,O=gb>=ga?A:B;
+    for(k in O)out[k]=O[k];for(k in G)out[k]=G[k];
+    var ua=+A.updated||0,ub=+B.updated||0,U=ub>=ua?B:A;
+    ["achieved","comment","done","carry","updated"].forEach(function(f){if(f in U)out[f]=U[f];});
+    return out;
+  }
+  function agMerge(a,b){
+    var A=typeof a==="string"?syParse(a):a,B=typeof b==="string"?syParse(b):b;
+    if(!A||typeof A!=="object")return typeof b==="string"?b:JSON.stringify(B||{v:1,days:{}});
+    if(!B||typeof B!=="object")return typeof a==="string"?a:JSON.stringify(A);
+    var out={v:Math.max(+A.v||1,+B.v||1,1),days:{}},da=A.days&&typeof A.days==="object"?A.days:{},db=B.days&&typeof B.days==="object"?B.days:{};
+    out.updated=String(A.updated||"")>=String(B.updated||"")?A.updated:B.updated;
+    function addDay(k,src){
+      if(!out.days[k]){out.days[k]=src;return;}
+      var cur=out.days[k],merged={},x,imap={},items=[];
+      for(x in cur)if(x!=="items")merged[x]=cur[x];
+      for(x in src)if(x!=="items")merged[x]=src[x];
+      (cur.items||[]).forEach(function(it){if(it&&it.id)imap[it.id]=it;});
+      (src.items||[]).forEach(function(it){if(!it||!it.id)return;imap[it.id]=imap[it.id]?agMergeItem(imap[it.id],it):it;});
+      Object.keys(imap).forEach(function(id){items.push(imap[id]);});
+      merged.items=items;out.days[k]=merged;
+    }
+    Object.keys(da).forEach(function(k){addDay(k,da[k]);});
+    Object.keys(db).forEach(function(k){addDay(k,db[k]);});
+    return JSON.stringify(out);
+  }
+  function meetlogMerge(a,b){
+    var A=typeof a==="string"?syParse(a):a,B=typeof b==="string"?syParse(b):b;
+    if(!A||typeof A!=="object")return typeof b==="string"?b:JSON.stringify(B||{v:1,entries:[]});
+    if(!B||typeof B!=="object")return typeof a==="string"?a:JSON.stringify(A);
+    var m={},order=[];
+    function add(src){(src.entries||[]).forEach(function(e){if(!e||!e.id)return;if(!m[e.id]){m[e.id]=e;order.push(e.id);}else if((+e.u||0)>(+m[e.id].u||0))m[e.id]=e;});}
+    add(A);add(B);
+    var out={v:1,entries:order.map(function(id){return m[id];})};
+    out.updated=String(A.updated||"")>=String(B.updated||"")?A.updated:B.updated;
+    return JSON.stringify(out);
+  }
+  function agFmt(n){if(n==null||n==="")return "—";var x=+n;return isFinite(x)?x.toLocaleString("en-CA"):String(n);}
+  function agSave(A){A.v=A.v||1;A.updated=agIso();setJ("agenda",A);}
+  function agPatch(id,f,val){
+    var A=agGet();if(!A.days)A.days={};if(!A.days[AG.d])A.days[AG.d]={date:AG.d,items:[]};
+    var its=A.days[AG.d].items||[];
+    var it=null;its.forEach(function(x){if(x&&x.id===id)it=x;});
+    if(!it){it={id:id,section:"",title:id};its.push(it);A.days[AG.d].items=its;}
+    if(f==="achieved")it.achieved=val===""?null:(isFinite(+val)?+val:val);
+    else if(f==="comment")it.comment=val;
+    else if(f==="done")it.done=!!val;
+    else if(f==="carry")it.carry=!!val;
+    it.updated=Date.now();agSave(A);
+  }
+  function agAddMeet(kind,name,comment){
+    name=(name||"").replace(/\s+/g," ").trim();if(!name)return;
+    var L=agLogGet();if(!Array.isArray(L.entries))L.entries=[];
+    L.v=1;L.updated=agIso();
+    L.entries.push({id:"m_"+Date.now()+"_"+slugName(name),date:AG.d,kind:kind==="team"?"team":"personal",name:name,comment:comment||"",u:Date.now()});
+    setJ("meetlog",L);
+  }
+  function slugName(s){return String(s||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,32)||"x";}
+  function agLogs(kind){
+    var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){if(e&&e.date===AG.d&&e.kind===kind)a.push(e);});
+    return a;
+  }
+  function agItemHtml(it){
+    if(!it||!it.id)return "";
+    var tgt=it.target,ach=it.achieved,cur=it.extra&&it.extra.gen_current;
+    if(it.id==="conv"&&(ach==null||ach==="")&&cur!=null)ach=cur;
+    var done=!!it.done;
+    var h='<div class="agit'+(done?" done":"")+'" data-agid="'+esc(it.id)+'">';
+    h+='<div class="agt">'+esc(it.title||"")+'</div>';
+    if(it.detail)h+='<div class="agd">'+esc(it.detail)+'</div>';
+    h+='<div class="agrow"><div><label>Target</label><div class="agtv">'+esc(agFmt(tgt))+'</div></div>';
+    h+='<div><label>Achieved</label><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—"></div></div>';
+    h+='<div class="agc"><label>Comment</label><textarea class="agta" data-agf="comment" data-agid="'+esc(it.id)+'" rows="2" placeholder="How did it go? What should move to tomorrow?">'+esc(it.comment||"")+'</textarea></div>';
+    h+='<div class="agtog"><label><input type="checkbox" data-agf="done" data-agid="'+esc(it.id)+'"'+(done?" checked":"")+'> Done</label>';
+    h+='<label><input type="checkbox" data-agf="carry" data-agid="'+esc(it.id)+'"'+(it.carry?" checked":"")+'> Carry to tomorrow</label></div></div>';
+    return h;
+  }
+  function agCol(kind,title,items){
+    var h='<div class="agcol"><h4>'+esc(title)+' <button type="button" class="agplus" data-agadd="'+kind+'" aria-label="Add '+esc(title)+' note">+</button></h4>';
+    h+='<div class="agform" id="agF-'+kind+'"><label>Name</label><input class="agin" id="agN-'+kind+'" placeholder="Who did you meet?"><label style="margin-top:6px;display:block;font-family:var(--fc);font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#cfd6db">How it went</label><textarea class="agta" id="agC-'+kind+'" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="'+kind+'">Save note</button></div>';
+    var ev=items.filter(function(it){return it.kind==="appt"&&it.extra&&it.extra.appt===kind;});
+    if(!ev.length)h+='<div class="agnone">No calendar events in this column.</div>';
+    ev.forEach(function(it){h+=agItemHtml(it);});
+    var logs=agLogs(kind);
+    if(logs.length){h+='<div class="slbl" style="margin-top:10px"><span>How the meeting went</span></div>';
+      logs.forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b><p>'+esc(e.comment||"")+'</p></div>';});}
+    h+='</div>';
+    return h;
+  }
+  function renderAgenda(){
+    if(!AG.d)AG.d=agDefault();
+    var A=agGet(),day=A.days&&A.days[AG.d],fut=AG.d>today;
+    $("agLbl").textContent=AG.d===today?"TODAY":AG.d===shift(today,-1)?"YESTERDAY":AG.d===shift(today,1)?"TOMORROW":(function(){var p=AG.d.split("-");return DOW[new Date(+p[0],+p[1]-1,+p[2]).getDay()].toUpperCase()+" "+MON[+p[1]-1].toUpperCase()+" "+(+p[2]);})();
+    $("agPick").value=AG.d;$("agToday").hidden=AG.d===today;
+    $("agMeta").textContent=day&&day.headline?day.headline:"EMD · $250K by June 30, 2027";
+    if(!day||!Array.isArray(day.items)||!day.items.length){
+      $("agBody").innerHTML='<div class="card"><div class="agnone">'+(SY.loaded?"No agenda built for this day yet.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div></div>';
+      $("agNote").textContent="";
+      return;
+    }
+    var groups={urgent:[],grow:[],base:[],prospect:[],appts:[],score:[],other:[]};
+    day.items.forEach(function(it){if(!it)return;var s=it.section||"other";if(!groups[s])groups[s]=[];groups[s].push(it);});
+    var labels={urgent:"Urgent",grow:"Grow production",base:"Base productivity",prospect:"Prospecting",appts:"Appointments",score:"Scoreboard"};
+    var h="";
+    ["urgent","grow","base","prospect"].forEach(function(sec){
+      var list=groups[sec]||[];if(!list.length)return;
+      h+='<div class="agsec"><h3>'+labels[sec]+'</h3>';
+      list.forEach(function(it){h+=agItemHtml(it);});
+      h+='</div>';
+    });
+    h+='<div class="agsec"><h3>Appointments</h3>';
+    (groups.appts||[]).filter(function(it){return it.kind!=="appt";}).forEach(function(it){h+=agItemHtml(it);});
+    h+='<div class="agap">'+agCol("personal","Personal appointments",groups.appts||[])+agCol("team","Team appointments",groups.appts||[])+'</div></div>';
+    if((groups.score||[]).length){
+      h+='<div class="agsec"><h3>Scoreboard</h3><div class="ag2">';
+      groups.score.forEach(function(it){h+=agItemHtml(it);});
+      h+='</div></div>';
+    }
+    $("agBody").innerHTML=h;
+    $("agNote").textContent=(day.source?"Built from "+day.source+". ":"")+"Your numbers, comments, Done and Carry save automatically. Meeting notes are kept permanently.";
+  }
+  function agSet(k){if(!k)k=today;AG.d=k;renderAgenda();renderUpd("agenda");}
+
   var WARM_ST=["Booked","Done","Asked","Reschedule","Confirming","Building","Warming","Ghosted"],WM_SEL="";
   function warmIso(){try{var d=new Date(),p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23",timeZoneName:"longOffset"}).formatToParts(d),o={};p.forEach(function(x){o[x.type]=x.value;});
     var off=(o.timeZoneName||"").replace(/^GMT/,"").replace(/^UTC/,"");if(/^[+-]\d{2}$/.test(off))off+=":00";if(!/^[+-]\d{2}:\d{2}$/.test(off))off="-05:00";
@@ -2294,6 +2477,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   $("attSecs").addEventListener("click",function(e){var b=e.target.closest("[data-rr]");if(!b)return;var tr=b.closest("tr");if(!tr)return;var R=getJ("attendance_roster",null),RO=attRo(R);RO.v=1;RO.o[tr.dataset.id]={rec:null,t:Date.now()};setJ("attendance_recruiter_overrides",RO);AT.pend=true;AT.ok="";renderAtt();});
   $("attSecs").addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(!b)return;var B=(AT.blocks||[]).filter(function(x){return x.bk===b.dataset.copy;})[0];if(!B)return;
     attCopy(attCopyText(B)).then(function(ok){b.textContent=ok?"✓ Copied":"Copy failed";b.classList.toggle("ok",!!ok);setTimeout(function(){b.textContent="📋 Copy names";b.classList.remove("ok");},2200);});});
+
+  $("agPrev").addEventListener("click",function(){agSet(shift(AG.d||today,-1));});
+  $("agNext").addEventListener("click",function(){agSet(shift(AG.d||today,1));});
+  $("agToday").addEventListener("click",function(){agSet(today);});
+  $("agPick").addEventListener("change",function(){if(this.value)agSet(this.value);});
+  $("agBody").addEventListener("input",function(e){var t=e.target,f=t&&t.dataset&&t.dataset.agf,id=t&&t.dataset&&t.dataset.agid;if(!f||!id)return;
+    if(f==="comment"||f==="achieved")agPatch(id,f,t.value);});
+  $("agBody").addEventListener("click",function(e){var t=e.target.closest("[data-agadd],[data-agsave]");if(!t)return;
+    if(t.dataset.agadd){var box=$("agF-"+t.dataset.agadd);if(box)box.classList.toggle("on");return;}
+    if(t.dataset.agsave){var k=t.dataset.agsave;agAddMeet(k,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
+  $("agBody").addEventListener("change",function(e){var t=e.target,f=t&&t.dataset&&t.dataset.agf,id=t&&t.dataset&&t.dataset.agid;
+    if(!f||!id)return;
+    if(f==="done"||f==="carry"){agPatch(id,f,t.checked);var card=t.closest(".agit");if(card&&f==="done")card.classList.toggle("done",t.checked);}
+    if(f==="achieved")agPatch(id,f,t.value);});
+  calPill(document.querySelector("#agPick").parentNode,function(){var mk={};agDays(agGet()).forEach(function(k){mk[k]=1;});
+    calOpen({mode:"day",value:AG.d||agDefault(),title:"Agenda day",mark:function(k){return !!mk[k];},legend:"Day with an agenda",quick:[["Today",today],["Yesterday",shift(today,-1)],["Tomorrow",shift(today,1)]],pick:agSet});});
+
   // shared calendar on the Main + Certs day pills (the native input stays as the value holder; past dates only, like before)
   calPill(document.querySelector("#dPick").parentNode,function(){var mk=dayMarks();var G=goalsAll();if(G)Object.keys(G.days).forEach(function(k){mk[k]=1;});calOpen({mode:"day",value:view,max:gMax(),title:"Goal day",mark:function(k){return !!mk[k];},legend:"Day with a goal or entries",quick:[["Today",today],["Yesterday",shift(today,-1)]].concat(gMax()>today?[["Tomorrow",shift(today,1)]]:[]),pick:function(k){setView(k);}});});
   calPill(document.querySelector("#cPick").parentNode,function(){var mk={};list("certs").forEach(function(e){if(e&&e.team!=="superbase"&&e.date)mk[e.date]=1;});calOpen({mode:"day",value:dv.c,max:today,title:"Certifications day",mark:function(k){return !!mk[k];},legend:"Day with a cert",quick:[["Today",today],["Yesterday",shift(today,-1)]],pick:function(k){dv.c=k>today?today:k;renderCert();}});});
@@ -2307,10 +2507,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     calOpen({mode:"month",value:$("lbMon").value,min:ks[ks.length-1]+"-01",max:ks[0]+"-28",title:"Bulletin month",ok:function(k){return !!set[k];},mark:function(k){return !!set[k];},legend:"Month saved",pick:lbSet});});
   function navReveal(){var nav=$("tabs"),b=nav.querySelector("button.on");if(!b||nav.scrollWidth<=nav.clientWidth+1)return;var l=b.offsetLeft,r=l+b.offsetWidth;
     if(l<nav.scrollLeft+8)nav.scrollLeft=Math.max(0,l-24);else if(r>nav.scrollLeft+nav.clientWidth-8)nav.scrollLeft=r-nav.clientWidth+24;}
-  var tab="meet",TABS={meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm,att:renderAtt};
+  var tab="meet",TABS={agenda:renderAgenda,meet:renderMeet,gold:renderGold,cert:renderCert,up:renderUp,rec:renderRec,lic:renderLic,md:renderMd,trends:renderPR,tview:renderTV,lb:renderLb,gt:function(){},adm:renderAdm,att:renderAtt};
   function show(t){t=t||"";if(t==="cold")t="gold";if(t==="goal"||t==="main")t="meet";   /* v46: #goal / #main = aliases of #meet (Goal tab) */   /* v35: #cold = alias of #gold (Prospects tab) */
     if(t.indexOf("trends/")===0){tvSlug=t.slice(7);t="tview";}else if(t==="tview")t=tvSlug?"tview":"trends";if(!TABS[t])t="meet";tab=t;[].forEach.call(document.querySelectorAll(".page"),function(p){p.classList.toggle("on",p.id==="p-"+t);});
-    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm"||t==="att";renderHeader();TABS[t]();renderUpd(t);navReveal();}
+    var hb=t==="tview"?"trends":t;[].forEach.call(document.querySelectorAll("#tabs button"),function(b){b.classList.toggle("on",b.dataset.t===hb);});$("hdr").hidden=t==="tview"||t==="md"||t==="lic"||t==="up"||t==="gt"||t==="gold"||t==="lb"||t==="rec"||t==="trends"||t==="adm"||t==="att"||t==="agenda";renderHeader();TABS[t]();renderUpd(t);navReveal();}
   $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;try{history.replaceState(null,"","#"+(b.dataset.t==="meet"?"goal":b.dataset.t));}catch(x){}tvPushed=false;show(b.dataset.t);window.scrollTo(0,0);});
   window.addEventListener("hashchange",function(){show(location.hash.slice(1));window.scrollTo(0,0);});
   function checkDay(){var t=torKey();if(t!==today){var o=today;today=t;if(view===o)view=t;if(dv.c===o)dv.c=t;if(dv.l===o)dv.l=t;show(tab);}}
@@ -2349,6 +2549,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
     if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v53: per-person merge by name, newest updated wins
+    if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v54: per-item manuals, newest updated wins
+    if(fk===PREFIX+"meetlog"&&a!==null&&b!==null)return meetlogMerge(a,b);   // v54: append-only meeting notes
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
     if(/^day:/.test(k)&&N&&O&&typeof N==="object"&&typeof O==="object"){var r={m:{},r:{}},z;
@@ -2380,11 +2582,15 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
           var om=ovMerge(loc,rv),oc=canon(syParse(om));nv=oc===canon(syParse(rv))?rv:oc===canon(syParse(loc))?loc:om;}
         if(k===PREFIX+"warm"&&loc!==null&&rv!==null){   // v53: ALWAYS merge warm-prospect edits
           var wm=warmMerge(loc,rv),wc=canon(syParse(wm));nv=wc===canon(syParse(rv))?rv:wc===canon(syParse(loc))?loc:wm;}
+        if(k===PREFIX+"agenda"&&loc!==null&&rv!==null){
+          var agm=agMerge(loc,rv),agc=canon(syParse(agm));nv=agc===canon(syParse(rv))?rv:agc===canon(syParse(loc))?loc:agm;}
+        if(k===PREFIX+"meetlog"&&loc!==null&&rv!==null){
+          var mlm=meetlogMerge(loc,rv),mlc=canon(syParse(mlm));nv=mlc===canon(syParse(rv))?rv:mlc===canon(syParse(loc))?loc:mlm;}
         if(nv!==loc){try{if(nv===null)localStorage.removeItem(k);else localStorage.setItem(k,nv);changed=true;}catch(e){return;}}
         if(rv===null)delete sh[k];else sh[k]=syHash(rv);
         if(nv!==rv)mt[k]=Math.max(now,(+r.t||0)+1);else delete mt[k];});
       sySet("sh",sh);sySet("mt",mt);sySet("rt",rtm);
-      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm"||tab==="att")show(tab);else renderUpd(tab);}
+      if(!SY.loaded||changed){SY.loaded=true;SY.err="";syUI();if(changed){changed=false;syRerender();}else if(tab==="lic"||tab==="cert"||tab==="up"||tab==="gold"||tab==="lb"||tab==="rec"||tab==="trends"||tab==="adm"||tab==="att"||tab==="agenda")show(tab);else renderUpd(tab);}
       var N={},diff=false,sent={};
       Object.keys(D).forEach(function(k){if(k.indexOf(PREFIX)===0&&!(D[k]&&D[k].d&&now-(+D[k].t||0)>180*864e5))N[k]=D[k];});
       syLocalKeys().forEach(function(k){var v=localStorage.getItem(k);sent[k]=v;if(!D[k]||D[k].d||D[k].v!==v){N[k]={v:v,t:mt[k]||now};diff=true;}});
@@ -2400,7 +2606,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return syRead().then(function(D){return round(1,D);}).then(function(){SY.err="";SY.fails=0;sySet("at",new Date().toISOString());},function(e){
         if(e&&e.stale){setTimeout(syncNow,4000);return;}SY.err=SY.loaded?"upload":"offline";SY.fails++;
         clearTimeout(SY.retry);SY.retry=setTimeout(function(){if(!document.hidden)syncNow();},Math.min(60000,10000*SY.fails));})
-      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert"||tab==="up"||tab==="att")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
+      .then(function(){SY.busy=false;syUI();if(changed||(SY.err&&!SY.loaded&&(tab==="lic"||tab==="cert"||tab==="up"||tab==="att"||tab==="agenda")))syRerender();if(SY.again){SY.again=false;return syncNow();}});
   }
   function syRerender(){var ae=document.activeElement;if(ae&&(ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT"))return;show(tab);}
   function ago(iso){var s=Math.round((Date.now()-new Date(iso))/1000);return s<60?"just now":s<3600?Math.round(s/60)+" min ago":Math.round(s/3600)+" h ago";}
