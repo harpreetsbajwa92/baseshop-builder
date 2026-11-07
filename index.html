@@ -593,7 +593,7 @@ button{cursor:pointer}
 #p-agenda .agkind{width:auto;min-width:148px;flex:0 0 auto;height:28px;padding:3px 8px;font-size:12.5px;font-weight:700;color:#f2f4f5}
 #p-agenda .agthead{display:flex;align-items:flex-start;gap:8px;min-width:0}
 #p-agenda .agthead .agt{flex:1;min-width:0}
-#p-agenda .agdel{flex:0 0 auto;width:28px;height:28px;padding:0;border:1px solid #5a656e;border-radius:8px;background:#2b343b;color:#fff;font-size:18px;font-weight:800;line-height:1;cursor:pointer}
+#p-agenda .agdel{flex:0 0 auto;width:1.25em;height:1.25em;padding:0;border:0;background:transparent;color:#cfd6db;font-size:16px;font-weight:800;line-height:1.15;cursor:pointer}
 #p-agenda .agother{margin:0;border-top:1px solid #3a444c}
 #p-agenda .agother summary{list-style:none;cursor:pointer;padding:7px 10px;font-size:12.5px;font-weight:800;color:#f2f4f5;display:flex;align-items:center;gap:8px}
 #p-agenda .agother summary::-webkit-details-marker{display:none}
@@ -1285,7 +1285,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-62";
+var APP_VERSION="2026.11.07-63";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1894,7 +1894,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   function agRecKeys(rec){
     var keys=[],extra=(rec&&rec.extra&&typeof rec.extra==="object")?rec.extra:{};
-    function push(v){if(!v)return;v=String(v).trim().toLowerCase();if(!v)return;keys.push(v);keys.push(agSlug(v));}
+    function push(v){if(!v)return;v=String(v).trim();if(!v)return;keys.push(v.toLowerCase());keys.push(agSlug(v));if(v.indexOf("carry:")===0)keys.push(v.slice(6).toLowerCase());else keys.push(("carry:"+v).toLowerCase());}
     if(!rec)return keys;
     push(rec.id);push(rec.item_id);push(rec.cal_id);push(rec.eid);push(extra.cal_id);push(extra.eid);
     var tt=String(rec.title||"").replace(/\s+/g," ").trim().toLowerCase();
@@ -1913,13 +1913,13 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var auth=newer,other=older,ids=nb;
     if(!nb&&ob){auth=older;other=newer;ids=ob;}
     if(!ids)ids=(auth.items||[]).filter(agGenerated).map(function(it){return it.id;});
-    var dismissed=agMergeRecs(older.dismissed_appts,newer.dismissed_appts);
+    var dismissed=agMergeRecs(agMergeRecs(older.dismissed,newer.dismissed),agMergeRecs(older.dismissed_appts,newer.dismissed_appts));
     var promoted=agMergeRecs(older.promoted_appts,newer.promoted_appts);
     var allow={};ids.forEach(function(id){allow[id]=1;});
     var merged={},x;
-    for(x in older)if(x!=="items"&&x!=="built_ids"&&x!=="dismissed_appts"&&x!=="promoted_appts")merged[x]=older[x];
-    for(x in newer)if(x!=="items"&&x!=="built_ids"&&x!=="dismissed_appts"&&x!=="promoted_appts")merged[x]=newer[x];
-    merged.dismissed_appts=dismissed;merged.promoted_appts=promoted;
+    for(x in older)if(x!=="items"&&x!=="built_ids"&&x!=="dismissed"&&x!=="dismissed_appts"&&x!=="promoted_appts")merged[x]=older[x];
+    for(x in newer)if(x!=="items"&&x!=="built_ids"&&x!=="dismissed"&&x!=="dismissed_appts"&&x!=="promoted_appts")merged[x]=newer[x];
+    merged.dismissed=dismissed;merged.dismissed_appts=dismissed;merged.promoted_appts=promoted;
     var imap={};
     (other.items||[]).forEach(function(it){if(it&&it.id)imap[it.id]=it;});
     (auth.items||[]).forEach(function(it){if(!it||!it.id)return;imap[it.id]=imap[it.id]?agMergeItem(imap[it.id],it):it;});
@@ -2009,20 +2009,31 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     L.entries.forEach(function(e){if(e&&e.id===id){e.kind=agNormKind(kind);e.u=Date.now();e.ts=Date.now();}});
     L.updated=agIso();setJ("meetlog",L);
   }
+  function agDayDismissed(day){return agMergeRecs((day&&day.dismissed)||[],(day&&day.dismissed_appts)||[]);}
+  function agDismissRecord(day,rec){
+    if(!day||!rec)return;
+    if(!Array.isArray(day.dismissed))day.dismissed=[];
+    day.dismissed.push(rec);
+    day.dismissed_appts=agMergeRecs(day.dismissed,day.dismissed_appts||[]);
+  }
   function agDismiss(id){
     var A=agGet();if(!A.days||!A.days[AG.d])return;
-    var day=A.days[AG.d],hit=null;
+    var day=A.days[AG.d],hit=null,other=null,cid=String(id||"");
     (day.items||[]).forEach(function(x){if(x&&x.id===id)hit=x;});
-    if(!hit)return;
-    if(!window.confirm("Remove \u201c"+(hit.title||"this appointment")+"\u201d from today's list? It will not come back when the agenda rebuilds."))return;
-    var rec={id:hit.id,item_id:hit.id,cal_id:((hit.extra||{}).cal_id||""),title:hit.title||"",kind:agNormKind(agApptKind(hit)),comment:hit.comment||"",detail:hit.detail||"",u:Date.now()};
-    if(!Array.isArray(day.dismissed_appts))day.dismissed_appts=[];
-    day.dismissed_appts.push(rec);
-    day.items=(day.items||[]).filter(function(x){return !x||x.id!==id;});
-    if(Array.isArray(day.built_ids))day.built_ids=day.built_ids.filter(function(x){return x!==id;});
-    if(Array.isArray(day.promoted_appts))day.promoted_appts=day.promoted_appts.filter(function(pr){return pr&&pr.id!==id&&pr.item_id!==id&&!(rec.cal_id&&pr.cal_id===rec.cal_id);});
+    if(!hit){(day.other_cal||[]).forEach(function(x){if(x&&(String(x.id)===cid||String(x.cal_id)===cid||String(x.item_id)===cid))other=x;});}
+    var title=(hit&&hit.title)||(other&&other.title)||"this item";
+    if(!hit&&!other)return;
+    if(!window.confirm("Remove \u201c"+title+"\u201d from today's list? It will not come back today."))return;
+    var rec=hit?{id:hit.id,item_id:hit.id,cal_id:((hit.extra||{}).cal_id||""),title:hit.title||"",section:hit.section||"",kind:hit.kind==="appt"?agNormKind(agApptKind(hit)):(hit.kind||""),comment:hit.comment||"",detail:hit.detail||"",u:Date.now()}:{id:other.item_id||other.id,item_id:other.item_id||other.id,cal_id:other.cal_id||other.id||"",title:other.title||"",section:"appts",kind:"",comment:"",detail:other.when||"",u:Date.now()};
+    agDismissRecord(day,rec);
+    if(hit){
+      day.items=(day.items||[]).filter(function(x){return !x||x.id!==id;});
+      if(Array.isArray(day.built_ids))day.built_ids=day.built_ids.filter(function(x){return x!==id;});
+    }
+    if(other){day.other_cal=(day.other_cal||[]).filter(function(x){return x&&String(x.id)!==cid&&String(x.cal_id)!==cid&&String(x.item_id)!==cid;});}
+    if(Array.isArray(day.promoted_appts))day.promoted_appts=day.promoted_appts.filter(function(pr){return pr&&pr.id!==rec.id&&pr.item_id!==rec.id&&!(rec.cal_id&&pr.cal_id===rec.cal_id);});
     agSave(A);
-    agMeetPush({id:"m_dismissed_"+Date.now()+"_"+agSlug(hit.title||id),date:AG.d,kind:rec.kind,name:rec.title,comment:rec.comment,ts:Date.now(),u:Date.now(),src:"dismissed",src_id:id,cal_id:rec.cal_id});
+    agMeetPush({id:"m_dismissed_"+Date.now()+"_"+agSlug(title||id),date:AG.d,kind:rec.kind||"personal",name:rec.title,comment:rec.comment||"",ts:Date.now(),u:Date.now(),src:"dismissed",src_id:rec.id,cal_id:rec.cal_id||"",section:rec.section||""});
     renderAgenda();
   }
   function agPromote(calId){
@@ -2154,7 +2165,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var rows=(day&&day.other_cal)||[],out=[];
     rows.forEach(function(ev){
       if(!ev)return;
-      if(agListed(day&&day.dismissed_appts,ev))return;
+      if(agListed(agDayDismissed(day),ev))return;
       if(agListed(day&&day.promoted_appts,ev))return;
       var taken=false;
       ((day&&day.items)||[]).forEach(function(it){if(it&&agListed([ev],it))taken=true;});
@@ -2172,7 +2183,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       h+='<div class="agother-row"><div class="agother-t"><b>'+esc(ev.title||"")+'</b>';
       if(ev.when)h+='<small>'+esc(ev.when)+'</small>';
       h+='</div><select class="agin agkind" data-agpromotekind="'+esc(cid)+'" aria-label="Meeting type">'+agKindOptions("personal")+'</select>';
-      h+='<button type="button" class="btn agpromote" data-agpromote="'+esc(cid)+'">Add</button></div>';
+      h+='<button type="button" class="btn agpromote" data-agpromote="'+esc(cid)+'">Add</button>';
+      h+='<button type="button" class="agdel" data-agdel="'+esc(ev.item_id||cid)+'" aria-label="Remove from today" title="Remove">&times;</button></div>';
     });
     return h+'</details>';
   }
@@ -2189,10 +2201,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       h+='<span>Achieved</span><input class="agin" type="number" inputmode="numeric" data-agf="achieved" data-agid="'+esc(it.id)+'" value="'+(ach==null||ach===""?"":esc(ach))+'" placeholder="—"></div>';
     }
     var showKind=it.kind==="appt"||!!(it.extra&&it.extra.appt)||String(it.id||"").indexOf("appt:")===0;
-    var canDel=showKind&&it.id!=="todays_appts"&&it.id!=="pers_appts"&&it.id!=="team_appts";
     h='<div class="agit'+(done?" done":"")+'" data-agid="'+esc(it.id)+'">';
     h+='<div class="agthead"><div class="agt">'+esc(it.title||"")+'</div>';
-    if(canDel)h+='<button type="button" class="agdel" data-agdel="'+esc(it.id)+'" aria-label="Remove appointment" title="Remove">&times;</button>';
+    h+='<button type="button" class="agdel" data-agdel="'+esc(it.id)+'" aria-label="Remove from today" title="Remove">&times;</button>';
     h+='</div>';
     if(it.detail)h+='<div class="agd">'+esc(it.detail)+'</div>';
     if(num){
@@ -2248,7 +2259,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       var s=agSecOf(it);
       if(s==="llqp"||s==="training"||s==="certs"||s==="score")return;
       if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
-      if(agListed(day.dismissed_appts,it))return;
+      if(agListed(agDayDismissed(day),it))return;
       if(!groups[s])groups[s]=[];groups[s].push(it);
     });
     function col(keys){
