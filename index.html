@@ -1446,16 +1446,17 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   function goGap(have,tgt,unit){
     if(tgt==null||tgt<=0)return "No target";
-    var d=Math.round((have||0)-tgt);
-    if(d===0)return "Goal met";
-    if(d>0)return d.toLocaleString("en-CA")+" "+unit+" over";
-    return Math.abs(d).toLocaleString("en-CA")+" "+unit+" short";
+    var d=(have||0)-tgt;
+    if(Math.abs(d)<0.005)return "Goal met";
+    if(d>0)return goNum(d)+" "+unit+" over";
+    return goNum(Math.abs(d))+" "+unit+" short";
   }
+  function goNum(n){n=+n||0;return n.toLocaleString("en-CA",{maximumFractionDigits:2});}
   function goStat(label,have,tgt,k){
     var hv=have==null?0:+have,tg=tgt==null?0:+tgt,f=tg>0?Math.round(hv/tg*100):null;
-    return '<div class="gmx"><span>'+label+'</span><b>'+(k?kfmt(hv):hv.toLocaleString("en-CA"))+' / '+(k?kfmt(tg):tg.toLocaleString("en-CA"))+'</b><small>'+esc(goGap(hv,tg,k?"points":"recruits"))+(f==null?"":" · "+f+"%")+'</small>'+gbar(f)+'</div>';
+    return '<div class="gmx"><span>'+label+'</span><b>'+goNum(hv)+' / '+goNum(tg)+'</b><small>'+esc(goGap(hv,tg,k?"points":"recruits"))+(f==null?"":" · "+f+"%")+'</small>'+gbar(f)+'</div>';
   }
-  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="inv"?"Investment":p==="recruit"?"Recruit":(p||"—");}
+  function prodLabel(p){p=String(p||"").toLowerCase();return p==="iul"?"IUL":p==="ul"?"UL":p==="term"?"Term":p==="inv"?"Investment":p==="inv_pac"?"Investment PAC":p==="recruit"?"Recruit":(p||"—");}
   function goEntriesHtml(ents){
     ents=Array.isArray(ents)?ents:[];
     if(!ents.length)return '<details class="gment"><summary>No result posts yet</summary></details>';
@@ -1463,7 +1464,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     ents.forEach(function(e){
       if(!e)return;
       var who=e.agent||e.poster||e.client||"Unknown";
-      var extra=[e.client&&e.client!==who?e.client:"",prodLabel(e.product),e.date].filter(Boolean).join(" · ");
+      var extra=[e.client&&e.client!==who?e.client:"",prodLabel(e.product),e.date,e.note].filter(Boolean).join(" · ");
       var pts=e.skipped?"skipped":(e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");
       h+='<div class="gme"><div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+(e.base==null?'<span class="need">needs check</span>':'')+'</div><div>'+esc(pts)+'</div></div>';
     });
