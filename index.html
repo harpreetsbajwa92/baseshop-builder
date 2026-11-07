@@ -1270,7 +1270,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-58";
+var APP_VERSION="2026.11.06-59";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1854,6 +1854,39 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     ["achieved","comment","done","carry","updated"].forEach(function(f){if(f in U)out[f]=U[f];});
     return out;
   }
+  function agGenerated(it){
+    if(!it||!it.id)return false;
+    var id=String(it.id);
+    if(/^user:/.test(id)||/^m_/.test(id))return false;
+    if(it.gen_t)return true;
+    if(/^(flag:|bday(?:$|:)|review(?:s$|:)|mkt$|basezero(?:$|:)|wa(?:$|:)|ig(?:$|:)|li(?:$|:)|rec_day$|close_day$|rec_month$|close_month$|gap$|conv$|pers_appts$|team_appts$|appt:|carry:)/.test(id))return true;
+    if(/^(llqp|certs|training|birthdays|reviews|marketing|base|wa|ig|li|personal|team|score|urgent|grow|prospect|appts)$/.test(it.section||""))return true;
+    return it.kind==="goal"||it.kind==="flag"||it.kind==="appt";
+  }
+  function agBuiltIds(day){
+    if(!day||typeof day!=="object")return null;
+    if(Array.isArray(day.built_ids)&&day.built_ids.length)return day.built_ids.filter(Boolean);
+    return null;
+  }
+  function agMergeDay(cur,src){
+    var cb=+cur.built||0,sb=+src.built||0;
+    var newer=sb>=cb?src:cur,older=sb>=cb?cur:src;
+    var nb=agBuiltIds(newer),ob=agBuiltIds(older);
+    var auth=newer,other=older,ids=nb;
+    if(!nb&&ob){auth=older;other=newer;ids=ob;}
+    if(!ids)ids=(auth.items||[]).filter(agGenerated).map(function(it){return it.id;});
+    var allow={};ids.forEach(function(id){allow[id]=1;});
+    var merged={},x;
+    for(x in older)if(x!=="items"&&x!=="built_ids")merged[x]=older[x];
+    for(x in newer)if(x!=="items"&&x!=="built_ids")merged[x]=newer[x];
+    var imap={};
+    (other.items||[]).forEach(function(it){if(it&&it.id)imap[it.id]=it;});
+    (auth.items||[]).forEach(function(it){if(!it||!it.id)return;imap[it.id]=imap[it.id]?agMergeItem(imap[it.id],it):it;});
+    var items=[];
+    Object.keys(imap).forEach(function(id){var it=imap[id];if(allow[id]||!agGenerated(it))items.push(it);});
+    merged.items=items;merged.built_ids=ids.slice();
+    return merged;
+  }
   function agMerge(a,b){
     var A=typeof a==="string"?syParse(a):a,B=typeof b==="string"?syParse(b):b;
     if(!A||typeof A!=="object")return typeof b==="string"?b:JSON.stringify(B||{v:1,days:{}});
@@ -1862,13 +1895,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     out.updated=String(A.updated||"")>=String(B.updated||"")?A.updated:B.updated;
     function addDay(k,src){
       if(!out.days[k]){out.days[k]=src;return;}
-      var cur=out.days[k],merged={},x,imap={},items=[];
-      for(x in cur)if(x!=="items")merged[x]=cur[x];
-      for(x in src)if(x!=="items")merged[x]=src[x];
-      (cur.items||[]).forEach(function(it){if(it&&it.id)imap[it.id]=it;});
-      (src.items||[]).forEach(function(it){if(!it||!it.id)return;imap[it.id]=imap[it.id]?agMergeItem(imap[it.id],it):it;});
-      Object.keys(imap).forEach(function(id){items.push(imap[id]);});
-      merged.items=items;out.days[k]=merged;
+      out.days[k]=agMergeDay(out.days[k],src);
     }
     Object.keys(da).forEach(function(k){addDay(k,da[k]);});
     Object.keys(db).forEach(function(k){addDay(k,db[k]);});
@@ -1937,7 +1964,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(s==="appts")return "personal";
     return s||"training";
   }
-  var AG_LEFT=["llqp","certs","training","birthdays","reviews","marketing"];
+  var AG_LEFT=["certs","birthdays","reviews","marketing"];
   var AG_RIGHT=["base","wa","ig","li","personal","team","score"];
   var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",wa:"WhatsApp prospects",ig:"Instagram",li:"LinkedIn",personal:"Personal appointments",team:"Team appointments",score:"Scoreboard"};
   var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,personal:1,team:1,score:1};
@@ -1982,8 +2009,15 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       $("agNote").textContent="";
       return;
     }
-    var groups={};
-    day.items.forEach(function(it){if(!it)return;var s=agSecOf(it);if(!groups[s])groups[s]=[];groups[s].push(it);});
+    var groups={},allow=null;
+    if(Array.isArray(day.built_ids)&&day.built_ids.length){allow={};day.built_ids.forEach(function(id){allow[id]=1;});}
+    day.items.forEach(function(it){
+      if(!it)return;
+      var s=agSecOf(it);
+      if(s==="llqp"||s==="training")return;
+      if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
+      if(!groups[s])groups[s]=[];groups[s].push(it);
+    });
     function col(keys){
       var h='<div class="agstack">';
       keys.forEach(function(k){
@@ -2580,7 +2614,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
     if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v53: per-person merge by name, newest updated wins
-    if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v57: per-item manuals, newest updated wins
+    if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v59: built_ids authoritative for generated items; manuals merge on survivors
     if(fk===PREFIX+"meetlog"&&a!==null&&b!==null)return meetlogMerge(a,b);   // v54: append-only meeting notes
     var newS=ta>=tb?a:b,oldS=ta>=tb?b:a;if(a===null||b===null)return newS;
     var N=syParse(newS),O=syParse(oldS),k=fk.slice(PREFIX.length);if(N===null||O===null)return newS;
