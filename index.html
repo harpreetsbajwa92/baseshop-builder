@@ -659,7 +659,6 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 #p-meet .gmix{display:block;margin-top:3px;color:#f2f4f5;font-size:10.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere;max-width:100%}
 #p-meet .gpbtn{margin-top:6px;align-self:flex-start;background:#3a444c;border:1px solid #5a656e;border-radius:999px;color:#fff;font-size:12px;font-weight:800;padding:4px 10px}
 #p-meet .need{display:inline-block;margin-top:3px;color:#1d1503;background:#F5C451;border-radius:6px;padding:1px 6px;font-size:11px;font-weight:800}
-#p-meet .gowa,.goshp .gowa{display:inline-block;margin-top:5px;margin-left:6px;background:#128C7E;border:1px solid #0e6e63;border-radius:999px;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;text-decoration:none;vertical-align:middle}
 #p-meet .gme{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #3a444c;color:#f2f4f5;font-size:13px;min-width:0}
 #p-meet .gme:last-child{border-bottom:0}
 #p-meet .gme b{display:block;overflow-wrap:anywhere}
@@ -1340,7 +1339,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.07-65";
+var APP_VERSION="2026.11.07-66";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1517,21 +1516,16 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return goMix(fake);
   }
   var GO_ENTS=[];
-  function goWaHref(){
-    var u=(subGet()||{}).group_link;
-    if(typeof u==="string"){u=u.trim();if(/^https?:\/\//i.test(u)||/^whatsapp:/i.test(u))return u;}
-    return "https://wa.me/";
-  }
   function goEntriesList(ents){
     ents=Array.isArray(ents)?ents:[];
     if(!ents.length)return '<div class="gmos">No result posts yet</div>';
-    var h="", wa=esc(goWaHref());
+    var h="";
     ents.forEach(function(e){
       if(!e)return;
       var who=e.agent||e.poster||"Unknown";
       var extra=[prodLabel(e.product),e.date,e.note].filter(Boolean).join(" · ");
       var pts=e.skipped?"skipped":(e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");
-      var chk=e.base==null?'<span class="need">needs check</span> <a class="gowa" href="'+wa+'" target="_blank" rel="noopener noreferrer">Open WhatsApp</a>':'';
+      var chk=e.base==null?'<span class="need">needs check</span>':'';
       h+='<div class="gme"><div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+chk+'</div><div>'+esc(pts)+'</div></div>';
     });
     return h;
