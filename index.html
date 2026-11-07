@@ -595,6 +595,8 @@ button{cursor:pointer}
 #p-agenda .agcom{flex:1;min-width:0;height:28px;min-height:28px;resize:none;overflow:hidden;line-height:1.3}
 #p-agenda .agcom:focus{height:64px;min-height:64px;resize:vertical;overflow:auto}
 #p-agenda .agplus{flex:none;width:28px;height:28px;border:1px solid #5a656e;border-radius:8px;background:#2b343b;color:#fff;font-size:20px;font-weight:800;line-height:1}
+#p-agenda .aglicbar{padding:8px 10px;border-bottom:1px solid #3a444c}
+#p-agenda .agaddlic{display:inline-block;max-width:100%;border:1px solid #5a656e;border-radius:8px;background:#2b343b;color:#fff;font-size:12.5px;font-weight:800;padding:6px 10px;letter-spacing:.2px;white-space:nowrap}
 #p-agenda .agform{display:none;margin:8px;border:1px solid #5a656e;border-radius:8px;padding:8px}
 #p-agenda .agform.on{display:block}
 #p-agenda .agform .btn{margin-top:8px}
@@ -1270,7 +1272,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-60";
+var APP_VERSION="2026.11.06-61";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1933,6 +1935,50 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     setJ("meetlog",L);
   }
   function slugName(s){return String(s||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,32)||"x";}
+  var AG_LIC_FIX_CODE={"32BSZC":"superbase","369BDC":"superbase","2988TC":"base"};
+  var AG_LIC_FIX_NAME={"tisha patel":"superbase","arpit shah":"superbase","simran kaur bhatia":"base"};
+  function agBaseHolders(){
+    var L=getJ("licensed",null)||{},out=[],seen={};
+    (Array.isArray(L.base)?L.base:[]).forEach(function(p){
+      if(!p||!p.name)return;
+      if(/harpreet singh bajwa/i.test(p.name))return;
+      var code=String(p.code||"").toUpperCase(),nm=String(p.name).toLowerCase();
+      var team=AG_LIC_FIX_CODE[code]||AG_LIC_FIX_NAME[nm]||"base";
+      if(team!=="base")return;
+      if(seen[nm])return;seen[nm]=1;
+      out.push({name:p.name,code:p.code||""});
+    });
+    out.sort(function(a,b){return String(a.name).localeCompare(String(b.name));});
+    return out;
+  }
+  function agLicOptions(){
+    var ps=agBaseHolders();
+    if(!ps.length)return '<option value="">No base licence holders loaded</option>';
+    return '<option value="">Select a licence holder…</option>'+ps.map(function(p){return '<option value="'+esc(p.name)+'">'+esc(p.name)+'</option>';}).join("");
+  }
+  function agAddLic(name,comment){
+    name=(name||"").replace(/\s+/g," ").trim();if(!name)return;
+    var allowed=agBaseHolders(),hit=null;
+    allowed.forEach(function(p){if(p.name===name)hit=p;});
+    if(!hit)return;
+    comment=(comment||"").trim();
+    var A=agGet();if(!A.days)A.days={};if(!A.days[AG.d])A.days[AG.d]={date:AG.d,items:[]};
+    if(!Array.isArray(A.days[AG.d].items))A.days[AG.d].items=[];
+    A.days[AG.d].items.push({
+      id:"user:lic:"+Date.now()+"_"+slugName(name),
+      section:"base",
+      title:name,
+      detail:comment,
+      target:null,
+      kind:"flag",
+      extra:{type:"userlic",name:name,code:hit.code||""},
+      comment:comment,
+      done:false,
+      carry:false,
+      updated:Date.now()
+    });
+    agSave(A);
+  }
   function agLogs(kind){
     var L=agLogGet(),a=[];(L.entries||[]).forEach(function(e){if(e&&e.date===AG.d&&e.kind===kind)a.push(e);});
     return a;
@@ -1953,7 +1999,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(id==="bday"||id.indexOf("bday:")===0)return "birthdays";
     if(id==="reviews"||id.indexOf("review:")===0)return "reviews";
     if(id==="mkt")return "marketing";
-    if(id==="basezero"||id.indexOf("basezero:")===0)return "base";
+    if(id==="basezero"||id.indexOf("basezero:")===0||id==="basework"||id.indexOf("user:lic:")===0||ex==="userlic"||ex==="basework")return "base";
     if(id==="wa"||id.indexOf("wa:")===0)return "wa";
     if(id==="ig"||id.indexOf("ig:")===0)return "ig";
     if(id==="li"||id.indexOf("li:")===0)return "li";
@@ -1992,6 +2038,16 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     h+='</h3>';
     if(plus){
       h+='<div class="agform" id="agF-'+plus+'"><label>Name</label><input class="agin" id="agN-'+plus+'" placeholder="Who did you meet?"><label class="agfl">How it went</label><textarea class="agta" id="agC-'+plus+'" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="'+plus+'">Save note</button></div>';
+    }
+    if(key==="base"){
+      var work=[],extra=[];
+      items.forEach(function(it){if(it&&(it.id==="basework"||(it.extra&&it.extra.type==="basework")))work.push(it);else extra.push(it);});
+      if(!work.length&&!extra.length)h+='<div class="agnone">Nothing in this section.</div>';
+      work.forEach(function(it){h+=agItemHtml(it);});
+      h+='<div class="aglicbar"><button type="button" class="agaddlic" data-agadd="base">Add licence +</button></div>';
+      h+='<div class="agform" id="agF-base"><label class="agfl">Licence holder</label><select class="agin" id="agN-base">'+agLicOptions()+'</select><label class="agfl">Comment</label><textarea class="agta" id="agC-base" rows="2" placeholder="Anything to note…"></textarea><button type="button" class="btn" data-agsave="base">Save</button></div>';
+      extra.forEach(function(it){h+=agItemHtml(it);});
+      return h+'</section>';
     }
     if(!items.length)h+='<div class="agnone">Nothing in this section.</div>';
     items.forEach(function(it){h+=agItemHtml(it);});
@@ -2551,7 +2607,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(f==="comment"||f==="achieved")agPatch(id,f,t.value);});
   $("agBody").addEventListener("click",function(e){var t=e.target.closest("[data-agadd],[data-agsave]");if(!t)return;
     if(t.dataset.agadd){var box=$("agF-"+t.dataset.agadd);if(box)box.classList.toggle("on");return;}
-    if(t.dataset.agsave){var k=t.dataset.agsave;agAddMeet(k,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
+    if(t.dataset.agsave){var k=t.dataset.agsave;if(k==="base")agAddLic(($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);else agAddMeet(k,($("agN-"+k)||{}).value,($("agC-"+k)||{}).value);if($("agN-"+k))$("agN-"+k).value="";if($("agC-"+k))$("agC-"+k).value="";if($("agF-"+k))$("agF-"+k).classList.remove("on");renderAgenda();}});
   $("agBody").addEventListener("change",function(e){var t=e.target,f=t&&t.dataset&&t.dataset.agf,id=t&&t.dataset&&t.dataset.agid;
     if(!f||!id)return;
     if(f==="done"||f==="carry"){agPatch(id,f,t.checked);var card=t.closest(".agit");if(card&&f==="done")card.classList.toggle("done",t.checked);}
