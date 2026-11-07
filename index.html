@@ -573,8 +573,21 @@ button{cursor:pointer}
 #p-agenda .agban p{margin-top:4px;color:#cfd6db;font-size:13.5px;line-height:1.45;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 #p-agenda .aggrid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start}
 #p-agenda .agstack{display:flex;flex-direction:column;gap:10px;min-width:0}
-#p-agenda .agsec{margin:0;border:1px solid #4a555e;border-radius:10px;background:var(--card);overflow:hidden}
+#p-agenda .agsec{margin:0;border:1px solid #4a555e;border-left-width:4px;border-radius:10px;background:var(--card);overflow:hidden}
 #p-agenda .agsec h3{font-family:var(--fc);font-size:12.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#fff;margin:0;padding:6px 10px;display:flex;align-items:center;gap:8px;background:#1c242a;border-bottom:1px solid #4a555e}
+#p-agenda .agsec-birthdays{background:linear-gradient(0deg,rgba(224,130,150,.11),rgba(224,130,150,.11)),var(--card);border-color:#5a454c;border-left-color:#c98696}
+#p-agenda .agsec-birthdays h3{color:#f4c2cc;background:rgba(224,130,150,.12);border-bottom-color:rgba(201,134,150,.4)}
+#p-agenda .agsec-reviews{background:linear-gradient(0deg,rgba(72,176,172,.11),rgba(72,176,172,.11)),var(--card);border-color:#3d5454;border-left-color:#4eaea8}
+#p-agenda .agsec-reviews h3{color:#9ee3de;background:rgba(72,176,172,.12);border-bottom-color:rgba(78,174,168,.4)}
+#p-agenda .agsec-marketing{background:linear-gradient(0deg,rgba(156,126,204,.11),rgba(156,126,204,.11)),var(--card);border-color:#4a4258;border-left-color:#9a82c4}
+#p-agenda .agsec-marketing h3{color:#d4c4f0;background:rgba(156,126,204,.12);border-bottom-color:rgba(154,130,196,.4)}
+#p-agenda .agsec-base{background:linear-gradient(0deg,rgba(214,168,72,.11),rgba(214,168,72,.11)),var(--card);border-color:#554a38;border-left-color:#d0a24e}
+#p-agenda .agsec-base h3{color:#efd39a;background:rgba(214,168,72,.12);border-bottom-color:rgba(208,162,78,.4)}
+#p-agenda .agsec-prospect{background:linear-gradient(0deg,rgba(82,148,206,.11),rgba(82,148,206,.11)),var(--card);border-color:#3a4a58;border-left-color:#6ea0d0}
+#p-agenda .agsec-prospect h3{color:#b6d6f2;background:rgba(82,148,206,.12);border-bottom-color:rgba(110,160,208,.4)}
+#p-agenda .agsec-appts{background:linear-gradient(0deg,rgba(80,172,118,.11),rgba(80,172,118,.11)),var(--card);border-color:#3a5244;border-left-color:#62b87e}
+#p-agenda .agsec-appts h3{color:#b6e6c4;background:rgba(80,172,118,.12);border-bottom-color:rgba(98,184,126,.4)}
+#p-agenda .agsec h3 .agcnt{color:inherit;opacity:.92}
 #p-agenda .agsec h3 .agst{min-width:0;overflow-wrap:anywhere}
 #p-agenda .agsec h3 .agcnt{margin-left:auto;flex:none;color:#cfd6db;font-size:12px;font-weight:800;letter-spacing:0}
 #p-agenda .agit{border:0;border-bottom:1px solid #3a444c;border-radius:0;padding:7px 10px;margin:0;background:transparent}
@@ -594,8 +607,8 @@ button{cursor:pointer}
 #p-agenda .agthead{display:flex;align-items:flex-start;gap:8px;min-width:0}
 #p-agenda .agthead .agt{flex:1;min-width:0}
 #p-agenda .agdel{flex:0 0 auto;width:1.25em;height:1.25em;padding:0;border:0;background:transparent;color:#cfd6db;font-size:16px;font-weight:800;line-height:1.15;cursor:pointer}
-#p-agenda .agother{margin:0;border-top:1px solid #3a444c}
-#p-agenda .agother summary{list-style:none;cursor:pointer;padding:7px 10px;font-size:12.5px;font-weight:800;color:#f2f4f5;display:flex;align-items:center;gap:8px}
+#p-agenda .agother{margin:0;border-top:1px solid #5a6268;background:rgba(156,164,172,.12);border-left:4px solid #8b939b}
+#p-agenda .agother summary{list-style:none;cursor:pointer;padding:7px 10px;font-size:12.5px;font-weight:800;color:#e8ecef;display:flex;align-items:center;gap:8px}
 #p-agenda .agother summary::-webkit-details-marker{display:none}
 #p-agenda .agother summary .agcnt{margin-left:auto;color:#cfd6db;font-size:12px}
 #p-agenda .agother-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:0 10px 8px;min-width:0}
@@ -1339,7 +1352,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.07-66";
+var APP_VERSION="2026.11.07-67";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2450,7 +2463,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   function agSecHtml(key,title,items){
     var plus=(key==="appts"||key==="personal"||key==="team")?"appts":"";
-    var h='<section class="agsec"><h3><span class="agst">'+esc(title)+'</span><span class="agcnt">'+items.length+'</span>';
+    var tint=key==="wa"||key==="ig"||key==="li"||key==="prospect"?"prospect":key==="personal"||key==="team"||key==="appts"?"appts":key;
+    var h='<section class="agsec agsec-'+esc(tint)+'"><h3><span class="agst">'+esc(title)+'</span><span class="agcnt">'+items.length+'</span>';
     if(plus)h+='<button type="button" class="agplus" data-agadd="'+plus+'" aria-label="Add appointment note">+</button>';
     h+='</h3>';
     if(plus){
