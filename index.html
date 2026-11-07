@@ -1270,7 +1270,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-59";
+var APP_VERSION="2026.11.06-60";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2014,7 +2014,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     day.items.forEach(function(it){
       if(!it)return;
       var s=agSecOf(it);
-      if(s==="llqp"||s==="training")return;
+      if(s==="llqp"||s==="training"||s==="certs")return;
       if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
       if(!groups[s])groups[s]=[];groups[s].push(it);
     });
