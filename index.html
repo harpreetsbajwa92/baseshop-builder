@@ -590,7 +590,7 @@ button{cursor:pointer}
 #p-agenda .agnum b{color:#fff;font-size:13.5px}
 #p-agenda .agnum .agin{width:76px;flex:none;padding:4px 6px;font-family:var(--fn);font-size:15px;font-weight:800}
 #p-agenda .agctl{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:5px;min-width:0}
-#p-agenda .agkind{width:auto;min-width:110px;flex:0 0 auto;height:28px;padding:3px 8px;font-size:12.5px;font-weight:700;color:#f2f4f5}
+#p-agenda .agkind{width:auto;min-width:118px;flex:0 0 auto;height:28px;padding:3px 8px;font-size:12.5px;font-weight:700;color:#f2f4f5}
 #p-agenda .agctl label{display:flex;align-items:center;gap:4px;margin:0;font-size:12.5px;font-weight:700;color:#f2f4f5;cursor:pointer;flex:none;white-space:nowrap}
 #p-agenda .agctl input[type=checkbox]{width:16px;height:16px;accent-color:#35aef5}
 #p-agenda .agcom{flex:1;min-width:0;height:28px;min-height:28px;resize:none;overflow:hidden;line-height:1.3}
@@ -1926,19 +1926,19 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     else if(f==="comment")it.comment=val;
     else if(f==="done")it.done=!!val;
     else if(f==="carry")it.carry=!!val;
-    else if(f==="appt_kind")it.appt_kind=val==="team"?"team":"personal";
+    else if(f==="appt_kind")it.appt_kind=val==="team"?"team":val==="agent"?"agent":"personal";
     it.updated=Date.now();agSave(A);
   }
   function agAddMeet(kind,name,comment){
     name=(name||"").replace(/\s+/g," ").trim();if(!name)return;
     var L=agLogGet();if(!Array.isArray(L.entries))L.entries=[];
     L.v=1;L.updated=agIso();
-    L.entries.push({id:"m_"+Date.now()+"_"+slugName(name),date:AG.d,kind:kind==="team"?"team":"personal",name:name,comment:comment||"",u:Date.now()});
+    L.entries.push({id:"m_"+Date.now()+"_"+slugName(name),date:AG.d,kind:kind==="team"?"team":kind==="agent"?"agent":"personal",name:name,comment:comment||"",u:Date.now()});
     setJ("meetlog",L);
   }
   function agPatchMeet(id,kind){
     var L=agLogGet();if(!Array.isArray(L.entries))return;
-    L.entries.forEach(function(e){if(e&&e.id===id){e.kind=kind==="team"?"team":"personal";e.u=Date.now();}});
+    L.entries.forEach(function(e){if(e&&e.id===id){e.kind=kind==="team"?"team":kind==="agent"?"agent":"personal";e.u=Date.now();}});
     L.updated=agIso();setJ("meetlog",L);
   }
   function slugName(s){return String(s||"x").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,32)||"x";}
@@ -1992,17 +1992,19 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   function agApptKind(it){
     if(!it)return "personal";
-    if(it.appt_kind==="team"||it.appt_kind==="personal")return it.appt_kind;
+    if(it.appt_kind==="team"||it.appt_kind==="personal"||it.appt_kind==="agent")return it.appt_kind;
     var ap=(it.extra||{}).appt;
-    if(ap==="team"||ap==="personal")return ap;
+    if(ap==="team"||ap==="personal"||ap==="agent")return ap;
     var id=String(it.id||"");
     if(id.indexOf("appt:team")===0)return "team";
+    if(id.indexOf("appt:agent")===0)return "agent";
     return "personal";
   }
   function agKindSelect(id,kind,field){
-    return '<select class="agin agkind" data-agf="'+field+'" data-agid="'+esc(id)+'" aria-label="Personal or Team">'
+    return '<select class="agin agkind" data-agf="'+field+'" data-agid="'+esc(id)+'" aria-label="Personal, Team or Agent">'
       +'<option value="personal"'+(kind==="personal"?" selected":"")+'>Personal</option>'
-      +'<option value="team"'+(kind==="team"?" selected":"")+'>Team</option></select>';
+      +'<option value="team"'+(kind==="team"?" selected":"")+'>Team</option>'
+      +'<option value="agent"'+(kind==="agent"?" selected":"")+'>Agent</option></select>';
   }
   function agNumeric(it){
     if(!it)return false;
@@ -2014,7 +2016,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if({llqp:1,certs:1,training:1,birthdays:1,reviews:1,marketing:1,base:1,prospect:1,appts:1}[s])return s;
     if(s==="wa"||s==="ig"||s==="li")return "prospect";
     if(s==="personal"||s==="team")return "appts";
-    if(ap==="personal"||ap==="team"||id.indexOf("appt:")===0||id==="pers_appts"||id==="team_appts"||id==="todays_appts")return "appts";
+    if(ap==="personal"||ap==="team"||ap==="agent"||id.indexOf("appt:")===0||id==="pers_appts"||id==="team_appts"||id==="todays_appts")return "appts";
     if(id.indexOf("flag:llqp")===0||id.indexOf("flag:examsoon")===0||ex==="llqp"||ex==="exam")return "llqp";
     if(id.indexOf("flag:up")===0||ex==="upcoming")return "certs";
     if(id.indexOf("flag:td")===0||id.indexOf("flag:pf")===0||ex==="training"||ex==="eno"||ex==="platform_fee")return "training";
@@ -2058,7 +2060,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(plus)h+='<button type="button" class="agplus" data-agadd="'+plus+'" aria-label="Add appointment note">+</button>';
     h+='</h3>';
     if(plus){
-      h+='<div class="agform" id="agF-appts"><label>Name</label><input class="agin" id="agN-appts" placeholder="Who did you meet?"><label class="agfl">Personal / Team</label><select class="agin agkind" id="agK-appts"><option value="personal">Personal</option><option value="team">Team</option></select><label class="agfl">Comment</label><textarea class="agta" id="agC-appts" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="appts">Save note</button></div>';
+      h+='<div class="agform" id="agF-appts"><label>Name</label><input class="agin" id="agN-appts" placeholder="Who did you meet?"><label class="agfl">Personal / Team / Agent</label><select class="agin agkind" id="agK-appts"><option value="personal">Personal</option><option value="team">Team</option><option value="agent">Agent</option></select><label class="agfl">Comment</label><textarea class="agta" id="agC-appts" rows="2" placeholder="What happened, next step…"></textarea><button type="button" class="btn" data-agsave="appts">Save note</button></div>';
     }
     if(key==="base"){
       var work=[],extra=[];
@@ -2072,7 +2074,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     }
     if(!items.length)h+='<div class="agnone">Nothing in this section.</div>';
     items.forEach(function(it){h+=agItemHtml(it);});
-    if(plus){agLogs("appts").forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b>'+agKindSelect(e.id,e.kind==="team"?"team":"personal","meetkind")+'<p>'+esc(e.comment||"")+'</p></div>';});}
+    if(plus){agLogs("appts").forEach(function(e){h+='<div class="aglog"><b>'+esc(e.name)+'</b>'+agKindSelect(e.id,e.kind==="team"?"team":e.kind==="agent"?"agent":"personal","meetkind")+'<p>'+esc(e.comment||"")+'</p></div>';});}
     return h+'</section>';
   }
   function renderAgenda(){
