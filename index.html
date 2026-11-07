@@ -1266,7 +1266,7 @@ button{cursor:pointer}
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.06-54";
+var APP_VERSION="2026.11.06-55";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1934,7 +1934,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return h;
   }
   function renderAgenda(){
-    if(!AG.d)AG.d=agDefault();
+    if(!AG.d||(!(agGet().days||{})[AG.d]&&!AG.locked))AG.d=agDefault();
     var A=agGet(),day=A.days&&A.days[AG.d],fut=AG.d>today;
     $("agLbl").textContent=AG.d===today?"TODAY":AG.d===shift(today,-1)?"YESTERDAY":AG.d===shift(today,1)?"TOMORROW":(function(){var p=AG.d.split("-");return DOW[new Date(+p[0],+p[1]-1,+p[2]).getDay()].toUpperCase()+" "+MON[+p[1]-1].toUpperCase()+" "+(+p[2]);})();
     $("agPick").value=AG.d;$("agToday").hidden=AG.d===today;
@@ -1965,7 +1965,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("agBody").innerHTML=h;
     $("agNote").textContent=(day.source?"Built from "+day.source+". ":"")+"Your numbers, comments, Done and Carry save automatically. Meeting notes are kept permanently.";
   }
-  function agSet(k){if(!k)k=today;AG.d=k;renderAgenda();renderUpd("agenda");}
+  function agSet(k){if(!k)k=today;AG.d=k;AG.locked=true;renderAgenda();renderUpd("agenda");}
 
   var WARM_ST=["Booked","Done","Asked","Reschedule","Confirming","Building","Warming","Ghosted"],WM_SEL="";
   function warmIso(){try{var d=new Date(),p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23",timeZoneName:"longOffset"}).formatToParts(d),o={};p.forEach(function(x){o[x.type]=x.value;});
