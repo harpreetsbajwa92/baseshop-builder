@@ -110,6 +110,7 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.07-68 (Nov 7, 2026):** Bottom nav puts Goal immediately left of Agenda (Goal, then Agenda); every other tab stays in place.
 - **v2026.11.07-67 (Nov 7, 2026):** Agenda sections each have a muted tint (rose birthdays, teal reviews, violet marketing, amber base productivity, blue prospects, green appointments, grey other calendar items), a matching left border and header color. Dark theme and layout unchanged.
 - **v2026.11.07-66 (Nov 7, 2026):** No WhatsApp links in the published app or store (no Open WhatsApp, no wa.me / chat.whatsapp.com, no `group_link`). Needs-check rows only show “needs check”.
 - **v2026.11.07-64 (Nov 7, 2026):** Goal tab is monthly and base shop only: month selector plus three cards (Monthly goal, editable 15 recruits / 100,000 points in `bs-v1:monthgoals`; Submitted so far from WhatsApp result posts in `bs-v1:submitted`; On system from MyWFG `pointsrecruits` SMD Base). Daily goal cards and the Detailed log are hidden, not deleted (`bs-v1:goals` and day records stay). Submitted points: monthly premiums, Term ×15, IUL ×15, UL ×20, investment lump/posted savings ×0.05 (skip small monthly investment contributions); group recruit posts count. `write_key.py` refuses `bs-v1:submitted`; merge with `write_submitted.py`. November 2026 submitted month seeded from the group scan (21,955.15 base points, 0 recruits).
