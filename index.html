@@ -1362,7 +1362,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.09-72";
+var APP_VERSION="2026.11.09-73";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2515,7 +2515,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(s==="grow")return "marketing";
     return s||"training";
   }
-  var AG_LEFT=["certs","birthdays","reviews","marketing"];
+  var AG_LEFT=["certs","birthdays","reviews","marketing","prospect"];
   var AG_RIGHT=["base","appts"];
   var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",prospect:"Prospects needing attention",appts:"Today's appointments",wa:"Prospects needing attention",ig:"Prospects needing attention",li:"Prospects needing attention",personal:"Today's appointments",team:"Today's appointments",score:"Scoreboard"};
   var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,appts:1};
@@ -2630,6 +2630,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function col(keys){
       var h='<div class="agstack">';
       keys.forEach(function(k){
+        if(k==="prospect"){h+='<section class="agsec agsec-prospect"><h3><span class="agst">'+esc(AG_LAB.prospect)+'</span></h3></section>';return;}
         var list=groups[k]||[];
         if(!list.length&&!AG_ALWAYS[k])return;
         h+=agSecHtml(k,AG_LAB[k]||k,list);
