@@ -1362,7 +1362,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.08-71";
+var APP_VERSION="2026.11.09-72";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2202,6 +2202,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function push(v){if(!v)return;v=String(v).trim();if(!v)return;keys.push(v.toLowerCase());keys.push(agSlug(v));if(v.indexOf("carry:")===0)keys.push(v.slice(6).toLowerCase());else keys.push(("carry:"+v).toLowerCase());}
     if(!rec)return keys;
     push(rec.id);push(rec.item_id);push(rec.cal_id);push(rec.eid);push(extra.cal_id);push(extra.eid);
+    // user:/m_ rows match by id only — title match blocked re-adding "Add licence +" after a same-name dismiss (Saurabh Nair, Nov 9).
+    var oid=String(rec.id||rec.item_id||"");
+    if(oid.indexOf("user:")===0||oid.indexOf("m_")==0)return keys;
     var tt=String(rec.title||"").replace(/\s+/g," ").trim().toLowerCase();
     if(tt)keys.push("title:"+tt);
     return keys;
@@ -2513,9 +2516,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     return s||"training";
   }
   var AG_LEFT=["certs","birthdays","reviews","marketing"];
-  var AG_RIGHT=["base","appts","prospect"];
+  var AG_RIGHT=["base","appts"];
   var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",prospect:"Prospects needing attention",appts:"Today's appointments",wa:"Prospects needing attention",ig:"Prospects needing attention",li:"Prospects needing attention",personal:"Today's appointments",team:"Today's appointments",score:"Scoreboard"};
-  var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,prospect:1,appts:1};
+  var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,appts:1};
   function agOtherVisible(day){
     var rows=(day&&day.other_cal)||[],out=[];
     rows.forEach(function(ev){
@@ -2619,7 +2622,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     day.items.forEach(function(it){
       if(!it)return;
       var s=agSecOf(it);
-      if(s==="llqp"||s==="training"||s==="certs"||s==="score")return;
+      if(s==="llqp"||s==="training"||s==="certs"||s==="score"||s==="prospect"||s==="wa"||s==="ig"||s==="li")return;
       if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
       if(agListed(agDayDismissed(day),it))return;
       if(!groups[s])groups[s]=[];groups[s].push(it);
