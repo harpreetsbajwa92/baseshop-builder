@@ -588,6 +588,18 @@ button{cursor:pointer}
 #p-gold .wsel:focus,#p-gold .wcom:focus{outline:0;border-color:#79bdf7;box-shadow:0 0 0 2px rgba(74,163,240,.3)}
 #p-gold #warmNote{color:#7fa7cc}
 
+
+/* v76: remove (x) buttons + removed list */
+#p-gold .prx{flex:none;width:30px;height:30px;line-height:26px;text-align:center;border-radius:8px;border:1px solid #5a656e;background:transparent;color:#cfd6db;font-size:20px;cursor:pointer;padding:0}
+#p-gold .prx:hover{background:#7a2e2e;border-color:#c35a5a;color:#fff}
+#p-gold .wt col.c-x{width:44px}#p-gold .wt td.wx{text-align:center;padding:6px 4px}
+#p-gold .gr .prx{margin-left:6px}
+#p-gold .prrem{margin:12px 2px;color:#9aa5ad;font-size:13px}
+#p-gold .prrem summary{cursor:pointer;font-weight:700;color:#cfd6db}
+#p-gold .prr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid #3a444c}
+#p-gold .prr small{color:#7fb8ec;margin-left:6px}
+#p-gold .prrb{background:#323b42;border:1px solid #4a555e;color:#e6eaec;border-radius:8px;padding:4px 10px;font-weight:700;cursor:pointer}
+
 /* ===== v57: Daily Agenda compact sections (bs-v1:agenda + bs-v1:meetlog) ===== */
 #p-agenda{max-width:100%;overflow-x:hidden}
 #p-agenda .agban{border:1px solid #4a555e;margin-top:10px;overflow:hidden}
@@ -1253,6 +1265,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
         <p class="note" id="warmNote"></p>
       </div>
     </div>
+    <div id="prRem"></div>
   </section>
 
   <!-- TAB 2b (v24): UPCOMING LICENCES (bs-v1:upcoming, filled by the bot from DBI Hub; filtered against bs-v1:licensed at render time). Scrolls like a normal page. -->
@@ -1384,7 +1397,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.09-75";
+var APP_VERSION="2026.11.09-76";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2177,10 +2190,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   // ---------- v28: Gold Prospects (bs-v1:gold from build_gold.py; LinkedIn then Instagram; read-only) ----------
   function goldSince(d){return /^\d{4}-\d{2}-\d{2}$/.test(d||"")?"since "+upShort(d):"";}
-  function goldList(a){a=Array.isArray(a)?a.filter(function(x){return x&&x.name;}):[];
+  function goldList(a,kind){a=Array.isArray(a)?a.filter(function(x){return x&&x.name&&!prRemoved("cold",x.name);}):[];
     if(!a.length)return {n:0,h:'<div class="none">No good prospects yet</div>'};
     return {n:a.length,h:a.map(function(x){var u=/^https:\/\//.test(x.url||"")?x.url:"",pr=x.url_kind==="profile",sub=[goldSince(x.since),x.note].filter(Boolean).join(" · ");
-      return '<div class="gr"><div class="gn"><b>'+esc(x.name)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+(u?'<a class="gk '+(pr?'p':'c')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+(pr?'Profile':'Chat')+' ↗</a>':'')+'</div>';}).join("")};}
+      return '<div class="gr"><div class="gn"><b>'+esc(x.name)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+(u?'<a class="gk '+(pr?'p':'c')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+(pr?'Profile':'Chat')+' ↗</a>':'')+'<button type="button" class="prx" data-prdel="'+esc(x.name)+'" data-prkind="cold" aria-label="Remove '+esc(x.name)+'" title="Remove from list">&times;</button></div>';}).join("")};}
 
   var AG={d:""};
   function agIso(){return warmIso();}
@@ -2682,7 +2695,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
         (mo[ym]&&Array.isArray(mo[ym].people)?mo[ym].people:[]).forEach(function(p){if(!p||!p.name)return;var k=String(p.name).toLowerCase(),i=ix[k];
           if(i==null){ix[k]=dest.length;dest.push(p);}else if((+p.updated||0)>=(+dest[i].updated||0))dest[i]=p;});});}
     add(A);add(B);return JSON.stringify(out);}
-  function warmBadge(ps){var n=ps.filter(function(p){return p&&p.name;}).length,b=ps.filter(function(p){return p&&p.status==="Booked";}).length;if($("warmBd"))$("warmBd").textContent="Booked "+b+" / "+n;}
+  function warmBadge(ps){ps=ps.filter(function(p){return p&&p.name&&!prRemoved("warm",p.name);});var n=ps.length,b=ps.filter(function(p){return p&&p.status==="Booked";}).length;if($("warmBd"))$("warmBd").textContent="Booked "+b+" / "+n;}
   function renderWarm(){
     var W=warmGet(),ks=warmYmList(W),nowYm=(function(){try{return new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit"}).format(new Date());}catch(e){return ks[0]||"";}})();
     if(!WM_SEL||ks.indexOf(WM_SEL)<0)WM_SEL=ks.indexOf(nowYm)>=0?nowYm:(ks[0]||nowYm);
@@ -2690,12 +2703,12 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(!so)so='<option value="'+esc(WM_SEL)+'">'+esc(WM_SEL)+'</option>';
     if($("warmMon").innerHTML!==so)$("warmMon").innerHTML=so;$("warmMon").value=WM_SEL;
     var ps=warmPeople(W,WM_SEL);warmBadge(ps);
-    if(!ps.length){$("warmTbl").innerHTML='<div class="none">'+(SY.loaded?"No reach-outs this month yet.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("warmNote").textContent="";return;}
-    var h='<table class="wt"><colgroup><col class="c-n"><col class="c-nm"><col class="c-st"><col class="c-cm"></colgroup><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Comments</th></tr></thead><tbody>';
-    ps.forEach(function(p,i){if(!p||!p.name)return;var st=WARM_ST.indexOf(p.status)>=0?p.status:"Warming";
-      h+='<tr><td class="wn">'+(i+1)+'</td><td class="wnm">'+esc(p.name)+'</td><td><select class="wsel '+st+'" data-wi="'+i+'" data-wf="status" aria-label="Status for '+esc(p.name)+'">';
+    if(!ps.filter(function(p){return p&&p.name&&!prRemoved("warm",p.name);}).length){$("warmTbl").innerHTML='<div class="none">'+(SY.loaded?"No reach-outs this month yet.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("warmNote").textContent="";return;}
+    var h='<table class="wt"><colgroup><col class="c-n"><col class="c-nm"><col class="c-st"><col class="c-cm"><col class="c-x"></colgroup><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Comments</th><th></th></tr></thead><tbody>';var shown=0;
+    ps.forEach(function(p,i){if(!p||!p.name||prRemoved("warm",p.name))return;shown++;var st=WARM_ST.indexOf(p.status)>=0?p.status:"Warming";
+      h+='<tr><td class="wn">'+shown+'</td><td class="wnm">'+esc(p.name)+'</td><td><select class="wsel '+st+'" data-wi="'+i+'" data-wf="status" aria-label="Status for '+esc(p.name)+'">';
       WARM_ST.forEach(function(x){h+='<option value="'+x+'"'+(x===st?" selected":"")+'>'+x+'</option>';});
-      h+='</select></td><td><textarea class="wcom" data-wi="'+i+'" data-wf="comment" rows="2" placeholder="Add an update…">'+esc(p.comment||"")+'</textarea></td></tr>';});
+      h+='</select></td><td><textarea class="wcom" data-wi="'+i+'" data-wf="comment" rows="2" placeholder="Add an update…">'+esc(p.comment||"")+'</textarea></td><td class="wx"><button type="button" class="prx" data-prdel="'+esc(p.name)+'" data-prkind="warm" aria-label="Remove '+esc(p.name)+'" title="Remove from list">&times;</button></td></tr>';});
     $("warmTbl").innerHTML=h+"</tbody></table>";warmFit();
     $("warmNote").textContent="This month's reach-outs and bookings. Status and comments save automatically.";}
   function warmFit(){var a=document.querySelectorAll('#warmTbl .wcom');for(var i=0;i<a.length;i++){a[i].style.height='auto';a[i].style.height=Math.max(38,a[i].scrollHeight+2)+'px';}}
@@ -2705,16 +2718,41 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(f==="status"){if(WARM_ST.indexOf(t.value)<0)return;ps[i].status=t.value;t.className="wsel "+t.value;}
     else ps[i].comment=t.value;
     ps[i].updated=Date.now();W.v=W.v||1;W.updated=warmIso();setJ("warm",W);warmBadge(ps);}
+  // v76: removed prospects (tombstones). Per name, newest change wins; x=true hides the name on the Warm and Cold lists.
+  function prNorm(n){return String(n||"").toLowerCase().replace(/\s+/g," ").trim();}
+  function prGet(){var P=getJ("prem",null);return P&&typeof P==="object"&&Array.isArray(P.list)?P:{v:1,list:[]};}
+  function prRemoved(kind,name){var k=kind+"|"+prNorm(name),r=false;prGet().list.forEach(function(e){if(e&&e.key===k)r=!!e.x;});return r;}
+  function prSet(kind,name,x){var P=prGet(),k=kind+"|"+prNorm(name),hit=false;
+    P.list.forEach(function(e){if(e&&e.key===k){e.x=!!x;e.u=Date.now();hit=true;}});
+    if(!hit)P.list.push({key:k,kind:kind,name:String(name),x:!!x,u:Date.now()});
+    P.v=1;P.updated=warmIso();setJ("prem",P);}
+  function prMerge(a,b){var A=typeof a==="string"?syParse(a):a,B=typeof b==="string"?syParse(b):b,m={},out=[];
+    [A,B].forEach(function(P){((P&&Array.isArray(P.list))?P.list:[]).forEach(function(e){if(!e||!e.key)return;if(!m[e.key]||(+e.u||0)>=(+m[e.key].u||0))m[e.key]=e;});});
+    Object.keys(m).forEach(function(k){out.push(m[k]);});
+    var u=(A&&A.updated)||"";if(B&&B.updated&&String(B.updated)>String(u))u=B.updated;
+    return JSON.stringify({v:1,updated:u,list:out});}
+  function prRemovedHtml(){var L=prGet().list.filter(function(e){return e&&e.x;});
+    if(!L.length)return "";
+    return '<details class="prrem"><summary>Removed prospects ('+L.length+')</summary>'+L.map(function(e){return '<div class="prr"><span>'+esc(e.name)+' <small>'+(e.kind==="warm"?"Warm":"Cold")+'</small></span><button type="button" class="prrb" data-prrestore="'+esc(e.key)+'">Restore</button></div>';}).join("")+'</details>';}
+  function prRestoreKey(key){var P=prGet();P.list.forEach(function(e){if(e&&e.key===key){e.x=false;e.u=Date.now();}});P.updated=warmIso();setJ("prem",P);}
   function renderGold(){
     var G=getJ("gold",null);
     $("goldMeta").textContent="Cold list + monthly reach-outs";
     if(!G||typeof G!=="object"){var w='<div class="none" style="text-align:center">'+(SY.loaded?"No data yet. Filled from the LinkedIn and Instagram bots.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("goldLi").innerHTML=w;$("goldIg").innerHTML="";$("goldLn").textContent="";$("goldIn").textContent="";$("goldNote").textContent="";}
     else{var L=goldList(G.linkedin),I=goldList(G.instagram);
       $("goldLi").innerHTML=L.h;$("goldIg").innerHTML=I.h;$("goldLn").textContent=L.n;$("goldIn").textContent=I.n;
-      $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation.";}
-    renderWarm();
+      $("goldNote").textContent="Good prospects flagged by your LinkedIn and Instagram bots, newest first. Chat opens the conversation. Tap × to remove someone who has gone quiet.";}
+    renderWarm();if($("prRem"))$("prRem").innerHTML=prRemovedHtml();
   }
   $("warmMon").addEventListener("change",function(){WM_SEL=this.value;renderWarm();});
+  $("p-gold").addEventListener("click",function(e){
+    var d=e.target.closest("[data-prdel]");
+    if(d){e.preventDefault();var nm=d.dataset.prdel,kd=d.dataset.prkind;
+      if(!window.confirm("Remove "+nm+" from the "+(kd==="warm"?"Warm":"Cold")+" prospects list? You can restore them from 'Removed prospects' at the bottom."))return;
+      prSet(kd,nm,true);renderGold();return;}
+    var r=e.target.closest("[data-prrestore]");
+    if(r){e.preventDefault();prRestoreKey(r.dataset.prrestore);renderGold();}
+  });
   $("warmTbl").addEventListener("change",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf)warmPatch(t);});
   $("warmTbl").addEventListener("input",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf==="comment"){warmPatch(t);t.style.height='auto';t.style.height=Math.max(38,t.scrollHeight+2)+'px';}});
   // ---------- v29: Leaders Bulletin (bs-v1:leaders from build_lb.py; read-only) ----------
@@ -3295,6 +3333,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function syMerge(fk,a,b,ta,tb){
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
+    if(fk===PREFIX+"prem"&&a!==null&&b!==null)return prMerge(a,b);   // v76: removed-prospect tombstones, newest per name wins
     if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v53: per-person merge by name, newest updated wins
     if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v59: built_ids authoritative for generated items; manuals merge on survivors
     if(fk===PREFIX+"meetlog"&&a!==null&&b!==null)return meetlogMerge(a,b);   // v54: append-only meeting notes
@@ -3328,6 +3367,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
           var am=attMerge(loc,rv),ac=canon(syParse(am));nv=ac===canon(syParse(rv))?rv:ac===canon(syParse(loc))?loc:am;}
         if((k===PREFIX+"attendance_md_overrides"||k===PREFIX+"attendance_recruiter_overrides")&&loc!==null&&rv!==null){   // v41: ALWAYS merge MD picks the same way
           var om=ovMerge(loc,rv),oc=canon(syParse(om));nv=oc===canon(syParse(rv))?rv:oc===canon(syParse(loc))?loc:om;}
+        if(k===PREFIX+"prem"&&loc!==null&&rv!==null){
+          var prm=prMerge(loc,rv),prc=canon(syParse(prm));nv=prc===canon(syParse(rv))?rv:prc===canon(syParse(loc))?loc:prm;}
         if(k===PREFIX+"warm"&&loc!==null&&rv!==null){   // v53: ALWAYS merge warm-prospect edits
           var wm=warmMerge(loc,rv),wc=canon(syParse(wm));nv=wc===canon(syParse(rv))?rv:wc===canon(syParse(loc))?loc:wm;}
         if(k===PREFIX+"agenda"&&loc!==null&&rv!==null){
