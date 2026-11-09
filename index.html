@@ -566,6 +566,28 @@ button{cursor:pointer}
 #p-gold .wcom::placeholder{color:#8c979f}
 #p-gold #warmNote,#p-gold #goldNote{color:#9aa5ad;font-size:12.5px;padding:4px 2px 8px}
 
+
+/* v75: Warm Prospects blue theme, no inner scroll, roomier rows */
+#p-gold #goldWarm .gsl.wm{color:#9fd0ff;font-size:16px}
+#p-gold #goldWarm .gsl.wm .pc{background:#4aa3f0;color:#06182b}
+#p-gold #warmMon{background-color:#4aa3f0;border-color:#79bdf7;color:#06182b;background-image:linear-gradient(45deg,transparent 50%,#06182b 50%),linear-gradient(135deg,#06182b 50%,transparent 50%)}
+#p-gold .wtcard{background:#14283d;border:1px solid #2f6ea8;border-radius:14px;box-shadow:0 2px 14px rgba(40,120,200,.18)}
+#p-gold .wtsc{overflow:visible;max-height:none}
+#p-gold .wt{border-collapse:separate;border-spacing:0}
+#p-gold .wt th{position:static;background:#1d4a78;color:#e8f3ff;border:0;border-bottom:2px solid #4aa3f0;padding:10px 8px;font-size:12px}
+#p-gold .wt td{border:0;border-bottom:1px solid #27527f;padding:10px 8px;vertical-align:middle;background:transparent}
+#p-gold .wt tbody tr:nth-child(even) td{background:rgba(74,163,240,.07)}
+#p-gold .wt tbody tr:last-child td{border-bottom:0}
+#p-gold .wt td.wn{color:#7fb8ec;font-weight:800}
+#p-gold .wt td.wnm{font-size:14.5px;color:#fff}
+#p-gold .wt col.c-st{width:132px}
+#p-gold .wsel,#p-gold .wcom{background:#0d1c2c;border:1px solid #2f6ea8;border-radius:9px;color:#f2f8ff;font-size:13.5px}
+#p-gold .wsel{border-left-width:5px}
+#p-gold .wcom{min-height:38px;resize:none;overflow:hidden;line-height:1.4;padding:8px 9px}
+#p-gold .wcom::placeholder{color:#6f95b8}
+#p-gold .wsel:focus,#p-gold .wcom:focus{outline:0;border-color:#79bdf7;box-shadow:0 0 0 2px rgba(74,163,240,.3)}
+#p-gold #warmNote{color:#7fa7cc}
+
 /* ===== v57: Daily Agenda compact sections (bs-v1:agenda + bs-v1:meetlog) ===== */
 #p-agenda{max-width:100%;overflow-x:hidden}
 #p-agenda .agban{border:1px solid #4a555e;margin-top:10px;overflow:hidden}
@@ -1362,7 +1384,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.09-74";
+var APP_VERSION="2026.11.09-75";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2674,8 +2696,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       h+='<tr><td class="wn">'+(i+1)+'</td><td class="wnm">'+esc(p.name)+'</td><td><select class="wsel '+st+'" data-wi="'+i+'" data-wf="status" aria-label="Status for '+esc(p.name)+'">';
       WARM_ST.forEach(function(x){h+='<option value="'+x+'"'+(x===st?" selected":"")+'>'+x+'</option>';});
       h+='</select></td><td><textarea class="wcom" data-wi="'+i+'" data-wf="comment" rows="2" placeholder="Add an update…">'+esc(p.comment||"")+'</textarea></td></tr>';});
-    $("warmTbl").innerHTML=h+"</tbody></table>";
+    $("warmTbl").innerHTML=h+"</tbody></table>";warmFit();
     $("warmNote").textContent="This month's reach-outs and bookings. Status and comments save automatically.";}
+  function warmFit(){var a=document.querySelectorAll('#warmTbl .wcom');for(var i=0;i<a.length;i++){a[i].style.height='auto';a[i].style.height=Math.max(38,a[i].scrollHeight+2)+'px';}}
   function warmPatch(t){var i=+t.dataset.wi,f=t.dataset.wf;if(!(i>=0)||!f)return;
     var W=warmGet();if(!W.months)W.months={};if(!W.months[WM_SEL])W.months[WM_SEL]={people:[]};
     var ps=W.months[WM_SEL].people;if(!ps[i])return;
@@ -2693,7 +2716,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   $("warmMon").addEventListener("change",function(){WM_SEL=this.value;renderWarm();});
   $("warmTbl").addEventListener("change",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf)warmPatch(t);});
-  $("warmTbl").addEventListener("input",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf==="comment")warmPatch(t);});
+  $("warmTbl").addEventListener("input",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf==="comment"){warmPatch(t);t.style.height='auto';t.style.height=Math.max(38,t.scrollHeight+2)+'px';}});
   // ---------- v29: Leaders Bulletin (bs-v1:leaders from build_lb.py; read-only) ----------
   var LBM=[["rec_m","Rec","m"],["rec_12","Rec","12"],["pts_m","Pts","m"],["pts_12","Pts","12"],["lic_m","Lic","m"],["lic_12","Lic","12"]];
   function lbN(v,f){if(v===null||v===undefined||v==="")return null;v=+v;if(isNaN(v))return null;if(f.indexOf("pts")!==0)return String(Math.round(v));var a=Math.abs(v);
