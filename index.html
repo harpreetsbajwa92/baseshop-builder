@@ -1362,7 +1362,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.09-73";
+var APP_VERSION="2026.11.09-74";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2421,22 +2421,23 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   var AG_LIC_FIX_NAME={"tisha patel":"superbase","arpit shah":"superbase","simran kaur bhatia":"base"};
   function agBaseHolders(){
     var L=getJ("licensed",null)||{},out=[],seen={};
-    (Array.isArray(L.base)?L.base:[]).forEach(function(p){
-      if(!p||!p.name)return;
-      if(/harpreet singh bajwa/i.test(p.name))return;
-      var code=String(p.code||"").toUpperCase(),nm=String(p.name).toLowerCase();
-      var team=AG_LIC_FIX_CODE[code]||AG_LIC_FIX_NAME[nm]||"base";
-      if(team!=="base")return;
-      if(seen[nm])return;seen[nm]=1;
-      out.push({name:p.name,code:p.code||""});
+    [["base",L.base],["superbase",L.superbase]].forEach(function(g){
+      (Array.isArray(g[1])?g[1]:[]).forEach(function(p){
+        if(!p||!p.name)return;
+        if(/harpreet singh bajwa/i.test(p.name))return;
+        var code=String(p.code||"").toUpperCase(),nm=String(p.name).toLowerCase();
+        var team=AG_LIC_FIX_CODE[code]||AG_LIC_FIX_NAME[nm]||g[0];
+        if(seen[nm])return;seen[nm]=1;
+        out.push({name:p.name,code:p.code||"",team:team});
+      });
     });
     out.sort(function(a,b){return String(a.name).localeCompare(String(b.name));});
     return out;
   }
   function agLicOptions(){
     var ps=agBaseHolders();
-    if(!ps.length)return '<option value="">No base licence holders loaded</option>';
-    return '<option value="">Select a licence holder…</option>'+ps.map(function(p){return '<option value="'+esc(p.name)+'">'+esc(p.name)+'</option>';}).join("");
+    if(!ps.length)return '<option value="">No team licence holders loaded</option>';
+    return '<option value="">Select a team licence holder…</option>'+ps.map(function(p){return '<option value="'+esc(p.name)+'">'+esc(p.name)+(p.team==="superbase"?" (Super base)":" (Base)")+'</option>';}).join("");
   }
   function agAddLic(name,comment){
     name=(name||"").replace(/\s+/g," ").trim();if(!name)return;
@@ -2517,7 +2518,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   var AG_LEFT=["certs","birthdays","reviews","marketing","prospect"];
   var AG_RIGHT=["base","appts"];
-  var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Base productivity",prospect:"Prospects needing attention",appts:"Today's appointments",wa:"Prospects needing attention",ig:"Prospects needing attention",li:"Prospects needing attention",personal:"Today's appointments",team:"Today's appointments",score:"Scoreboard"};
+  var AG_LAB={llqp:"LLQP",certs:"Certifications & Licences",training:"Training / Admin",birthdays:"Birthdays",reviews:"Client reviews",marketing:"Marketing",base:"Team productivity",prospect:"Prospects needing attention",appts:"Today's appointments",wa:"Prospects needing attention",ig:"Prospects needing attention",li:"Prospects needing attention",personal:"Today's appointments",team:"Today's appointments",score:"Scoreboard"};
   var AG_ALWAYS={birthdays:1,reviews:1,marketing:1,appts:1};
   function agOtherVisible(day){
     var rows=(day&&day.other_cal)||[],out=[];
@@ -2630,7 +2631,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     function col(keys){
       var h='<div class="agstack">';
       keys.forEach(function(k){
-        if(k==="prospect"){h+='<section class="agsec agsec-prospect"><h3><span class="agst">'+esc(AG_LAB.prospect)+'</span></h3></section>';return;}
+        if(k==="prospect"){var pc=null;(day.items||[]).forEach(function(x){if(x&&x.id==="user:prospectcheck")pc=x;});var pd=!!(pc&&pc.done);h+='<section class="agsec agsec-prospect"><h3><span class="agst">'+esc(AG_LAB.prospect)+'</span></h3><div class="agit'+(pd?" done":"")+'"><div class="agctl"><label><input type="checkbox" data-agf="done" data-agid="user:prospectcheck"'+(pd?" checked":"")+'> Done</label><textarea class="agcom" data-agf="comment" data-agid="user:prospectcheck" rows="1" placeholder="Comment">'+esc((pc&&pc.comment)||"")+'</textarea></div></div></section>';return;}
         var list=groups[k]||[];
         if(!list.length&&!AG_ALWAYS[k])return;
         h+=agSecHtml(k,AG_LAB[k]||k,list);
