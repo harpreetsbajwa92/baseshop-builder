@@ -705,6 +705,35 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 #p-meet .gmet .rgap{font-size:11px;color:#d5dce0;font-weight:700;margin-top:1px;line-height:1.2}
 #p-meet .gmix{display:block;margin-top:3px;color:#f2f4f5;font-size:10.5px;font-weight:700;line-height:1.25;overflow-wrap:anywhere;max-width:100%}
 #p-meet .gpbtn{margin-top:6px;align-self:flex-start;background:#3a444c;border:1px solid #5a656e;border-radius:999px;color:#fff;font-size:12px;font-weight:800;padding:4px 10px}
+/* v77: Base (gold) and Super base (blue) sections, small rings, both on one screen */
+#p-meet .gmo.gmg{flex:0 0 auto;padding:6px 10px}
+#p-meet .gmg .gmor{margin-top:3px}
+#p-meet .gmg .gmoin{flex-direction:row;gap:6px}
+#p-meet .gmg .gmoin .num{height:32px;font-size:17px;max-width:110px}
+#p-meet .gsec{flex:1 1 0;min-height:0;border-radius:14px;padding:7px 8px 6px;display:flex;flex-direction:column;overflow:auto}
+#p-meet .gsec.gb{border:1px solid rgba(245,196,81,.55);background:linear-gradient(180deg,rgba(245,196,81,.16),rgba(245,196,81,.04) 60%),var(--card)}
+#p-meet .gsec.gs{border:1px solid rgba(108,195,245,.6);background:linear-gradient(180deg,rgba(0,147,231,.20),rgba(0,147,231,.05) 60%),#1f2a33}
+#p-meet .gsh{display:flex;align-items:center;gap:6px;min-width:0}
+#p-meet .gsh .bst{margin-left:0}
+#p-meet .bst.sbb{background:linear-gradient(180deg,#bfe6ff,#6cc3f5 55%,#2a9be0)}
+#p-meet .gsh small{color:#e8ecee;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+#p-meet .gsh .gpbtn{margin:0;padding:2px 8px;font-size:11px;white-space:nowrap}
+#p-meet .gpg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;margin-top:5px;flex:1;min-height:0}
+#p-meet .gpn{background:rgba(0,0,0,.22);border-radius:10px;padding:5px 5px 4px;min-width:0;display:flex;flex-direction:column}
+#p-meet .gpt b{display:block;font-family:var(--fc);font-size:12.5px;letter-spacing:.8px;text-transform:uppercase;color:#fff}
+#p-meet .gb .gpt b{color:var(--gold)}#p-meet .gs .gpt b{color:#8fd2fa}
+#p-meet .gpt small{display:block;color:#d5dce0;font-size:10px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-meet .gpr{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:3px;align-items:start}
+#p-meet .gmn{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+#p-meet .gmn .ring{width:44px;height:44px}
+#p-meet .gmn .rin b{font-size:11.5px}
+#p-meet .gmn .rin b small{font-size:8px}
+#p-meet .gmn .rl{font-size:10px;letter-spacing:.5px;margin-top:2px;color:#fff;text-transform:uppercase}
+#p-meet .gmn .rv{font-size:11px;font-weight:800;color:#fff;white-space:nowrap}
+#p-meet .gmn .rgap{font-size:9.5px;color:#d5dce0;font-weight:700;line-height:1.15}
+#p-meet .gpn .gmix{font-size:9.5px;margin-top:2px;text-align:center}
+#p-meet .gsf{margin-top:4px;color:#cfe9fb;font-size:10px;line-height:1.25}
+#p-meet .need.sbt{background:#6cc3f5}
 #p-meet .need{display:inline-block;margin-top:3px;color:#1d1503;background:#F5C451;border-radius:6px;padding:1px 6px;font-size:11px;font-weight:800}
 #p-meet .gme{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #3a444c;color:#f2f4f5;font-size:13px;min-width:0}
 #p-meet .gme:last-child{border-bottom:0}
@@ -732,6 +761,10 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
   #p-meet #goMonth{flex-direction:row;align-items:stretch}
   #p-meet .gmo{flex:1 1 0}
   #p-meet .gmet .ring{width:88px;height:88px}
+  #p-meet .gmo.gmg{flex:0 0 190px;align-self:flex-start}
+  #p-meet .gmg .gmor{grid-template-columns:1fr}
+  #p-meet .gmg .gmoin{flex-direction:column}
+  #p-meet .gsec{align-self:flex-start;flex:1 1 0}
   .gosh{align-items:center}
   .goshp{border-radius:16px;max-height:70dvh}
 }
@@ -1203,7 +1236,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
   <!-- TAB 1: MEETINGS -->
   <section class="page" id="p-meet">
     <!-- v64: monthly Goal tab. Old daily goal cards + detailed log stay in the DOM (hidden) so stored keys and listeners are untouched. -->
-    <div class="card mdf sm"><div class="mdft">Goal</div><div class="mdfs" id="goMeta">Base shop · this month</div></div>
+    <div class="card mdf sm"><div class="mdft">Goal</div><div class="mdfs" id="goMeta">Base shop + Super base · this month</div></div>
     <div class="gonav"><div class="pnav"><button class="pa" id="goMPrev" aria-label="Previous month">‹</button><div class="pl cal" role="button" tabindex="0"><span id="goMLbl">November 2026</span><input type="month" id="goMPick" aria-label="Pick a month"></div><button class="pa" id="goMNext" aria-label="Next month">›</button></div></div>
     <div id="goMonth"></div>
     <div id="goSheet" class="gosh" hidden><button type="button" class="goshbg" id="goSheetBg" aria-label="Close posts"></button><div class="goshp" role="dialog" aria-labelledby="goSheetT"><div class="goshh"><b id="goSheetT">Result posts</b><button type="button" id="goSheetX">Close</button></div><div id="goSheetB"></div></div></div>
@@ -1397,7 +1430,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.09-76";
+var APP_VERSION="2026.11.10-77";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1526,8 +1559,31 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(!row)return {rec:null,pts:null,missing:true,updated:P.updated,as_of:P.as_of,pulled:P.pulled,source:P.source};
     return {rec:(row.rec||[])[i],pts:(row.pts||[])[i],to_date:row.to_date,updated:P.updated,as_of:P.as_of,pulled:P.pulled,source:P.source,missing:false};
   }
+  // v77: Super base (Sunchandan Singh 27RJEC + downline). On system = Sunny's own report (PR_27RJEC, SMD Base column); also Harpreet's R11 "Super Base" column (his base + super base).
+  function prSuperMonth(ym){
+    var P=getJ("pointsrecruits",null),out={rec:null,pts:null,missing:true};
+    if(!P||typeof P!=="object")return out;
+    var o=null;(Array.isArray(P.others)?P.others:[]).forEach(function(x){if(x&&String(x.code||"").toUpperCase()==="27RJEC")o=x;});
+    var G0=P.groups||[],j=G0.indexOf("Super Base");if(j<0)j=2;
+    (Array.isArray(P.rows)?P.rows:[]).forEach(function(r){if(r&&!r.total&&r.ym===ym){out.r11rec=(r.rec||[])[j];out.r11pts=(r.pts||[])[j];out.r11base_rec=(r.rec||[])[1];out.r11base_pts=(r.pts||[])[1];}});
+    if(!o||!Array.isArray(o.rows))return out;
+    var G=o.groups||["Personal","SMD Base","Super Base","Super Team"],i=G.indexOf("SMD Base");if(i<0)i=1;
+    var row=null;o.rows.forEach(function(r){if(r&&!r.total&&r.ym===ym)row=r;});
+    out.updated=o.pulled||P.updated;out.as_of=o.as_of;out.name=o.name||"Sunchandan Singh";
+    if(!row)return out;
+    out.rec=(row.rec||[])[i];out.pts=(row.pts||[])[i];out.to_date=row.to_date;out.missing=false;return out;
+  }
+  function goIsSb(e){return !!(e&&e.team==="superbase");}
+  function goSbTotals(ents){var rec=0,pts=0;(Array.isArray(ents)?ents:[]).forEach(function(e){
+      if(!e||e.deleted||e.fell_through||!goIsSb(e))return;
+      if(String(e.product||"").toLowerCase()==="recruit")rec+=(int(e.recruits)!=null?int(e.recruits):1);
+      else if(+e.recruits)rec+=int(e.recruits)||0;
+      pts+=(+e.points||0);});
+    pts=Math.round(pts*100)/100;return {rec:rec,pts:pts};}
+  function goSbMix(ents){return goMix((Array.isArray(ents)?ents:[]).filter(goIsSb).map(function(e){var o=Object.assign({},e);o.base=true;return o;}));}
+  function goSbPts(e){return e&&!e.deleted&&!e.fell_through&&e.team==="superbase"&&!(+e.points)&&e.base!==true;}
   function goGap(have,tgt,unit){
-    if(tgt==null||tgt<=0)return "No target";
+    if(tgt==null||tgt<=0)return "No goal set";
     var d=(have||0)-tgt;
     if(Math.abs(d)<0.005)return "Goal met";
     if(d>0)return goNum(d)+" "+unit+" over";
@@ -1588,9 +1644,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function goProdOpts(cur){
     return [["term","Term"],["iul","IUL"],["ul","UL"],["di","DI"],["inv","Investment"],["inv_pac","Investment PAC"],["recruit","Recruit"],["other","Other"]].map(function(x){return '<option value="'+x[0]+'"'+(String(cur||"").toLowerCase()===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
   }
-  function goBaseOpts(cur){
-    var v=cur===true?"true":cur===false?"false":"null";
-    return [["true","Base"],["false","Not base"],["null","Needs check"]].map(function(x){return '<option value="'+x[0]+'"'+(v===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
+  function goBaseOpts(cur,team){
+    var v=cur===true?"true":team==="superbase"?"sb":cur===false?"false":"null";
+    return [["true","Base"],["sb","Super base"],["false","Neither (not base)"],["null","Needs check"]].map(function(x){return '<option value="'+x[0]+'"'+(v===x[0]?" selected":"")+'>'+x[1]+'</option>';}).join("");
   }
   function goPtsLbl(e){if(!e)return "—";if(e.fell_through||e.deleted)return "0 pts";if(e.skipped)return "skipped";return (e.points==null?"—":(+e.points).toLocaleString("en-CA")+" pts");}
   function goMix(ents){
@@ -1633,10 +1689,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var extra=[e.date,e.note].filter(Boolean).join(" · ");
     var amt=goAmtOf(e),amtS=(amt===amt&&isFinite(amt))?String(amt):"";
     var h='<div class="gme'+(e.fell_through?" fell":"")+'" data-i="'+i+'">';
-    h+='<div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+(e.base==null?'<span class="need">needs check</span>':'')+'</div><div class="gpts">'+esc(goPtsLbl(e))+'</div>';
+    h+='<div><b>'+esc(who)+'</b><i>'+esc(extra)+'</i>'+(e.base==null?'<span class="need">needs check</span>':e.team==="superbase"?'<span class="need sbt">super base</span>':'')+'</div><div class="gpts">'+esc(goPtsLbl(e))+'</div>';
     h+='<div class="gsub"><label>Product <select data-sf="product">'+goProdOpts(e.product)+'</select></label>';
     h+='<label>Amount <input data-sf="amount" type="number" inputmode="decimal" step="0.01" min="0" value="'+esc(amtS)+'"></label>';
-    h+='<label>Base <select data-sf="base">'+goBaseOpts(e.base)+'</select></label>';
+    h+='<label>Team <select data-sf="base">'+goBaseOpts(e.base,e.team)+'</select></label>';
     h+='<label class="gtog"><input type="checkbox" data-sf="fell_through"'+(e.fell_through?" checked":"")+'> Fell through</label>';
     h+='<button type="button" class="gdel" data-sf="del">Delete</button></div></div>';
     return h;
@@ -1647,7 +1703,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     h+='<label>Date <input data-af="date" type="date" value="'+esc(typeof today==="string"?today:"")+'"></label>';
     h+='<label>Product <select data-af="product">'+goProdOpts("iul")+'</select></label>';
     h+='<label>Amount <input data-af="amount" type="number" inputmode="decimal" step="0.01" min="0"></label>';
-    h+='<label>Base <select data-af="base">'+goBaseOpts(true)+'</select></label>';
+    h+='<label>Team <select data-af="base">'+goBaseOpts(true)+'</select></label>';
     h+='<label>Note <input data-af="note" maxlength="80" placeholder="short note"></label>';
     h+='<button type="button" class="gaddok" id="goAddOk">Save result</button></div></div>';
     var vis=0;
@@ -1659,12 +1715,24 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var hv=have==null?0:+have,tg=tgt==null?0:+tgt,f=tg>0?hv/tg:0,pct=tg>0?Math.round(f*100):0;
     return '<div class="gmet">'+ring(Math.min(1,f),recCol(f),72,7,'<b>'+pct+'<small>%</small></b>')+'<span class="rl">'+label+'</span><span class="rv">'+goNum(hv)+' / '+goNum(tg)+'</span>'+(extra?'<span class="gmix">'+esc(extra)+'</span>':'')+'<span class="rgap">'+esc(goGap(hv,tg,unit))+'</span></div>';
   }
+  function goMini(label,have,tgt,unit){
+    var hv=have==null?0:+have,tg=tgt==null?0:+tgt,f=tg>0?hv/tg:0,pct=tg>0?Math.round(f*100):null,k=unit==="points";
+    var inner=pct==null?'<b>'+(k?kfmt(hv):goNum(hv))+'</b>':'<b>'+pct+'<small>%</small></b>';
+    var col=pct==null?"#6cc3f5":recCol(f);
+    var val=pct==null?(k?goNum(hv)+" pts":goNum(hv)):((k?kfmt(hv):goNum(hv))+' / '+(k?kfmt(tg):goNum(tg)));
+    return '<div class="gmn">'+ring(pct==null?(hv>0?1:0):Math.min(1,f),col,44,5,inner)+'<span class="rl">'+label+'</span><span class="rv">'+esc(val)+'</span><span class="rgap">'+esc(pct==null?"No goal set":goMiniGap(hv,tg,unit))+'</span></div>';
+  }
+  function goMiniGap(hv,tg,unit){var d=hv-tg;if(Math.abs(d)<0.005)return "Goal met";var a=unit==="points"?kfmt(Math.abs(d)):goNum(Math.abs(d));return a+(d>0?" over":" short");
+  }
+  function goPanel(title,src,a,b,mix){
+    return '<div class="gpn"><div class="gpt"><b>'+title+'</b><small>'+esc(src)+'</small></div><div class="gpr">'+a+b+'</div>'+(mix?'<div class="gmix">'+esc(mix)+'</div>':'')+'</div>';
+  }
   function renderGoalMonth(){
     if(!GM)GM=ymNow();
     var max=ymNow();
     $("goMLbl").textContent=ymPretty(GM);
     $("goMPick").value=GM;$("goMPick").max=max;$("goMNext").disabled=GM>=max;
-    if($("goMeta"))$("goMeta").textContent="Base shop · "+ymPretty(GM);
+    if($("goMeta"))$("goMeta").textContent="Base shop + Super base · "+ymPretty(GM);
     var T=mgT(GM),S=subGet(),sm=subMonth(GM),P=prBaseMonth(GM);
     GO_ENTS=sm.entries||[];
     var tot=goTotals(GO_ENTS),sRec=tot.rec,sPts=tot.pts;
@@ -1674,12 +1742,24 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var pWhen=P.updated?updFmt(+new Date(P.updated)):(P.as_of?pretty(P.as_of).replace(/^\w+, /,""):"");
     var pUpd=(pWhen?("Updated "+pWhen):"MyWFG not loaded")+(P.to_date?" · to date "+P.to_date.slice(5).replace("-","/"):"");
     var mix=goMix(GO_ENTS), sysMix=goSysMix(P);
-    var h='<div class="card gmo"><div class="gmoh"><b>Monthly goal</b><span class="bst">BASE SHOP</span></div><div class="gmos">'+esc(tUpd)+'</div><div class="gmor">';
+    var SB=prSuperMonth(GM),sbt=goSbTotals(GO_ENTS),sbMix=goSbMix(GO_ENTS);
+    var sbRec=SB.missing?0:(+SB.rec||0),sbPts=SB.missing?0:(+SB.pts||0);
+    var sbWhen=SB.updated?updFmt(+new Date(SB.updated)):"";
+    var sbUpd=SB.missing?"MyWFG not loaded":("Sunny's SMD Base"+(SB.to_date?" · to "+SB.to_date.slice(5).replace("-","/"):"")+(sbWhen?" · "+sbWhen:""));
+    var nPosts=goVisible(GO_ENTS).length,nSb=goVisible(GO_ENTS).filter(goIsSb).length;
+    var nChk=goVisible(GO_ENTS).filter(function(e){return e.base==null&&!e.fell_through;}).length;
+    var h='<div class="card gmo gmg"><div class="gmoh"><b>Monthly goal</b><span class="bst">BASE SHOP</span></div><div class="gmor">';
     h+='<div class="gmoin"><label for="goTrec">Recruits</label><input class="num" id="goTrec" type="number" inputmode="numeric" min="0" step="1" value="'+esc(T.recruits)+'"></div>';
     h+='<div class="gmoin"><label for="goTpts">Points</label><input class="num" id="goTpts" type="number" inputmode="numeric" min="0" step="1" value="'+esc(T.points)+'"></div>';
+    h+='</div><div class="gmos">'+esc(tUpd)+'</div></div>';
+    h+='<div class="gsec gb"><div class="gsh"><span class="bst">BASE SHOP</span><small>goal '+esc(T.recruits)+' rec · '+esc(kfmt(T.points))+' pts</small><button type="button" class="gpbtn" id="goPosts">'+(nPosts?nPosts+' posts':'Results')+(nChk?' · '+nChk+' to check':'')+'</button></div><div class="gpg">';
+    h+=goPanel("Submitted","WhatsApp · "+sUpd.replace(/^Updated /,""),goMini("Recruits",sRec,T.recruits,"recruits"),goMini("Points",sPts,T.points,"points"),mix);
+    h+=goPanel("On system","MyWFG SMD Base"+(P.to_date?" · to "+P.to_date.slice(5).replace("-","/"):"")+(pWhen?" · "+pWhen:""),goMini("Recruits",pRec,T.recruits,"recruits"),goMini("Points",pPts,T.points,"points"),sysMix);
     h+='</div></div>';
-    h+='<div class="card gmo"><div class="gmoh"><b>Submitted so far</b><span class="bst">BASE SHOP</span></div><div class="gmos">WhatsApp · '+esc(sUpd)+'</div><div class="gmor">'+goRing("Recruits",sRec,T.recruits,"recruits")+goRing("Points",sPts,T.points,"points",mix)+'</div><button type="button" class="gpbtn" id="goPosts">'+(goVisible(GO_ENTS).length?goVisible(GO_ENTS).length+' posts':'Results')+'</button></div>';
-    h+='<div class="card gmo"><div class="gmoh"><b>On system</b><span class="bst">BASE SHOP</span></div><div class="gmos">MyWFG · SMD Base · '+esc(pUpd)+'</div><div class="gmor">'+goRing("Recruits",pRec,T.recruits,"recruits")+goRing("Points",pPts,T.points,"points",sysMix)+'</div></div>';
+    h+='<div class="gsec gs"><div class="gsh"><span class="bst sbb">SUPER BASE</span><small>Sunchandan + team · no goal set</small><button type="button" class="gpbtn" id="goPostsSb">'+(nSb?nSb+' posts':'Results')+'</button></div><div class="gpg">';
+    h+=goPanel("Submitted","WhatsApp · "+sUpd.replace(/^Updated /,""),goMini("Recruits",sbt.rec,0,"recruits"),goMini("Points",sbt.pts,0,"points"),sbMix);
+    h+=goPanel("On system",sbUpd,goMini("Recruits",sbRec,0,"recruits"),goMini("Points",sbPts,0,"points"),"");
+    h+='</div>'+(SB.r11pts!=null?'<div class="gsf">MyWFG "Super Base" column on your report (your base + Sunny\'s): '+esc(goNum(SB.r11pts))+' pts · '+esc(goNum(SB.r11rec))+' rec</div>':'')+'</div>';
     $("goMonth").innerHTML=h;
   }
 
@@ -1780,7 +1860,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function goAddResult(){
     var box=$("goAddF");if(!box)return;
     var g=function(n){var el=box.querySelector("[data-af=\""+n+"\"]");return el?el.value:"";};
-    var bv=g("base"),e={id:"m_"+Date.now().toString(36),date:g("date")||today,poster:"You",product:g("product")||"other",amount:+g("amount")||0,base:bv==="true"?true:bv==="false"?false:null,note:goCleanNote(g("note"))||undefined,user_edited:true,u:Date.now()};
+    var bv=g("base"),e={id:"m_"+Date.now().toString(36),date:g("date")||today,poster:"You",product:g("product")||"other",amount:+g("amount")||0,base:bv==="true"?true:(bv==="false"||bv==="sb")?false:null,team:bv==="true"?"base":bv==="sb"?"superbase":bv==="false"?"other":undefined,note:goCleanNote(g("note"))||undefined,user_edited:true,u:Date.now()};
     e.origin_key=subContentKey(e);goCompute(e);
     var S=subGet(),ym=GM||ymNow();if(!S.months)S.months={};
     var m=S.months[ym]&&typeof S.months[ym]==="object"?S.months[ym]:{recruits:0,points:0,entries:[]};
@@ -1794,7 +1874,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(rec==null)rec=HL.rec.m;if(pts==null)pts=HL.pts.m;
     mgSave(GM||ymNow(),rec,pts);renderGoalMonth();
   });
-  $("goMonth").addEventListener("click",function(e){if(e.target&&e.target.id==="goPosts")goSheetOpen();});
+  $("goMonth").addEventListener("click",function(e){if(e.target&&(e.target.id==="goPosts"||e.target.id==="goPostsSb"))goSheetOpen();});
   $("goSheetX").addEventListener("click",goSheetClose);
   $("goSheetBg").addEventListener("click",goSheetClose);
   $("goSheet").addEventListener("input",function(ev){
@@ -1811,7 +1891,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     goMutate(+row.dataset.i,function(ent){
       subEnsure(ent);
       if(t.dataset.sf==="product")ent.product=t.value;
-      else if(t.dataset.sf==="base")ent.base=t.value==="true"?true:t.value==="false"?false:null;
+      else if(t.dataset.sf==="base"){var bv=t.value;ent.base=bv==="true"?true:(bv==="false"||bv==="sb")?false:null;if(bv==="true")ent.team="base";else if(bv==="sb")ent.team="superbase";else if(bv==="false")ent.team="other";else delete ent.team;}
       else if(t.dataset.sf==="fell_through")ent.fell_through=!!t.checked;
       ent.user_edited=true;ent.u=Date.now();
     });
@@ -3304,7 +3384,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     }
     if(subProtect(x)&&!subProtect(y))return x;
     if(subProtect(y)&&!subProtect(x))return y;
-    return (+(y&&y.u)||0)>=(+(x&&x.u)||0)?y:x;
+    var w=(+(y&&y.u)||0)>=(+(x&&x.u)||0)?y:x,o=w===y?x:y;
+    if(w&&o&&!w.team&&o.team&&!subProtect(w)){w=Object.assign({},w,{team:o.team});}   // v77: keep super base tag from the other side
+    return w;
   }
   function subMergeMonth(a,b){
     a=a&&typeof a==="object"?a:{entries:[]};b=b&&typeof b==="object"?b:{entries:[]};
