@@ -110,6 +110,7 @@ These are the same as the fitness app:
 On iPhone, open the link in Safari, tap Share, then **Add to Home Screen**.
 
 ## Changelog
+- **v2026.11.10-79 (Nov 10, 2026):** Warm Prospects merge now treats a person as the same when their name or `aka` matches (exact normalized). A cached old WhatsApp name is folded into the store's new display name, newest status/comment wins, and the merged list is not re-pushed if it already matches the store. Delete/restore tombstones follow aliases so a removed person stays hidden after a rename, and the removed list shows one row per person.
 - **v2026.11.10-78 (Nov 10, 2026):** Goal tab Super base monthly goal is 7 recruits and 25,000 points. Submitted and On system Super base rings show progress vs that goal (`x / 7`, `x / 25K`), same display as Base. Base stays 15 / 100,000. Defaults in app code; no store write. Both sections still fit one phone screen.
 - **v2026.11.09-72 (Nov 9, 2026):** Prospects needing attention removed from Daily Agenda (notes/status on Warm Prospects). Dismiss match for user:/m_ rows is id-only so Add licence + can re-add a same title after dismiss. AG_RIGHT = base, appts.
 - **v2026.11.08-71 (Nov 8, 2026):** Daily Agenda right column order: Today's appointments now sits above Prospects needing attention (AG_RIGHT = base, appts, prospect). Dark theme, tints, appointment dropdown/comments unchanged. App-only; no store writes.
