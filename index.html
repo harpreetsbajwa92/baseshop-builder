@@ -1430,7 +1430,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.10-77";
+var APP_VERSION="2026.11.10-78";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -1451,6 +1451,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   // headline results: $100K business = 15 base recruits + 100,000 base points a month
   // week = ceil(15/4.33)=4 and round(100000/4.33)=23K; day (Mon–Sat, 26 working days) = ceil(15/26)=1 and round(100000/26)=4K
   var HL={rec:{d:1,w:4,m:15},pts:{d:4000,w:23000,m:100000}};
+  // v78: Super base monthly goal (Sunchandan + team). Not in bs-v1:monthgoals unless later overridden as sb_recruits/sb_points.
+  var HL_SB={rec:{m:7},pts:{m:25000}};
   var CERTS=["Ethics Compliance","Ethics","Life Insurance","A&S","Seg Funds"];
   var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   var $=function(id){return document.getElementById(id);};
@@ -1548,7 +1550,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   function ymPretty(ym){var p=String(ym||"").split("-");return (MONL[(+p[1]||1)-1]||MON[(+p[1]||1)-1]||"")+" "+p[0];}
   function mgGet(){var M=getJ("monthgoals",null);return M&&typeof M==="object"?M:{v:1,months:{}};}
   function mgT(ym){var m=((mgGet().months)||{})[ym]||{},r=int(m.recruits),p=int(m.points);return {recruits:r!=null?r:HL.rec.m,points:p!=null?p:HL.pts.m,u:m.u,custom:r!=null||p!=null};}
-  function mgSave(ym,rec,pts){var M=mgGet();if(!M.months)M.months={};M.months[ym]={recruits:rec,points:pts,u:Date.now()};M.v=1;M.updated=agIso?agIso():new Date().toISOString();setJ("monthgoals",M);}
+  function mgSbT(ym){var m=((mgGet().months)||{})[ym]||{},r=int(m.sb_recruits),p=int(m.sb_points);return {recruits:r!=null?r:HL_SB.rec.m,points:p!=null?p:HL_SB.pts.m,u:m.u,custom:r!=null||p!=null};}
+  function mgSave(ym,rec,pts){var M=mgGet();if(!M.months)M.months={};var prev=M.months[ym]&&typeof M.months[ym]==="object"?M.months[ym]:{};var row={recruits:rec,points:pts,u:Date.now()};if(prev.sb_recruits!=null)row.sb_recruits=prev.sb_recruits;if(prev.sb_points!=null)row.sb_points=prev.sb_points;M.months[ym]=row;M.v=1;M.updated=agIso?agIso():new Date().toISOString();setJ("monthgoals",M);}
   function subGet(){var S=getJ("submitted",null);return S&&typeof S==="object"?S:{v:1,months:{}};}
   function subMonth(ym){var S=subGet(),m=(S.months||{})[ym];return m&&typeof m==="object"?m:{recruits:0,points:0,entries:[]};}
   function prBaseMonth(ym){
@@ -1733,7 +1736,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     $("goMLbl").textContent=ymPretty(GM);
     $("goMPick").value=GM;$("goMPick").max=max;$("goMNext").disabled=GM>=max;
     if($("goMeta"))$("goMeta").textContent="Base shop + Super base · "+ymPretty(GM);
-    var T=mgT(GM),S=subGet(),sm=subMonth(GM),P=prBaseMonth(GM);
+    var T=mgT(GM),STB=mgSbT(GM),S=subGet(),sm=subMonth(GM),P=prBaseMonth(GM);
     GO_ENTS=sm.entries||[];
     var tot=goTotals(GO_ENTS),sRec=tot.rec,sPts=tot.pts;
     var pRec=P.missing?0:(+P.rec||0),pPts=P.missing?0:(+P.pts||0);
@@ -1756,9 +1759,9 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     h+=goPanel("Submitted","WhatsApp · "+sUpd.replace(/^Updated /,""),goMini("Recruits",sRec,T.recruits,"recruits"),goMini("Points",sPts,T.points,"points"),mix);
     h+=goPanel("On system","MyWFG SMD Base"+(P.to_date?" · to "+P.to_date.slice(5).replace("-","/"):"")+(pWhen?" · "+pWhen:""),goMini("Recruits",pRec,T.recruits,"recruits"),goMini("Points",pPts,T.points,"points"),sysMix);
     h+='</div></div>';
-    h+='<div class="gsec gs"><div class="gsh"><span class="bst sbb">SUPER BASE</span><small>Sunchandan + team · no goal set</small><button type="button" class="gpbtn" id="goPostsSb">'+(nSb?nSb+' posts':'Results')+'</button></div><div class="gpg">';
-    h+=goPanel("Submitted","WhatsApp · "+sUpd.replace(/^Updated /,""),goMini("Recruits",sbt.rec,0,"recruits"),goMini("Points",sbt.pts,0,"points"),sbMix);
-    h+=goPanel("On system",sbUpd,goMini("Recruits",sbRec,0,"recruits"),goMini("Points",sbPts,0,"points"),"");
+    h+='<div class="gsec gs"><div class="gsh"><span class="bst sbb">SUPER BASE</span><small>goal '+esc(STB.recruits)+' rec · '+esc(kfmt(STB.points))+' pts</small><button type="button" class="gpbtn" id="goPostsSb">'+(nSb?nSb+' posts':'Results')+'</button></div><div class="gpg">';
+    h+=goPanel("Submitted","WhatsApp · "+sUpd.replace(/^Updated /,""),goMini("Recruits",sbt.rec,STB.recruits,"recruits"),goMini("Points",sbt.pts,STB.points,"points"),sbMix);
+    h+=goPanel("On system",sbUpd,goMini("Recruits",sbRec,STB.recruits,"recruits"),goMini("Points",sbPts,STB.points,"points"),"");
     h+='</div>'+(SB.r11pts!=null?'<div class="gsf">MyWFG "Super Base" column on your report (your base + Sunny\'s): '+esc(goNum(SB.r11pts))+' pts · '+esc(goNum(SB.r11rec))+' rec</div>':'')+'</div>';
     $("goMonth").innerHTML=h;
   }
