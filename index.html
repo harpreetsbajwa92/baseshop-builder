@@ -588,6 +588,21 @@ button{cursor:pointer}
 #p-gold .wsel:focus,#p-gold .wcom:focus{outline:0;border-color:#79bdf7;box-shadow:0 0 0 2px rgba(74,163,240,.3)}
 #p-gold #warmNote{color:#7fa7cc}
 
+/* v81: per-person month picker under the name; pushed-later line */
+#p-gold .wmon{appearance:none;-webkit-appearance:none;display:block;margin-top:5px;width:auto;max-width:100%;
+  background-color:#0d1c2c;color:#cfe6ff;border:1px solid #2f6ea8;border-radius:8px;
+  font-family:var(--fn);font-size:11.5px;font-weight:700;letter-spacing:0;line-height:1.2;
+  padding:3px 22px 3px 7px;
+  background-image:linear-gradient(45deg,transparent 50%,#9fd0ff 50%),linear-gradient(135deg,#9fd0ff 50%,transparent 50%);
+  background-position:calc(100% - 12px) 55%,calc(100% - 8px) 55%;background-size:4px 4px,4px 4px;background-repeat:no-repeat}
+#p-gold .wmon:focus{outline:0;border-color:#79bdf7;box-shadow:0 0 0 2px rgba(74,163,240,.3)}
+#p-gold .wpush{margin:0 4px 8px;color:#7fa7cc;font-size:12.5px}
+#p-gold .wpush summary{cursor:pointer;font-weight:700;color:#9fd0ff}
+#p-gold .wpr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 0;border-top:1px solid #27527f}
+#p-gold .wpr .wnm{font-weight:700;color:#fff;font-size:13.5px;flex:1 1 110px;min-width:0;overflow-wrap:anywhere}
+#p-gold .wpr .wst{font-size:11.5px;font-weight:700;color:#7fb8ec;white-space:nowrap}
+#p-gold .wpr .wmon{margin-top:0;flex:0 0 auto}
+#p-gold .wpr .prx{width:26px;height:26px;font-size:18px;line-height:22px}
 
 /* v76: remove (x) buttons + removed list */
 #p-gold .prx{flex:none;width:30px;height:30px;line-height:26px;text-align:center;border-radius:8px;border:1px solid #5a656e;background:transparent;color:#cfd6db;font-size:20px;cursor:pointer;padding:0}
@@ -1294,6 +1309,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
           <div class="gsl wm">Warm Prospects <span class="pc" id="warmBd"></span></div>
           <label class="wml"><span>Month</span><select id="warmMon" aria-label="Reach-out month"></select></label>
         </div>
+        <div id="warmPush" class="wpush" hidden></div>
         <div class="card wtcard"><div class="wtsc" id="warmTbl"></div></div>
         <p class="note" id="warmNote"></p>
       </div>
@@ -1430,7 +1446,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.10-80";
+var APP_VERSION="2026.11.11-81";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2771,13 +2787,20 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
   }
   function agSet(k){if(!k)k=today;AG.d=k;AG.locked=true;renderAgenda();renderUpd("agenda");}
 
-  var WARM_ST=["Booked","Done","Asked","Reschedule","Confirming","Building","Warming","Ghosted"],WM_SEL="";
+  var WARM_ST=["Booked","Done","Asked","Reschedule","Confirming","Building","Warming","Ghosted"],WM_SEL="",WP_OPEN=false;
   function warmIso(){try{var d=new Date(),p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23",timeZoneName:"longOffset"}).formatToParts(d),o={};p.forEach(function(x){o[x.type]=x.value;});
     var off=(o.timeZoneName||"").replace(/^GMT/,"").replace(/^UTC/,"");if(/^[+-]\d{2}$/.test(off))off+=":00";if(!/^[+-]\d{2}:\d{2}$/.test(off))off="-05:00";
     return o.year+"-"+o.month+"-"+o.day+"T"+o.hour+":"+o.minute+":"+o.second+off;}catch(e){return new Date().toISOString();}}
   function warmGet(){var W=getJ("warm",null);return W&&typeof W==="object"?W:{v:1,months:{}};}
-  function warmYmList(W){var a=[];if(W&&W.months&&typeof W.months==="object")Object.keys(W.months).forEach(function(k){if(/^\d{4}-\d{2}$/.test(k))a.push(k);});return a.sort().reverse();}
+  function warmValidYm(ym){return /^\d{4}-\d{2}$/.test(ym||"");}
+  function warmNowYm(){try{return new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit"}).format(new Date());}catch(e){return "2026-11";}}
+  function warmShiftYm(ym,n){var p=String(ym||"").split("-"),y=+p[0],m=+p[1]-1+n;if(!isFinite(y)||!isFinite(m))return warmNowYm();y+=Math.floor(m/12);m=((m%12)+12)%12;return y+"-"+("0"+(m+1)).slice(-2);}
+  function warmLabelYm(ym){var m=/^(\d{4})-(\d{2})/.exec(ym||"");return m?MON[+m[2]-1]+" "+m[1]:(ym||"");}
+  function warmPickerYms(extra){var a=[],i,now=warmNowYm();for(i=0;i<=6;i++)a.push(warmShiftYm(now,i));if(warmValidYm(extra)&&a.indexOf(extra)<0){a.push(extra);a.sort();}return a;}
+  function warmYmList(W){var a=[];if(W&&W.months&&typeof W.months==="object")Object.keys(W.months).forEach(function(k){if(warmValidYm(k))a.push(k);});return a.sort().reverse();}
+  function warmViewMonths(W){var set={},i,ks=warmPickerYms();ks.forEach(function(k){set[k]=1;});warmYmList(W).forEach(function(k){set[k]=1;});return Object.keys(set).sort();}
   function warmPeople(W,ym){var m=W&&W.months&&W.months[ym];return m&&Array.isArray(m.people)?m.people:[];}
+  function warmPersonYm(p,listYm){return (p&&warmValidYm(p.month))?p.month:(listYm||warmNowYm());}
   function warmNorm(n){return String(n||"").toLowerCase().replace(/\s+/g," ").trim();}
   function warmLabels(p){var a=[],seen={},add=function(s){s=String(s||"").trim();var k=warmNorm(s);if(!s||!k||seen[k])return;seen[k]=1;a.push(s);};
     if(!p)return a;if(typeof p==="string"){add(p);return a;}add(p.name);
@@ -2802,40 +2825,81 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     out.name=warmCanonName(dest,inc);
     var aka=warmUnionAka(dest,inc,out.name);if(aka.length)out.aka=aka;else delete out.aka;
     return out;}
+  // v81: one person lives in exactly one months[YYYY-MM] list (their month field). Newest updated wins, including month.
   function warmMerge(a,b){var A=typeof a==="string"?syParse(a):a,B=typeof b==="string"?syParse(b):b;
     if(!A||typeof A!=="object")return typeof b==="string"?b:JSON.stringify(B||{});
     if(!B||typeof B!=="object")return typeof a==="string"?a:JSON.stringify(A);
-    var out={v:Math.max(+A.v||1,+B.v||1),months:{}};out.updated=String(A.updated||"")>=String(B.updated||"")?A.updated:B.updated;
+    var list=[],updated=String(A.updated||"")>=String(B.updated||"")?A.updated:B.updated;
     function add(src){var mo=src.months&&typeof src.months==="object"?src.months:{};
-      Object.keys(mo).forEach(function(ym){if(!out.months[ym])out.months[ym]={people:[]};
-        var dest=out.months[ym].people;
+      Object.keys(mo).forEach(function(ym){
         (mo[ym]&&Array.isArray(mo[ym].people)?mo[ym].people:[]).forEach(function(p){if(!p||!p.name)return;
-          var i,hit=-1;for(i=0;i<dest.length;i++)if(warmSamePerson(dest[i],p)){hit=i;break;}
-          if(hit<0)dest.push(warmClean(p));else dest[hit]=warmMergePerson(dest[hit],p);});});}
-    add(A);add(B);return JSON.stringify(out);}
+          var q=warmClean(p);if(!warmValidYm(q.month))q.month=warmValidYm(ym)?ym:warmNowYm();
+          var i,hit=-1;for(i=0;i<list.length;i++)if(warmSamePerson(list[i],q)){hit=i;break;}
+          if(hit<0)list.push(q);else list[hit]=warmMergePerson(list[hit],q);});});}
+    add(A);add(B);
+    var months={};
+    list.forEach(function(p){var ym=warmValidYm(p.month)?p.month:warmNowYm();p.month=ym;if(!months[ym])months[ym]={people:[]};months[ym].people.push(p);});
+    return JSON.stringify({v:Math.max(+A.v||1,+B.v||1),updated:updated,months:months});}
+  function warmAllPeople(W){var list=[],mo=W&&W.months&&typeof W.months==="object"?W.months:{};
+    Object.keys(mo).forEach(function(ym){
+      (mo[ym]&&Array.isArray(mo[ym].people)?mo[ym].people:[]).forEach(function(p){if(!p||!p.name)return;
+        var q=warmCopy(p);if(!warmValidYm(q.month))q.month=warmValidYm(ym)?ym:warmNowYm();
+        var i,hit=-1;for(i=0;i<list.length;i++)if(warmSamePerson(list[i],q)){hit=i;break;}
+        if(hit<0)list.push(q);else list[hit]=warmMergePerson(list[hit],q);});});
+    return list;}
+  function warmFindIn(W,name){var mo=W&&W.months&&typeof W.months==="object"?W.months:{},ym,ps,i,p,probe={name:name};
+    for(ym in mo){ps=mo[ym]&&Array.isArray(mo[ym].people)?mo[ym].people:[];
+      for(i=0;i<ps.length;i++){p=ps[i];if(p&&p.name&&warmSamePerson(p,probe))return {ym:ym,i:i,p:p};}}
+    return null;}
+  function warmPlace(W,person,toYm){
+    if(!W.months)W.months={};if(!warmValidYm(toYm))return;
+    Object.keys(W.months).forEach(function(ym){var ps=W.months[ym]&&W.months[ym].people;if(!Array.isArray(ps))return;
+      W.months[ym].people=ps.filter(function(p){return !p||!p.name||!warmSamePerson(p,person);});});
+    if(!W.months[toYm])W.months[toYm]={people:[]};
+    person.month=toYm;W.months[toYm].people.push(person);}
+  function warmMonthSelect(p,listYm){var ym=warmPersonYm(p,listYm),opts=warmPickerYms(ym),h;
+    h='<select class="wmon" data-wn="'+esc(p.name)+'" data-wf="month" aria-label="Month for '+esc(p.name)+'">';
+    opts.forEach(function(k){h+='<option value="'+k+'"'+(k===ym?" selected":"")+'>'+esc(warmLabelYm(k))+'</option>';});
+    return h+"</select>";}
   function warmBadge(ps){ps=ps.filter(function(p){return p&&p.name&&!prRemoved("warm",p);});var n=ps.length,b=ps.filter(function(p){return p&&p.status==="Booked";}).length;if($("warmBd"))$("warmBd").textContent="Booked "+b+" / "+n;}
+  function warmRenderPush(later,listYm){var el=$("warmPush");if(!el)return;
+    if(!later.length){el.hidden=true;el.innerHTML="";return;}
+    el.hidden=false;
+    var h='<details class="wpushd"'+(WP_OPEN?" open":"")+'>';
+    h+='<summary>Pushed to later: '+later.length+'</summary>';
+    later.forEach(function(p){var st=WARM_ST.indexOf(p.status)>=0?p.status:"Warming";
+      h+='<div class="wpr"><span class="wnm">'+esc(p.name)+'</span><span class="wst">'+esc(st)+'</span>'+warmMonthSelect(p,listYm)+'<button type="button" class="prx" data-prdel="'+esc(p.name)+'" data-prkind="warm" aria-label="Remove '+esc(p.name)+'" title="Remove from list">&times;</button></div>';});
+    h+='</details>';el.innerHTML=h;}
   function renderWarm(){
-    var W=warmGet(),ks=warmYmList(W),nowYm=(function(){try{return new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit"}).format(new Date());}catch(e){return ks[0]||"";}})();
+    var W=warmGet(),ks=warmViewMonths(W),nowYm=warmNowYm();
     if(!WM_SEL||ks.indexOf(WM_SEL)<0)WM_SEL=ks.indexOf(nowYm)>=0?nowYm:(ks[0]||nowYm);
-    var so=ks.map(function(k){var m=/^(\d{4})-(\d{2})/.exec(k);return '<option value="'+k+'">'+esc(m?MON[+m[2]-1]+" "+m[1]:k)+'</option>';}).join("");
-    if(!so)so='<option value="'+esc(WM_SEL)+'">'+esc(WM_SEL)+'</option>';
+    var so=ks.map(function(k){return '<option value="'+k+'">'+esc(warmLabelYm(k))+'</option>';}).join("");
+    if(!so)so='<option value="'+esc(WM_SEL)+'">'+esc(warmLabelYm(WM_SEL))+'</option>';
     if($("warmMon").innerHTML!==so)$("warmMon").innerHTML=so;$("warmMon").value=WM_SEL;
-    var ps=warmPeople(W,WM_SEL);warmBadge(ps);
-    if(!ps.filter(function(p){return p&&p.name&&!prRemoved("warm",p);}).length){$("warmTbl").innerHTML='<div class="none">'+(SY.loaded?"No reach-outs this month yet.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("warmNote").textContent="";return;}
+    var all=warmAllPeople(W);
+    var mine=all.filter(function(p){return p&&p.name&&!prRemoved("warm",p)&&warmPersonYm(p,WM_SEL)===WM_SEL;});
+    var later=all.filter(function(p){return p&&p.name&&!prRemoved("warm",p)&&warmPersonYm(p,WM_SEL)>WM_SEL;});
+    later.sort(function(a,b){var c=warmPersonYm(a,WM_SEL).localeCompare(warmPersonYm(b,WM_SEL));return c||warmNorm(a.name).localeCompare(warmNorm(b.name));});
+    warmBadge(mine);warmRenderPush(later,WM_SEL);
+    if(!mine.length){$("warmTbl").innerHTML='<div class="none">'+(SY.loaded?"No reach-outs this month yet.":SY.err?"Can't reach the store yet. Retrying…":"Loading…")+'</div>';$("warmNote").textContent="This month's reach-outs and bookings. Status, comments and month save automatically.";return;}
     var h='<table class="wt"><colgroup><col class="c-n"><col class="c-nm"><col class="c-st"><col class="c-cm"><col class="c-x"></colgroup><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Comments</th><th></th></tr></thead><tbody>';var shown=0;
-    ps.forEach(function(p,i){if(!p||!p.name||prRemoved("warm",p))return;shown++;var st=WARM_ST.indexOf(p.status)>=0?p.status:"Warming";
-      h+='<tr><td class="wn">'+shown+'</td><td class="wnm">'+esc(p.name)+'</td><td><select class="wsel '+st+'" data-wi="'+i+'" data-wf="status" aria-label="Status for '+esc(p.name)+'">';
+    mine.forEach(function(p){shown++;var st=WARM_ST.indexOf(p.status)>=0?p.status:"Warming";
+      h+='<tr><td class="wn">'+shown+'</td><td class="wnm">'+esc(p.name)+warmMonthSelect(p,WM_SEL)+'</td><td><select class="wsel '+st+'" data-wn="'+esc(p.name)+'" data-wf="status" aria-label="Status for '+esc(p.name)+'">';
       WARM_ST.forEach(function(x){h+='<option value="'+x+'"'+(x===st?" selected":"")+'>'+x+'</option>';});
-      h+='</select></td><td><textarea class="wcom" data-wi="'+i+'" data-wf="comment" rows="2" placeholder="Add an update…">'+esc(p.comment||"")+'</textarea></td><td class="wx"><button type="button" class="prx" data-prdel="'+esc(p.name)+'" data-prkind="warm" aria-label="Remove '+esc(p.name)+'" title="Remove from list">&times;</button></td></tr>';});
+      h+='</select></td><td><textarea class="wcom" data-wn="'+esc(p.name)+'" data-wf="comment" rows="2" placeholder="Add an update…">'+esc(p.comment||"")+'</textarea></td><td class="wx"><button type="button" class="prx" data-prdel="'+esc(p.name)+'" data-prkind="warm" aria-label="Remove '+esc(p.name)+'" title="Remove from list">&times;</button></td></tr>';});
     $("warmTbl").innerHTML=h+"</tbody></table>";warmFit();
-    $("warmNote").textContent="This month's reach-outs and bookings. Status and comments save automatically.";}
+    $("warmNote").textContent="This month's reach-outs and bookings. Status, comments and month save automatically.";}
   function warmFit(){var a=document.querySelectorAll('#warmTbl .wcom');for(var i=0;i<a.length;i++){a[i].style.height='auto';a[i].style.height=Math.max(38,a[i].scrollHeight+2)+'px';}}
-  function warmPatch(t){var i=+t.dataset.wi,f=t.dataset.wf;if(!(i>=0)||!f)return;
-    var W=warmGet();if(!W.months)W.months={};if(!W.months[WM_SEL])W.months[WM_SEL]={people:[]};
-    var ps=W.months[WM_SEL].people;if(!ps[i])return;
-    if(f==="status"){if(WARM_ST.indexOf(t.value)<0)return;ps[i].status=t.value;t.className="wsel "+t.value;}
-    else ps[i].comment=t.value;
-    ps[i].updated=Date.now();W.v=W.v||1;W.updated=warmIso();setJ("warm",W);warmBadge(ps);}
+  function warmPatch(t){var f=t.dataset.wf,name=t.dataset.wn;if(!f||!name)return;
+    var W=warmGet();if(!W.months)W.months={};
+    var hit=warmFindIn(W,name);if(!hit)return;
+    var p=hit.p;if(!warmValidYm(p.month))p.month=hit.ym;
+    if(f==="status"){if(WARM_ST.indexOf(t.value)<0)return;p.status=t.value;t.className="wsel "+t.value;}
+    else if(f==="comment")p.comment=t.value;
+    else if(f==="month"){if(!warmValidYm(t.value))return;if(t.value!==p.month){p.month=t.value;p.updated=Date.now();warmPlace(W,p,t.value);W.v=W.v||1;W.updated=warmIso();setJ("warm",W);renderWarm();return;}}
+    else return;
+    p.updated=Date.now();W.v=W.v||1;W.updated=warmIso();setJ("warm",W);warmBadge(warmAllPeople(W).filter(function(x){return x&&x.name&&!prRemoved("warm",x)&&warmPersonYm(x,WM_SEL)===WM_SEL;}));}
+
   function prNorm(n){return warmNorm(n);}
   function prGet(){var P=getJ("prem",null);return P&&typeof P==="object"&&Array.isArray(P.list)?P:{v:1,list:[]};}
   function prFindWarmPerson(name){var W=warmGet(),n=prNorm(name),months=W&&W.months&&typeof W.months==="object"?W.months:{},ym,ps,i,p,L,j;
@@ -2913,7 +2977,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var r=e.target.closest("[data-prrestore]");
     if(r){e.preventDefault();prRestoreKey(r.dataset.prrestore);renderGold();}
   });
-  $("warmTbl").addEventListener("change",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf)warmPatch(t);});
+  $("goldWarm").addEventListener("change",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf)warmPatch(t);});
+  $("goldWarm").addEventListener("toggle",function(e){var d=e.target.closest("details.wpushd");if(d)WP_OPEN=d.open;},true);
   $("warmTbl").addEventListener("input",function(e){var t=e.target;if(t&&t.dataset&&t.dataset.wf==="comment"){warmPatch(t);t.style.height='auto';t.style.height=Math.max(38,t.scrollHeight+2)+'px';}});
   // ---------- v29: Leaders Bulletin (bs-v1:leaders from build_lb.py; read-only) ----------
   var LBM=[["rec_m","Rec","m"],["rec_12","Rec","12"],["pts_m","Pts","m"],["pts_12","Pts","12"],["lic_m","Lic","m"],["lic_12","Lic","12"]];
@@ -3496,7 +3561,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     if(fk===PREFIX+"attendance"&&a!==null&&b!==null)return attMerge(a,b);   // v37: per-tick merge, newest tick wins
     if((fk===PREFIX+"attendance_md_overrides"||fk===PREFIX+"attendance_recruiter_overrides")&&a!==null&&b!==null)return ovMerge(a,b);   // v41: per-person merge, newest pick wins
     if(fk===PREFIX+"prem"&&a!==null&&b!==null)return prMerge(a,b);   // v76: removed-prospect tombstones, newest per name wins
-    if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v79: per-person merge by name/aka, newest status/comment, store display name wins
+    if(fk===PREFIX+"warm"&&a!==null&&b!==null)return warmMerge(a,b);   // v81: per-person merge by name/aka across months; newest status/comment/month wins
     if(fk===PREFIX+"agenda"&&a!==null&&b!==null)return agMerge(a,b);   // v59: built_ids authoritative for generated items; manuals merge on survivors
     if(fk===PREFIX+"meetlog"&&a!==null&&b!==null)return meetlogMerge(a,b);   // v54: append-only meeting notes
     if(fk===PREFIX+"submitted"&&a!==null&&b!==null)return subMerge(a,b);   // v69: user edits / tombstones win over group refresh
@@ -3531,7 +3596,7 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
           var om=ovMerge(loc,rv),oc=canon(syParse(om));nv=oc===canon(syParse(rv))?rv:oc===canon(syParse(loc))?loc:om;}
         if(k===PREFIX+"prem"&&loc!==null&&rv!==null){
           var prm=prMerge(loc,rv),prc=canon(syParse(prm));nv=prc===canon(syParse(rv))?rv:prc===canon(syParse(loc))?loc:prm;}
-        if(k===PREFIX+"warm"&&loc!==null&&rv!==null){   // v79: ALWAYS merge; name/aka identity so a rename cannot duplicate or re-push
+        if(k===PREFIX+"warm"&&loc!==null&&rv!==null){   // v81: ALWAYS merge; name/aka identity, one list per person by month
           var wm=warmMerge(loc,rv),wc=canon(syParse(wm));nv=wc===canon(syParse(rv))?rv:wc===canon(syParse(loc))?loc:wm;}
         if(k===PREFIX+"agenda"&&loc!==null&&rv!==null){
           var agm=agMerge(loc,rv),agc=canon(syParse(agm));nv=agc===canon(syParse(rv))?rv:agc===canon(syParse(loc))?loc:agm;}
