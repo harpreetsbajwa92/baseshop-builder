@@ -1430,7 +1430,7 @@ body.tab-meet #hdr,body.tab-meet .foot,body.tab-meet #p-meet > .card.mdf{display
 <script>
 // ==== APP VERSION: on EVERY deploy bump APP_VERSION here AND "v" in version.json to the same new value. ====
 // The app compares them on open / when it comes back to the foreground and reloads itself once if they differ (fixes stale phone Home Screen copies).
-var APP_VERSION="2026.11.10-79";
+var APP_VERSION="2026.11.10-80";
 // ==== CLOUD SYNC: every device syncs all bs-v1:* keys with one public no-auth JSON bin (npoint.io). No tokens/keys anywhere. ====
 // Prefix bs-v1: (NOT nn-v1:) because this app shares the harpreetsbajwa92.github.io origin (and so localStorage) with the fitness app.
 var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
@@ -2339,6 +2339,10 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
     var auth=newer,other=older,ids=nb;
     if(!nb&&ob){auth=older;other=newer;ids=ob;}
     if(!ids)ids=(auth.items||[]).filter(agGenerated).map(function(it){return it.id;});
+    // v80: same builder run on both sides -> union built_ids, so an app-side promote/reschedule
+    // (which adds its id locally) is not dropped by the other copy's older list (Gaurav, Nov 10).
+    if(nb&&ob&&cb===sb){var seenI={};ids=nb.concat(ob).filter(function(id){if(!id||seenI[id])return false;seenI[id]=1;return true;});}
+    else ids=ids.slice();
     var dismissed=agMergeRecs(agMergeRecs(older.dismissed,newer.dismissed),agMergeRecs(older.dismissed_appts,newer.dismissed_appts));
     var promoted=agMergeRecs(older.promoted_appts,newer.promoted_appts);
     var allow={};ids.forEach(function(id){allow[id]=1;});
@@ -2356,6 +2360,8 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(allow[id]||!agGenerated(it)||agListed(promoted,it))items.push(it);
     });
     merged.items=items;
+    // v80: promoted appointments always stay allowed (they are kept in items above).
+    items.forEach(function(it){if(it&&it.id&&agListed(promoted,it)&&ids.indexOf(it.id)<0)ids.push(it.id);});
     merged.built_ids=ids.filter(function(id){var it=imap[id];return it?!agListed(dismissed,it):true;});
     return merged;
   }
@@ -2742,10 +2748,14 @@ var SYNC_CONFIG={url:"https://api.npoint.io/5b132b3a6768f39258a9"};
       if(!it)return;
       var s=agSecOf(it);
       if(s==="llqp"||s==="training"||s==="certs"||s==="score"||s==="prospect"||s==="wa"||s==="ig"||s==="li")return;
-      if(allow&&it.id&&agGenerated(it)&&!allow[it.id])return;
       if(agListed(agDayDismissed(day),it))return;
+      // v80: promoted / rescheduled-in / app-added meetings always show, even if a stale built_ids list misses them.
+      var keep=agListed(day.promoted_appts,it)||!!(it.extra&&(it.extra.promoted||it.extra.rescheduled));
+      if(allow&&it.id&&agGenerated(it)&&!allow[it.id]&&!keep)return;
       if(!groups[s])groups[s]=[];groups[s].push(it);
     });
+    // v80: drop the "No appointments today" placeholder when a real meeting is listed.
+    if(groups.appts&&groups.appts.some(function(it){return it&&it.id!=="todays_appts";}))groups.appts=groups.appts.filter(function(it){return it&&it.id!=="todays_appts";});
     function col(keys){
       var h='<div class="agstack">';
       keys.forEach(function(k){
